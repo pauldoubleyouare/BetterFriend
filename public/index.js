@@ -1,3 +1,94 @@
+let MOCK_USER_DATA = { 
+    "user": [
+        {
+            "id": "0001",
+            "username": "cooldood",
+            "firstName": "Johnny",
+            "lastName": "Onthespot",
+            "email": "test@test.com"
+        },
+        {
+            "id": "0002",
+            "username": "coolgurl",
+            "firstName": "Josepine",
+            "lastName": "Jumper",
+            "email": "email@notreal.com"
+        },
+        {
+            "id": "0003",
+            "username": "sickguy",
+            "firstName": "Xavier",
+            "lastName": "Onthedot",
+            "email": "not@real.com"
+        },
+        {
+            "id": "0004",
+            "username": "superwoman",
+            "firstName": "Zelda",
+            "lastName": "Zinger",
+            "email": "this@isnotreal.com"
+        }
+
+    ]
+
+};
+
+
+
+let MOCK_PROFILE_DATA = 
+{
+    "profiles": [
+        {
+            "profile_id": "0000001",
+            "user_id": "0001",
+            "firstName": "Michael",
+            "lastName": "Scott",
+            "relationship": "Dad",
+            "birthday": "1950-04-23T18:25:43.511Z",
+            "email": "mscott@notreally.com",
+            "address": "1428 Elm Street",
+            "phone": "(555)555-1212"
+        },
+        {
+            "profile_id": "0000002",
+            "user_id": "0002",
+            "firstName": "Jack",
+            "lastName": "White",
+            "relationship": "Brother",
+            "birthday": "1980-03-13T18:25:43.511Z",
+            "email": "not@email.com",
+            "address": "111 W. Cliff Road",
+            "phone": "(111) 222-333"
+        },
+        {
+            "profile_id": "0000003",
+            "user_id": "0003",
+            "firstName": "Jordan",
+            "lastName": "Peele",
+            "relationship": "Dad",
+            "birthday": "1976-02-13T18:25:43.511Z",
+            "email": "getout@notreally.com",
+            "address": "222 East Beach Lane",
+            "phone": "(333)444-5555"
+        },
+        {
+            "profile_id": "0000004",
+            "user_id": "0004",
+            "firstName": "Norm",
+            "lastName": "McDonald",
+            "relationship": "Best Friend",
+            "birthday": "1962-04-26T18:25:43.511Z",
+            "email": "guesswhat@notreally.com",
+            "address": "444 Cool Melon",
+            "phone": "(444)555-6666"
+        }
+    ]
+
+
+
+
+};
+
 function renderHomePage() {
 	$("main").html(`
 	<div class="page home">
@@ -142,12 +233,23 @@ function renderEditFriendPage() {
 }
 
 function renderFriendProfilePage() {
+	let mockProfile = MOCK_PROFILE_DATA;
 	$("main").html(`
 	<div class="page viewFriendProfile">
-		<h1>Existing Profile Page</h1>
-		<button class="btn editFriend">Edit Friend</button>
-		<button class="btn dashboard">Back to Dashboard</button>
+	<h1>Existing Profile Page</h1>
+	<button class="btn editFriend">Edit Friend</button>
+	<button class="btn dashboard">Back to Dashboard</button>	
+	<div class="friendProfileData">
+			<img class="friendProfilePhoto" src="https://i.amz.mshcdn.com/r59uAtQeFkaZXdJ9GvLRVWUXzno=/950x534/filters:quality(90)/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F732905%2Fd0fb8eb6-894d-4942-94db-4d86cc2ef241.jpg" alt="Michael Scott from the office">
+		<div class="friendFullName">${mockProfile.profiles[0].firstName + " " + mockProfile.profiles[0].lastName}</div>
+		<div class="friendRelationship">${mockProfile.profiles[0].relationship}</div>
+		<div class="friendPhoneNumber">${mockProfile.profiles[0].phone}</div>
+		<div class="friendBirthday">${mockProfile.profiles[0].birthday}</div>
+		<div class="friendEmail">${mockProfile.profiles[0].email}</div>
+		<div class="friendAddress">${mockProfile.profiles[0].address}</div>
 	</div>
+	
+</div>
 	`);
 	$(".btn.editFriend").on("click", function() {
 		renderEditFriendPage();
