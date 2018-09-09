@@ -1,3 +1,12 @@
 #dashboardPage, #createFriendPage, #profilePage, #wishlistPage {
 	display: none;
 }
+
+footer {
+	position: fixed;
+	color: black;
+	bottom: 0;
+	right: 0;
+	padding-left: 15px;
+	font-family: 'Yellowtail', cursive;
+}
