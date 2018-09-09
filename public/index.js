@@ -40,7 +40,8 @@ let MOCK_PROFILE_DATA =
     "profiles": [
         {
             "profile_id": "0000001",
-            "user_id": "0001",
+			"user_id": "0001",
+			"image": "https://i.amz.mshcdn.com/r59uAtQeFkaZXdJ9GvLRVWUXzno=/950x534/filters:quality(90)/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F732905%2Fd0fb8eb6-894d-4942-94db-4d86cc2ef241.jpg",
             "firstName": "Michael",
             "lastName": "Scott",
             "relationship": "Dad",
@@ -122,10 +123,9 @@ function renderLoginPage() {
 		</form>
 	</div>`);
 	$("#createBfAccount").on("click", function() {
-			renderCreateAccountPage();
+		renderCreateAccountPage();
 	});
-	$(".btn.submitUsrPas").on("click", function(e) {
-		e.preventDefault();
+	$(".btn.submitUsrPas").on("click", function() {
 		renderDashboardPage();
 	})
 }
@@ -239,24 +239,40 @@ function renderFriendProfilePage() {
 	<h1>Existing Profile Page</h1>
 	<button class="btn editFriend">Edit Friend</button>
 	<button class="btn dashboard">Back to Dashboard</button>	
-	<div class="friendProfileData">
-			<img class="friendProfilePhoto" src="https://i.amz.mshcdn.com/r59uAtQeFkaZXdJ9GvLRVWUXzno=/950x534/filters:quality(90)/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F732905%2Fd0fb8eb6-894d-4942-94db-4d86cc2ef241.jpg" alt="Michael Scott from the office">
-		<div class="friendFullName">${mockProfile.profiles[0].firstName + " " + mockProfile.profiles[0].lastName}</div>
-		<div class="friendRelationship">${mockProfile.profiles[0].relationship}</div>
-		<div class="friendPhoneNumber">${mockProfile.profiles[0].phone}</div>
-		<div class="friendBirthday">${mockProfile.profiles[0].birthday}</div>
-		<div class="friendEmail">${mockProfile.profiles[0].email}</div>
-		<div class="friendAddress">${mockProfile.profiles[0].address}</div>
+		<div class="friendProfileData">
+				<img class="centerBlock friendProfilePhoto" src="${mockProfile.profiles[0].image}">
+			<div class="centerText friendFullName">${mockProfile.profiles[0].firstName + " " + mockProfile.profiles[0].lastName}</div>
+			<div class="friendRelationship">${mockProfile.profiles[0].relationship}</div>
+			<div class="friendPhoneNumber">${mockProfile.profiles[0].phone}</div>
+			<div class="friendBirthday">${mockProfile.profiles[0].birthday}</div>
+			<div class="friendEmail">${mockProfile.profiles[0].email}</div>
+			<div class="friendAddress">${mockProfile.profiles[0].address}</div>
+		</div><br>
+		<form id="wishListForm">
+			Add wish list item:<br>
+			<input type="text" class="wishListInput">
+			<input type="submit" value="Add" id="addWishItem">
+		</form>
+		<div class="wishList"></div>
 	</div>
-	
-</div>
+	<br>
 	`);
+
 	$(".btn.editFriend").on("click", function() {
 		renderEditFriendPage();
 	});
 	$(".btn.dashboard").on("click", function() {
 		renderDashboardPage();
-	})
+	});
+	$(".viewFriendProfile").on("click", "#addWishItem", function(event) {
+		let wishListItem = $(".wishListInput").val();
+		$(".wishListInput").val('');
+		event.preventDefault();
+		$(".wishList").append(`
+			<li>${wishListItem}</li>
+		`)
+	});
+
 }
 
 
