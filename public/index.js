@@ -269,9 +269,21 @@ function renderFriendProfilePage() {
 		$(".wishListInput").val('');
 		event.preventDefault();
 		$(".wishList").append(`
-			<li>${wishListItem}</li>
+			<li>
+				<span class="wishListItem">${wishListItem}</span>
+				<div class="wishListItemControls">
+					<button class="deleteWishListItem">
+						<span class="deleteButtonLabel">Delete</span>
+					</button>
+				</div>
+			</li>
 		`)
 	});
+
+	$(".viewFriendProfile").on("click", ".deleteWishListItem", function(e) {
+		e.preventDefault();
+		$(this).closest('li').remove();
+	})
 
 }
 
