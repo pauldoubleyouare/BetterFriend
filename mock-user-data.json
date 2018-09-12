@@ -1,26 +1,24 @@
-{ 
-    "user": [
         {
             "id": "0001",
             "username": "cooldood",
             "firstName": "Johnny",
             "lastName": "Onthespot",
             "email": "test@test.com"
-        },
+        }
         {
             "id": "0002",
             "username": "coolgurl",
             "firstName": "Josepine",
             "lastName": "Jumper",
             "email": "email@notreal.com"
-        },
+        }
         {
             "id": "0003",
             "username": "sickguy",
             "firstName": "Xavier",
             "lastName": "Onthedot",
             "email": "not@real.com"
-        },
+        }
         {
             "id": "0004",
             "username": "superwoman",
@@ -28,7 +26,3 @@
             "lastName": "Zinger",
             "email": "this@isnotreal.com"
         }
-
-    ]
-
-}
