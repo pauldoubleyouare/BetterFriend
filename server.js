@@ -8,14 +8,29 @@ mongoose.Promise = global.Promise; // this is making Mongoose use ES6 promises
 
 //we're pulling the DB URL from ./config and setting them as variables here via desructuring assignment
 const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
+const { User } = require('./models');
+
 
 const app = express();
+
+app.use(morgan('common'));
 app.use(express.static('public')); //this is serving the static files in 'public'
 
 
-app.get('/users', (req, res) => {
 
-})
+app.get('/users', (req, res) => {
+    User
+        .find()
+        .then(users => {
+            res.json({
+                users: users.map(user => user.serialize())
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: 'we really messed this up'});
+        })
+});
 
 
 
@@ -35,7 +50,7 @@ function runServer(databaseUrl, port=PORT) {
             }
             //we're serring app.listen - with our port to server
             server = app.listen(port, () => {
-                console.log(`fack off app is listening on port ${port}`);
+                console.log(`app is listening on port ${port}`);
                 resolve();
             })
             .on('error', err => {
