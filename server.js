@@ -32,6 +32,15 @@ app.get('/users', (req, res) => {
         })
 });
 
+app.get('/users/:id', (req, res) => {
+    User
+        .findById(req.params.id)
+        .then(user => res.json(user.serialize()))
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({message: "internal server error"});
+        });
+});
 
 
 
