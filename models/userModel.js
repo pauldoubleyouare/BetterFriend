@@ -2,15 +2,19 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const userSchema = mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     userName: {type: String, required: true},
-    firstName: {type: String, required: true},
-    lastName: {type: String, required: true},
-    email: {type: String, required: true}
-}, {collection: "User"});
+    fullName: {
+        firstName: {type: String, required: true},
+        lastName: {type: String, required: true},
+    },
+    email: {type: String, required: true},
+    created: {
+        type: Date,
+        default: Date.now
+    }
+}, {collection: 'User'});
 
-// const profileSchema = mongoose.Schema({
-
-// });
 
 userSchema.methods.serialize = function() {
     return {
@@ -23,6 +27,6 @@ userSchema.methods.serialize = function() {
 };
 
 
-const User = mongoose.model("User", userSchema, "User");
+let User = mongoose.model('User', userSchema);
 
 module.exports = { User };

@@ -3,12 +3,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const uuid = require('uuid');
+
 
 mongoose.Promise = global.Promise; // this is making Mongoose use ES6 promises
 
 //we're pulling the DB URL from ./config and setting them as variables here via desructuring assignment
 const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
-const { User } = require('./models');
+const { User } = require('./models/userModel');
+const { Profile } = require('./models/profileModel');
 
 
 const app = express();

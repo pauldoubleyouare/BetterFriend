@@ -138,6 +138,12 @@ function renderCreateAccountPage() {
 		<form>
 			Username:<br>
 			<input type="text" class="newUsername" required><br>
+			First name:<br>
+			<input type="text" class="newFirstName" required><br>
+			Last name:<br>
+			<input type="text" class="newLastName" required><br>
+			Email:<br>
+			<input type="text" class="newEmail" required><br>
 			Password:<br>
 			<input type="password" class ="newPassword" required><br>
 			<input type="submit" value="Create Account">
