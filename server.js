@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const uuid = require('uuid');
 
+let router = express.Router();
+
 
 mongoose.Promise = global.Promise; // this is making Mongoose use ES6 promises
 
@@ -28,6 +30,7 @@ app.get('/users', (req, res) => {
             res.json({
                 users: users.map(user => user.serialize())
             });
+            console.log(users);
         })
         .catch(err => {
             console.error(err);
@@ -36,8 +39,9 @@ app.get('/users', (req, res) => {
 });
 
 app.get('/users/:id', (req, res) => {
+    let id = req.params.id;
     User
-        .findById(req.params.id)
+        .findOne(`{_id: ObjectId("5ba6eec925b7302e96eb8b76")}`)
         .then(user => res.json(user.serialize()))
         .catch(err => {
             console.error(err);
