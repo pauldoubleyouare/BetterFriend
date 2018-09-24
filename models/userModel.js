@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const userSchema = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+    // _id: mongoose.Schema.Types.ObjectId,
     userName: {
         type: String, 
         required: true,
@@ -27,12 +27,13 @@ userSchema.methods.serialize = function() {
     return {
         id: this._id,
         userName: this.userName,
-        firstName: this.fullName.firstName,
-        lastName: this.fullName.lastName,
+        fullName: this.fullName.firstName + " " + this.fullName.lastName,
+        // firstName: this.fullName.firstName,
+        // lastName: this.fullName.lastName,
         email: this.email
     };
 };
 
-const User = mongoose.model('User', userSchema, "Users");
+const User = mongoose.model('User', userSchema, 'Users');
 
 module.exports = { User };

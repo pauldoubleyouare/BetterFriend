@@ -20,6 +20,7 @@ const app = express();
 
 app.use(morgan('common'));
 app.use(express.static('public')); //this is serving the static files in 'public'
+app.use(express.json());
 
 
 
@@ -31,17 +32,18 @@ app.get('/users', (req, res) => {
                 users: users.map(user => user.serialize())
             });
             console.log(users);
+            return users;
         })
         .catch(err => {
             console.error(err);
-            res.status(500).json({ error: 'we really messed this up'});
+            res.status(500).json({ error: err});
         })
 });
 
 app.get('/users/:id', (req, res) => {
     let id = req.params.id;
     User
-        .findOne(`{_id: ObjectId("5ba6eec925b7302e96eb8b76")}`)
+        .findById(id)
         .then(user => res.json(user.serialize()))
         .catch(err => {
             console.error(err);
@@ -50,6 +52,55 @@ app.get('/users/:id', (req, res) => {
 });
 
 
+app.post('/users', (req, res) => {
+    const requiredFields = ['userName', 'fullName', 'email'];
+    console.log(req.body);
+    requiredFields.forEach(field => {
+        if (!(field in req.body)) {
+            const message = `missing ${field} in request body`;
+            console.error(message);
+            return res.status(400).send(message);
+        } else console.log("Request recieved");
+    });
+    User
+        .findOne({userName: req.body.userName})
+        .then(user => {
+            if (user) {
+                const message = `${req.body.userName} is already taken, please choose a new username`;
+                console.log(message);
+                return res.status(400).send(message);
+            } 
+            else {
+                User
+                    .create({
+                        userName: req.body.userName,
+                        fullName: {
+                            firstName: req.body.fullName.firstName,
+                            lastName: req.body.fullName.lastName
+                        },
+                        email: req.body.email
+                    })
+                    .then(user => res.status(201).json(user.serialize())
+                    .catch(err => {
+                        console.error(err);
+                        res.status(500).json({error: 'internal server error'});
+                    }));
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: 'something is not right'});
+        });
+});
+
+app.put('/users/:id', (req, res) => {
+    console.log('PUT request received');
+    res.json(req.params.id);
+    //take the req.params.id, query the database to find the user with the matching Id, if it finds a matching id
+    //then we'll update the document in our DB with the data that was sent over in the request
+    //if we do not find an object matching that ID, then we will throw a response to the client saying we couldn't find it
+
+})
 
 
 // we're calling server up here, then assigning a value to it inside of runServer, but closeServer also needs access to a server object
@@ -64,7 +115,7 @@ function runServer(databaseUrl, port=PORT) {
             if (err) {
                 return reject(err);
             }
-            //we're serring app.listen - with our port to server
+            //we're setting app.listen - with our port to server
             server = app.listen(port, () => {
                 console.log(`app is listening on port ${port}`);
                 resolve();
