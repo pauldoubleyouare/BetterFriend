@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const { Profile } = require('./profileModel');
 
 
 mongoose.Promise = global.Promise;
+
 
 const userSchema = mongoose.Schema({
     // _id: mongoose.Schema.Types.ObjectId,
@@ -11,9 +13,12 @@ const userSchema = mongoose.Schema({
     },
     fullName: {
         firstName: {type: String, required: true},
-        lastName: {type: String},
+        lastName: {type: String}
     },
     email: {type: String, required: true},
+    profiles: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Profile'
+    }],
     created: {
         type: Date,
         default: Date.now
@@ -36,4 +41,25 @@ userSchema.methods.serialize = function() {
 
 const User = mongoose.model('User', userSchema, 'Users');
 
+
+
+// <=======Creating a fake user=========>
+// let garfield = new User({
+//     userName: "garfield",
+//     fullName: {
+//         firstName: "Gar",
+//         lastName: "Field"
+//     },
+//     email: "gar@field.com"
+// });
+
+// garfield.save(err => {
+//     if (err) {
+//         console.log(err)
+//     }
+// });
+
+
+
 module.exports = { User };
+// module.exports = garfield;

@@ -10,8 +10,7 @@ mongoose.Promise = global.Promise; // this is making Mongoose use ES6 promises
 
 //we're pulling the DB URL from ./config and setting them as variables here via desructuring assignment
 const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
-const { User } = require('./models/userModel');
-const { Profile } = require('./models/profileModel');
+
 
 const userRouter = require('./routes/userRoutes');
 const profileRouter = require('./routes/profileRoutes');
@@ -23,6 +22,7 @@ app.use(express.static('public')); //this is serving the static files in 'public
 app.use(express.json());
 
 app.use('/api/users/', userRouter);
+app.use('/api/profiles/', profileRouter);
 
 
 
