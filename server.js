@@ -13,7 +13,6 @@ const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
 
 
 const userRouter = require('./routes/userRoutes');
-const profileRouter = require('./routes/profileRoutes');
 
 const app = express();
 
@@ -22,7 +21,7 @@ app.use(express.static('public')); //this is serving the static files in 'public
 app.use(express.json());
 
 app.use('/api/users/', userRouter);
-app.use('/api/profiles/', profileRouter);
+
 
 
 

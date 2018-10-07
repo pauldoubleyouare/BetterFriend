@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-const { Profile } = require('./profileModel');
-
-
 mongoose.Promise = global.Promise;
 
 
@@ -43,23 +40,32 @@ const User = mongoose.model('User', userSchema, 'Users');
 
 
 
-// <=======Creating a fake user=========>
-// let garfield = new User({
-//     userName: "garfield",
-//     fullName: {
-//         firstName: "Gar",
-//         lastName: "Field"
-//     },
-//     email: "gar@field.com"
-// });
+//*********How do I create a user with populated profiles and vice versa (creating profles to link to users)*********  */
+// for instance, would I do like... mongoose.schema.User.username? inside of profiles?
+// and inside of profiles - would I do mongoose.schema.Profile.id? 
+// do I manually save them to that specific User/Profile
+// and, when I'm creating a profile - how do I save that profile to an item in the array of Profiles underneath user?
 
-// garfield.save(err => {
-//     if (err) {
-//         console.log(err)
-//     }
-// });
 
+function createKramer () {
+    let kramer = new User({
+        userName: "cosmo",
+        fullName: {
+            firstName: "Cosmo",
+            lastName: "Kramer"
+        },
+        email: "cosmor@kramer.com"
+    });
+    
+    kramer.save(err => {
+        if (err) {
+            console.log(err)
+        }
+    });
+    console.log(kramer);
+}
+
+// createKramer();
 
 
 module.exports = { User };
-// module.exports = garfield;

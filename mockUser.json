@@ -1,0 +1,3 @@
+{"username": "coolguy", "fullName": {"firstName": "Bart", "lastName": "Simpson"}, "email": "bart@simpson.com"}
+{"username": "coolgirl", "fullName": {"firstName": "Lisa", "lastName": "Simpson"}, "email": "lisa@simpson.com"}
+{"username": "cooldad", "fullName": {"firstName": "Homer", "lastName": "Simpson"}, "email": "homer@simpson.com"}

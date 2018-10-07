@@ -1,9 +1,16 @@
 'use strict';
 
 const express = require('express');
-const { User } = require('../models/userModel');
 const router = express.Router();
+const profileRoutes = require('./profileRoutes')
+const { User } = require('../models/userModel');
 
+router.use('/:id/profiles/', (req, res, next) => {
+    req.userId = req.params.id;
+
+    next();
+}, profileRoutes)
+// inside of a profile route - GET all profiles of this user /api/users/:id/profiles/
 
 
 router.get('/', (req, res) => {
@@ -36,7 +43,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
     const requiredFields = ['userName', 'fullName', 'email'];
-    console.log(req.body);
+    // console.log(req.body);
     requiredFields.forEach(field => {
         if (!(field in req.body)) {
             const message = `missing ${field} in request body`;

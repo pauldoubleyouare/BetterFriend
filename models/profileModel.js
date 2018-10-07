@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { User } = require('./userModel');
-const garfield = require('./userModel');
 mongoose.Promise = global.Promise;
 
 const wishListSchema = mongoose.Schema({
@@ -15,7 +14,8 @@ const profileSchema = mongoose.Schema({
     // _id: mongoose.Schema.Types.ObjectId,
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     fullName: {
         firstName: {
@@ -26,7 +26,7 @@ const profileSchema = mongoose.Schema({
     },
     email: String,
     relationship: String,
-    birthday: Date,
+    birthday: String,
     address: {
         streetName: String,
         city: String,
@@ -39,11 +39,11 @@ const profileSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     }
-});
+}, { collection: 'Profile' });
 
 profileSchema.methods.serialize = function() {
     return {
-        // userName: User.email,
+        owner: this.owner,
         fullName: this.fullName.firstName + " " + this.fullName.lastName,
         relationship: this.relationship,
         email: this.email,
@@ -56,20 +56,39 @@ profileSchema.methods.serialize = function() {
 let Profile = mongoose.model('Profile', profileSchema, 'Profiles');
 let WishList = mongoose.model('WishList', wishListSchema);
 
-//<==========Creating a fake profile, attached to a user ========>
-// let mom = new Profile({
-//     fullName: {
-//         firstName: "Momfield",
-//         lastName: "Garfield"
-//     } ,
-//     relationship: "Mother",
-//     userName: garfield._id 
-// });
 
-// mom.save(err => {
-//     if (err) {
-//         console.log(err);
-//     }
-// });
+
+let jerry = new User({
+        _id: new mongoose.Types.ObjectId(),
+        userName: "jseinfeld",
+        fullName: {
+            firstName: "Jerry",
+            lastName: "Seinfeld"
+        },
+        email: "jerry@seinfeld.com"
+});
+    
+// jerry.save(err => {
+//         if (err) console.log(err);
+
+//         let jerrysDad = new Profile({
+//             owner: jerry._id,
+//             fullName: {
+//                 firstName: "Morty",
+//                 lastName: "Seinfeld"
+//             },
+//             relationship: "Dad",
+//             birthday: "June 9th 1924",
+//             address: "234 W 2nd Ave, NY, NY 10303"
+//         });
+
+//         jerrysDad.save(err => {
+//             if (err) console.log(err);
+//         });
+//     });
+
+
+
+
 
 module.exports = { Profile };
