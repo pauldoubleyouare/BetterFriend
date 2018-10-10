@@ -13,9 +13,9 @@ const userSchema = mongoose.Schema({
         lastName: {type: String}
     },
     email: {type: String, required: true},
-    profiles: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'Profile'
-    }],
+    // profiles: [{
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'Profile'
+    // }],
     created: {
         type: Date,
         default: Date.now
@@ -26,13 +26,15 @@ const userSchema = mongoose.Schema({
 // what this is doing, is creating a method .serialize that allows us 
 //to control what data we're going to be responding with (which gets called in server.js)
 userSchema.methods.serialize = function() {
+    console.log('user:', this);
     return {
         id: this._id,
         userName: this.userName,
         fullName: this.fullName.firstName + " " + this.fullName.lastName,
         // firstName: this.fullName.firstName,
         // lastName: this.fullName.lastName,
-        email: this.email
+        email: this.email,
+        profiles: this.profiles
     };
 };
 
@@ -47,25 +49,7 @@ const User = mongoose.model('User', userSchema, 'Users');
 // and, when I'm creating a profile - how do I save that profile to an item in the array of Profiles underneath user?
 
 
-function createKramer () {
-    let kramer = new User({
-        userName: "cosmo",
-        fullName: {
-            firstName: "Cosmo",
-            lastName: "Kramer"
-        },
-        email: "cosmor@kramer.com"
-    });
-    
-    kramer.save(err => {
-        if (err) {
-            console.log(err)
-        }
-    });
-    console.log(kramer);
-}
 
-// createKramer();
 
 
 module.exports = { User };

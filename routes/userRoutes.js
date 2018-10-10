@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const profileRoutes = require('./profileRoutes')
 const { User } = require('../models/userModel');
+const { Profile } = require('../models/profileModel');
 
 router.use('/:id/profiles/', (req, res, next) => {
     req.userId = req.params.id;
@@ -21,6 +22,7 @@ router.get('/', (req, res) => {
                 users: users.map(user => user.serialize())
             });
             // console.log(users);
+
             return users;
         })
         .catch(err => {
@@ -33,6 +35,19 @@ router.get('/:id', (req, res) => {
     let id = req.params.id;
     User
         .findById(id)
+        .then(user => {
+            //get all profiles for this user
+            //get wishlist items for the profile
+           return Profile
+                .find({owner: id})
+                .then(profiles => {
+                    //put them inside of the User object
+                    user.profiles = profiles;
+                    console.log(profiles);
+                    //return the user
+                    return user;
+                });
+        })
         .then(user => res.json(user.serialize()))
         .catch(err => {
             console.error(err);
@@ -106,7 +121,7 @@ router.put('/:id', (req, res) => {
         .then(user => {
             console.log(user);
             return res.status(204).end()})
-        .catch(err => res.status(500).json({message: 'Internal server error'}))
+        .catch(err => res.status(500).json({message: err + 'Internal server error'}))
 });
 
 
@@ -115,8 +130,8 @@ router.delete('/:id', (req, res) => {
     User
         .findByIdAndRemove(req.params.id)
         .then(() => {
-            res.status(204).json({message: `${req.params.id} has been deleted`});
             console.log(`${req.params.id} has been deleted`);
+            return res.status(200).json({message: `${req.params.id} has been deleted`});
         })
         .catch(err => {
             console.log(err);

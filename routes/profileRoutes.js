@@ -53,10 +53,11 @@ router.post('/', (req, res) => {
     // make sure that the profile 'owner'is referenced to the req.params.id
     User
         .findById(req.userId)
-        .then(user => 
-            Profile.create(Object.assign({}, req.body, {owner: req.userId})))
+        .then(user => {
+            console.log(user);
+            return Profile.create(Object.assign({}, req.body, {owner: req.userId}))})
         .then(profile => 
-            res.json({profile: profile.serialize()}).status(201)
+            res.status(201).json({profile: profile.serialize()})
         )
         .catch(e => res.status(500).json({errors: e})
             // if user not found, respond with required fields etc.
@@ -67,13 +68,44 @@ router.post('/', (req, res) => {
 //TESTS
 
 
-
+// Updating a Profile
 router.put('/:id', (req, res) => {
-    res.send('need to work');
+    console.log("PUT request to Profiles received");
+    //Make sure req.body.id and req.params.id match and make sure they exist
+    //Find the profile by Id
+    //Create a new object 
+    // Create fields to be updated
+    //Then we need do take the req.body and update that document
+    if (!(req.body.id && req.params.id && req.body.id === req.params.id)) {
+        let message = `Request params:${req.params.id} should match request body: ${req.body.id} and they both should exist`;
+        res.status(400).json({message: message});
+    }
+    let updatedFields = {};
+    let updateableFields = ['fullName', 'email', 'relationship', 'birthday', 'address', 'phone', 'wishList'];
+    //for each field inside of updateable fields, run function and set that content = to a new object in updated fields
+    updateableFields.forEach(field => {
+        if(field in req.body) {
+            updatedFields[field] = req.body[field];
+        }
+    });
+    console.log(">>>>Updated fields", updatedFields);
+    Profile
+        .findByIdAndUpdate(req.params.id, {$set: updatedFields})
+        .then(user => {
+            console.log(user);
+            return res.status(200).json("Updated:" + {user: user})
+        })
+        .catch(err => res.status(500).json({error: err + 'Internal server error'}))
+    
 });
 
 router.delete('/:id', (req, res) => {
-    res.send('need to work')
+    Profile
+        .findByIdAndRemove(req.params.id)
+        .then(data => res.status(200).json(data.fullName.firstName + " was deleted"))
+        .catch(err => res.status(500).json({err: err}))
+    //find Profile by ID and delete in same method?
+    // send a response
 });
 
 

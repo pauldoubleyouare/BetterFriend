@@ -3,7 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const uuid = require('uuid');
+// const uuid = require('uuid');
 
 
 mongoose.Promise = global.Promise; // this is making Mongoose use ES6 promises
@@ -29,7 +29,7 @@ app.use('/api/users/', userRouter);
 let server;
 
 //datbaseUrl the argument/paramater, is getting fed from the if(require.main === module) line
-function runServer(databaseUrl, port=PORT) {
+function runServer(databaseUrl = DATABASE_URL, port = PORT) {
     //we're wrapping this with a promise, so we can run tests on it easily later
     return new Promise((resolve, reject) => { 
         // we're starting our server with mongoose.connect - and if there's an error, return the error?
@@ -39,7 +39,7 @@ function runServer(databaseUrl, port=PORT) {
             }
             //we're setting app.listen - with our port to server
             server = app.listen(port, () => {
-                console.log(`app is listening on port ${port}`);
+                console.log(`App is listening on port ${port}`);
                 resolve();
             })
             .on('error', err => {
@@ -54,12 +54,12 @@ function runServer(databaseUrl, port=PORT) {
 function closeServer() {
     return mongoose.disconnect().then(() => {
         return new Promise((resolve, reject) => {
-            console.log("closing server");
+            console.log("Closing server");
             server.close(err => {
                 if (err) {
                     return reject(err);
                 }
-                reolve();
+                resolve();
             });
         });
     });
@@ -69,7 +69,7 @@ function closeServer() {
 //require is a function, and 'main' is a property on the require function
 // checking to see if we're in a node.js environment - if we are, then open port
 if (require.main === module) {
-    runServer(DATABASE_URL).catch(err => console.error(err));
+    runServer().catch(err => console.error(err));
 }
 
 //this is exposing a variable that represents current module (module) and exports is an object that gets exposed as a module
