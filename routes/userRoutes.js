@@ -33,9 +33,11 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     let id = req.params.id;
+    // console.log('id', id);
     User
         .findById(id)
         .then(user => {
+            // console.log('user', user)
             //get all profiles for this user
             //get wishlist items for the profile
            return Profile
@@ -43,7 +45,7 @@ router.get('/:id', (req, res) => {
                 .then(profiles => {
                     //put them inside of the User object
                     user.profiles = profiles;
-                    console.log(profiles);
+                    // console.log(profiles);
                     //return the user
                     return user;
                 });
@@ -84,11 +86,7 @@ router.post('/', (req, res) => {
                         },
                         email: req.body.email
                     })
-                    .then(user => res.status(201).json(user.serialize())
-                    .catch(err => {
-                        console.error(err);
-                        res.status(500).json({error: 'internal server error'});
-                    }));
+                    .then(user => res.status(201).json(user.serialize()));
             }
         })
         .catch(err => {
