@@ -88,7 +88,7 @@ describe('Users API', function() {
                     res.should.be.json;
                     //response should only contain 1 object
                     res.body.should.be.an('object');
-                    // console.group("GET one >>>>RESPONSE", res.body);
+                    console.group("GET one >>>>RESPONSE", res.body);
                     //req.params.id should match the oid inside of DB
                     res.body.id.should.equal(userId);
                     //confirm it has all the fields we care about
@@ -200,7 +200,7 @@ describe('Users API', function() {
                         .findById(userToUpdate.id);
                 })
                 .then(function(updatedUser) {
-                    console.log('UPDATED USER>>>>>>', updatedUser);
+                    // console.log('UPDATED USER>>>>>>', updatedUser);
                     updatedUser.id.should.equal(userToUpdate.id);
                     updatedUser.userName.should.equal(userToUpdate.userName);
                 })
@@ -229,7 +229,7 @@ describe('Users API', function() {
                         .delete(`/api/users/${userToDelete.id}`)
                     })
                     .then(function(res) {
-                        console.log('RES STATUS>>>>', res.status);
+                        // console.log('RES STATUS>>>>', res.status);
                         res.should.have.status(200);
                         return User.findById(userToDelete.id);
                     })
