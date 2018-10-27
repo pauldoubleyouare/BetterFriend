@@ -4,67 +4,79 @@ mongoose.Promise = global.Promise;
 const faker = require('faker');
 
 const wishListSchema = mongoose.Schema({
-    wishItem: String,
-    created: {
-        type: Date,
-        default: Date.now
-    }
+  wishItem: String,
+  created: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 // let WishList = mongoose.model('WishList', wishListSchema);
 
-const profileSchema = mongoose.Schema({
+const profileSchema = mongoose.Schema(
+  {
     // _id: mongoose.Schema.Types.ObjectId,
     owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
     },
     fullName: {
-        firstName: {
-            type: String,
-            required: true
-        },
-        lastName: String
+      firstName: {
+        type: String,
+        required: true
+      },
+      lastName: String
     },
     email: String,
     relationship: String,
     birthday: String,
     address: {
-        streetName: String,
-        city: String,
-        state: String,
-        zipcode: Number
+      streetName: String,
+      city: String,
+      state: String,
+      zipcode: Number
     },
     phone: String,
     wishList: [wishListSchema],
     created: {
-        type: Date,
-        default: Date.now
+      type: Date,
+      default: Date.now
     }
-}, { collection: 'Profile' });
+  },
+  { collection: 'Profile' }
+);
 
 profileSchema.methods.serialize = function() {
-    return {
-        owner: this.owner,
-        id: this._id,
-        fullName: this.fullName.firstName + " " + this.fullName.lastName,
-        relationship: this.relationship,
-        email: this.email,
-        birthday: this.birthday,
-        address: this.address,
-        phone: this.phone,
-        wishList: this.wishList
-    }
-}
+  return {
+    owner: this.owner,
+    id: this._id,
+    fullName: this.fullName.firstName + ' ' + this.fullName.lastName,
+    relationship: this.relationship,
+    email: this.email,
+    birthday: this.birthday,
+    address: this.address,
+    phone: this.phone,
+    wishList: this.wishList
+  };
+};
 
 let Profile = mongoose.model('Profile', profileSchema, 'Profiles');
 
-
 //Generating random relationship type
 function generateRelationship() {
-    const relationship = ["Mom", "Dad", "Friend", "Brother", "Sister", "Boyfriend", "Girlfriend", "Aunt", "Uncle"];
-    return relationship[Math.floor(Math.random() * relationship.length)];
+  const relationship = [
+    'Mom',
+    'Dad',
+    'Friend',
+    'Brother',
+    'Sister',
+    'Boyfriend',
+    'Girlfriend',
+    'Aunt',
+    'Uncle'
+  ];
+  return relationship[Math.floor(Math.random() * relationship.length)];
 }
 
 // let jerry = new User({
@@ -76,7 +88,7 @@ function generateRelationship() {
 //         },
 //         email: faker.internet.email()
 // });
-    
+
 // jerry.save(err => {
 //         if (err) console.log(err);
 
@@ -100,9 +112,5 @@ function generateRelationship() {
 //             if (err) console.log(err);
 //         });
 //     });
-
-
-
-
 
 module.exports = { Profile };
