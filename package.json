@@ -4,6 +4,7 @@
   "description": "ThinkfulNodeCapstone",
   "main": "server.js",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "express": "^4.16.3",
     "fakegoose": "0.0.3",
     "faker": "^4.1.0",
