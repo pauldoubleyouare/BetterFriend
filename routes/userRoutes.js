@@ -69,36 +69,49 @@ router.post('/', (req, res, next) => {
         return next(err); //end this middleware function and return the error
     }
 
-    const stringFields = ['userName', 'password', 'fullName'];
+    // Comparing a set of fields, that should be strings, to the req.body, and setting those NON string fields as a variable callled nonStringFields
+    // .find() and array method - which returns the value of the first element that's true, given the testing function
+    const stringFields = ['userName', 'password', 'fullName', 'email'];
     const nonStringField = stringFields.find(
         field => field in req.body && typeof req.body[field] !== "string"
     );
 
+    // if we have some nonStringFields (in req.body) then we're creating and returning an error message, 
+    //******** next() calls the next middleware function, but is that where does this get error message get processed? inside of server.js? ******/
     if (nonStringField) {
         const err = new Error(`Field: ${nonStringField} must be type String`);
         err.status = 422;
         return next(err);
     }
 
+    //Specifying fields that we'll be throwing an error for, if they have spaces before or after
+    //If we trim a provided field, and it does NOT equal what's in req.body - we're calling that a non-trimmed field
     const explicitlyTrimmedFields = ['userName', 'password'];
     const nonTrimmedField = explicitlyTrimmedFields.find(
         field => req.body[field].trim() !== req.body[field]
     );
 
+    //If we have some fields that are not trimmed, aka HAVE whitespace, then we're shutting down the rest of the block
     if (nonTrimmedField) {
         const err = new Error(`Field: '${nonTrimmedField}' cannot start or end with a 'space'`);
         err.status = 422;
         return next(err);
     }
 
+    //Setting the character length requirements of username and password
     const sizedFields = {
-        userName: { min: 1 },
+        userName: { min: 3 },
         password: { min: 8, max: 72 }
     };
 
+    //Object.keys returns an array, where each element is a string that corresponds to the properties of the object
+    //*****Not 100% sure what this is doing? */
+    //we're checking to see if the fields in req.body (username at least 3 && password 8-72) are too small
     const tooSmallField = Object.keys(sizedFields).find(
         field => 'min' in sizedFields[field] && req.body[field].trim().length < sizedFields[field].min
     );
+
+    //If there are fields that are too small, then 
     if (tooSmallField) {
         const min = sizedFields[tooSmallField].min;
         const err = new Error(`Field: '${tooSmallField}' must be at least ${min} characters long`);
