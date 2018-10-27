@@ -1,5 +1,9 @@
+"user strict";
+
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+
 
 
 const userSchema = mongoose.Schema({
@@ -41,6 +45,10 @@ userSchema.methods.serialize = function() {
         email: this.email,
         profiles: this.profiles
     };
+};
+
+userSchema.statics.hashPassword = function (password) {
+    return bcrypt.hash(password, 10);
 };
 
 const User = mongoose.model('User', userSchema, 'Users');

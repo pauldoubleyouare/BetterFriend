@@ -130,35 +130,69 @@ router.post('/', (req, res, next) => {
         return next(err);
     }
 
-    let { userName, password, fullName = "" } = req.body;
+
+    //****Don't quite understand how fullName will work, since I have it as another aboject fullName: {frstname, lastname} */
+    //***** Also don't know what the fullName ="" does/is */
+    let { userName, password, fullName = "", email } = req.body;
     fullName = fullName.trim();
 
-
-    User
-        .findOne({userName: req.body.userName})
-        .then(user => {
-            if (user) {
-                const message = `${req.body.userName} is already taken, please choose a new username`;
-                console.log(message);
-                return res.status(400).send(message);
-            } 
-            else {
-                User
-                    .create({
-                        userName: req.body.userName,
-                        fullName: {
-                            firstName: req.body.fullName.firstName,
-                            lastName: req.body.fullName.lastName
-                        },
-                        email: req.body.email
-                    })
-                    .then(user => res.status(201).json(user.serialize()));
+    return User.find({userName})
+        .count()
+        .then(count => {
+            if (count > 0) {
+                return Promise.reject({
+                    code: 422,
+                    reason: 'ValidationError',
+                    message: 'Username already taken',
+                    location: 'userName'
+                });
             }
+            return User.hashPassword(password);
+        })
+        .then(hash => {
+            return User.create({
+                userName,
+                password: hash,
+                fullName,
+                email
+            });
+        })
+        .then(user => {
+            return res.status(201).json(user.serialize());
         })
         .catch(err => {
-            console.error(err);
-            res.status(500).json({ error: 'something is not right'});
+            if (err.reason === 'ValidationError') {
+                return res.status(err.code).json(err);
+            }
+            res.status(500).json({code: 500, message: 'Internal server error'});
         });
+
+    //======ORIGINAL========
+    // User
+    //     .findOne({userName: req.body.userName})
+    //     .then(user => {
+    //         if (user) {
+    //             const message = `${req.body.userName} is already taken, please choose a new username`;
+    //             console.log(message);
+    //             return res.status(400).send(message);
+    //         } 
+    //         else {
+    //             User
+    //                 .create({
+    //                     userName: req.body.userName,
+    //                     fullName: {
+    //                         firstName: req.body.fullName.firstName,
+    //                         lastName: req.body.fullName.lastName
+    //                     },
+    //                     email: req.body.email
+    //                 })
+    //                 .then(user => res.status(201).json(user.serialize()));
+    //         }
+    //     })
+    //     .catch(err => {
+    //         console.error(err);
+    //         res.status(500).json({ error: 'something is not right'});
+    //     });
 });
 
 router.put('/:id', (req, res) => {
