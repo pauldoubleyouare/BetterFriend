@@ -196,8 +196,7 @@ describe('Users API', function() {
                     // console.log(res.status);
                     res.should.have.status(204);
                     // console.log("RESPONSE BODY>>>>>>", res.body);
-                    return User
-                        .findById(userToUpdate.id);
+                    return User.findById(userToUpdate.id);
                 })
                 .then(function(updatedUser) {
                     // console.log('UPDATED USER>>>>>>', updatedUser);

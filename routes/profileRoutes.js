@@ -93,7 +93,7 @@ router.put('/:id', (req, res) => {
         .findByIdAndUpdate(req.params.id, {$set: updatedFields})
         .then(user => {
             console.log(user);
-            return res.status(200).json("Updated:" + {user: user})
+            return res.status(202).json("Updated:" + {user: user})
         })
         .catch(err => res.status(500).json({error: err + 'Internal server error'}))
     

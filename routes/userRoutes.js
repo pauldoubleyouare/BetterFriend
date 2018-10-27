@@ -58,16 +58,69 @@ router.get('/:id', (req, res) => {
 });
 
 
-router.post('/', (req, res) => {
-    const requiredFields = ['userName', 'fullName', 'email'];
-    // console.log(req.body);
-    requiredFields.forEach(field => {
-        if (!(field in req.body)) {
-            const message = `missing ${field} in request body`;
-            console.error(message);
-            return res.status(400).send(message);
-        } else console.log("Request recieved");
-    });
+router.post('/', (req, res, next) => {
+    const requiredFields = ['userName', 'fullName', 'password', 'email']; //creating a model for the required fields
+    const missingField = requiredFields.find(field => (!field in req.body)); //check to see if there are missing fields inside of req.body
+
+// ===========Login/user credential validation=============//
+    if (missingField) { //if there are missing fields
+        const err = new Error(`Missing ${missingField} in request body`); //create a new error message
+        err.status = 422; //send 422 - unprocessable entity
+        return next(err); //end this middleware function and return the error
+    }
+
+    const stringFields = ['userName', 'password', 'fullName'];
+    const nonStringField = stringFields.find(
+        field => field in req.body && typeof req.body[field] !== "string"
+    );
+
+    if (nonStringField) {
+        const err = new Error(`Field: ${nonStringField} must be type String`);
+        err.status = 422;
+        return next(err);
+    }
+
+    const explicitlyTrimmedFields = ['userName', 'password'];
+    const nonTrimmedField = explicitlyTrimmedFields.find(
+        field => req.body[field].trim() !== req.body[field]
+    );
+
+    if (nonTrimmedField) {
+        const err = new Error(`Field: '${nonTrimmedField}' cannot start or end with a 'space'`);
+        err.status = 422;
+        return next(err);
+    }
+
+    const sizedFields = {
+        userName: { min: 1 },
+        password: { min: 8, max: 72 }
+    };
+
+    const tooSmallField = Object.keys(sizedFields).find(
+        field => 'min' in sizedFields[field] && req.body[field].trim().length < sizedFields[field].min
+    );
+    if (tooSmallField) {
+        const min = sizedFields[tooSmallField].min;
+        const err = new Error(`Field: '${tooSmallField}' must be at least ${min} characters long`);
+        err.status = 422;
+        return next(err);
+    }
+
+    const tooLargeField = Object.keys(sizedFields).find(
+        field => 'max' in sizedFields[field] && req.body[field].trim().length > sizedFields[field].max
+    );
+
+    if (tooLargeField) {
+        const max = sizedFields[tooLargeField].max;
+        const err = new Error(`Field: '${tooLargeField}' must be less than ${max} characters`);
+        err.status = 422;
+        return next(err);
+    }
+
+    let { userName, password, fullName = "" } = req.body;
+    fullName = fullName.trim();
+
+
     User
         .findOne({userName: req.body.userName})
         .then(user => {

@@ -140,7 +140,7 @@ describe('Profiles API', function() {
 
         it('Should create one new Profile with User ID attached', function() {
             let newProfile = generateProfiles(1);
-            console.log('NEW PROFILE OWNER>>>>>>', newProfile);
+            // console.log('NEW PROFILE OWNER>>>>>>', newProfile);
             let ownerId = newProfile[0].owner;
             
             // console.log("NEW PROFILE>>>>>>", newProfile.fullName.firstName);
@@ -148,17 +148,94 @@ describe('Profiles API', function() {
                 .post(`/api/users/${ownerId}/profiles/`)
                 .send(newProfile[0])
                 .then(function(res) {
-                    console.log("POST RESPONSE BODY>>>>", res.body);
+                    // console.log("POST RESPONSE BODY>>>>", res.body);
                     res.should.have.status(201);
                     res.should.be.json;
                     res.body.should.be.an('object');
                     res.body.should.exist;
                     res.body.profile.should.include.keys('owner', 'id', 'fullName');
 
-                })
-        })
+                });
+        });
 
-    })
+    });
+
+    describe('PUT Profile endpoint', function() {
+        before(function() {
+            return seedUserData(), seedProfileData();
+
+        });
+
+        after(function() {
+            return tearDownDb();
+        });
+
+        it('Should update one Profile', function() {
+            //first we need a profile to update
+            //
+            seedProfileData();
+            let profileToUpdate = {
+                fullName: {
+                    firstName: "Cosmo",
+                    lastName: "Kramer"
+                },
+                email: "cosmo@kramer.com"
+            };
+
+            return Profile
+                .findOne()
+                .then(function(profile) {
+                    console.log("PROFILE>>>>>", profile);
+                    profileToUpdate.id = profile.id;
+                    profileToUpdate.owner = profile.owner;
+                    console.log("PROFILE TO UPDATE>>>>>>>", profileToUpdate);
+                    return chai.request(app)
+                        .put(`/api/users/${profileToUpdate.owner}/profiles/${profileToUpdate.id}`)
+                        .send(profileToUpdate)
+                })
+                .then(function(res) {
+                    // console.log("RESPONSE BODY>>>>>", res.body);
+                    res.should.have.status(202);
+                    return Profile.findById(profileToUpdate.id);
+                })
+                .then(function(updatedProfile) {
+                    console.log("THE REAL DEAL>>>>>>>>>>>>", updatedProfile);
+                    updatedProfile.id.should.equal(profileToUpdate.id);
+                    updatedProfile.owner.should.deep.equal(profileToUpdate.owner);
+                });
+            
+        });
+
+
+
+    });
+
+    describe('DELETE Profile endpoint', function() {
+        before(function() {
+            return seedUserData(), seedProfileData();
+        });
+
+        after(function() {
+            return tearDownDb();
+        });
+
+        it('Should DELETE a Profile given the ID', function() {
+            return Profile
+                .findOne()
+                .then(function(profile){
+                    console.log("PORIFLE IN DB>>>>>>>>", profile);
+                    let profileToDelete = profile;
+                    return chai.request(app)
+                        .delete(`/api/users/${profileToDelete.owner}/profiles/${profileToDelete.id}`)
+                })
+                .then(function(res) {
+                    console.log("PROFILE RESPONSE>>>>>>", res.body);
+                    res.should.have.status(200);
+                })
+
+
+        });
+    });
 
 
 
