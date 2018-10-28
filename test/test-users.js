@@ -105,14 +105,15 @@ describe('Users API', function() {
       return tearDownDb();
     });
 
-    it('Should create one new User', function() {
+    it.only('Should create one new User', function() {
       const newUser = {
         userName: faker.internet.userName(),
         fullName: {
           firstName: faker.name.firstName(),
           lastName: faker.name.lastName()
         },
-        email: faker.internet.email()
+        email: faker.internet.email(),
+        password: faker.internet.password()
       };
       let responseId;
       return chai

@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
@@ -45,6 +45,10 @@ userSchema.methods.serialize = function() {
     email: this.email,
     profiles: this.profiles
   };
+};
+
+userSchema.methods.validatePassword = function(password) {
+  return bcrypt.compare(password, this.password)
 };
 
 userSchema.statics.hashPassword = function(password) {
