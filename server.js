@@ -8,16 +8,31 @@ mongoose.Promise = global.Promise; // this is making Mongoose use ES6 promises
 
 //we're pulling the DB URL from ./config and setting them as variables here via desructuring assignment
 const { DATABASE_URL, TEST_DATABASE_URL, PORT } = require('./config');
+const jwtAuth = require('./middleware/jwt-auth');
 
 const userRouter = require('./routes/userRoutes');
+const profileRouter = require('./routes/profileRoutes');
+const authRouter = require('./routes/auth');
 
 const app = express();
 
 app.use(morgan('common'));
-app.use(express.static('public')); //this is serving the static files in 'public'
+
+//Static webserver
+app.use(express.static('public'));
+
+//Enable CORS support
+app.use(cors());
+
+//Parse request body
 app.use(express.json());
 
-app.use('/api/users/', userRouter);
+//Public Routers
+app.use('/api', authRouter);
+app.use('/api/users', userRouter);
+
+//Protected Routers
+app.use('/api/profiles', jwtAuth, profileRouter);
 
 // we're calling server up here, then assigning a value to it inside of runServer, but closeServer also needs access to a server object
 let server;
