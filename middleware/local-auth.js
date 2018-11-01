@@ -1,5 +1,6 @@
 'use strict';
 
+const bcrypt = require('bcrypt');
 const { User } = require('../models/userModel');
 
 function localAuth(req, res, next) {
@@ -22,8 +23,8 @@ function localAuth(req, res, next) {
         err.location = 'userName';
         return Promise.reject(err);
       }
-
-      return user.validatePassword(password);
+      return bcrypt.compare(password, user.password);
+      // return user.validatePassword(password);
     })
     .then(isValid => {
 

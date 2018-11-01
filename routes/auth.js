@@ -6,13 +6,17 @@ const jwt = require('jsonwebtoken');
 const localAuth = require('../middleware/local-auth');
 const jwtAuth = require('../middleware/jwt-auth');
 
-const { JWT_SECRET, JWT_EXPIRY } = require('../config');
+// const { JWT_SECRET, JWT_EXPIRY } = require('../config');
+const config = require('../config');
 
 const router = express.Router();
 
 const createAuthToken = function (user) {
+  console.log('JWT EXPIRY>>>>>>>', config.JWT_EXPIRY);
+  console.log('JWT SECRET>>>>>>>', config.JWT_SECRET);
+  console.log('USER>>>>>', user);
   return new Promise(function (resolve, reject) {
-    jwt.sign({ user }, JWT_SECRET, { expiresIn: JWT_EXPIRY}, function (err, token) {
+    jwt.sign({ user }, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRY}, function (err, token) {
       if (err) {
         return reject(err);
       }
@@ -22,6 +26,7 @@ const createAuthToken = function (user) {
 };
 
 router.post('/login', localAuth, (req, res, next) => {
+  console.log("REQUEST.USER>>>>>>>>", req.user);
   createAuthToken(req.user)
     .then(authToken => {
       res.json({ authToken });

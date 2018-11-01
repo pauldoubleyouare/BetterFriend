@@ -1,8 +1,11 @@
 'use strict';
 
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const cors = require('cors');
 
 mongoose.Promise = global.Promise; // this is making Mongoose use ES6 promises
 
