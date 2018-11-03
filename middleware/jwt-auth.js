@@ -14,7 +14,7 @@ function jwtAuth(req, res, next) {
     return next(err);
   }
 
-  const scheme = auth.aplit(' ')[0];
+  const scheme = auth.split(' ')[0];
   const token = auth.split(' ')[1];
 
   if (scheme !== 'Bearer' || !token) {

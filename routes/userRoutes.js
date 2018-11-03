@@ -6,6 +6,12 @@ const profileRoutes = require('./profileRoutes');
 const { User } = require('../models/userModel');
 const { Profile } = require('../models/profileModel');
 
+// api/users/:id
+// api/users/:id/profiles/
+// api/profiles/:id
+// api/users/:id/profiles/:id
+
+
 router.use(
   '/:id/profiles/',
   (req, res, next) => {
@@ -155,7 +161,7 @@ router.post('/', (req, res, next) => {
   // const err = new Error(`Field: '${tooSmallField}' must be at least ${min} characters long`);
   // err.status = 422;
   // return next(err);
-  
+
   // if (tooLargeField) {
   //     const max = sizedFields[tooLargeField].max;
   //     const err = new Error(`Field: '${tooLargeField}' must be less than ${max} characters`);
@@ -232,6 +238,7 @@ router.post('/', (req, res, next) => {
   //     });
 });
 
+//*****NEED TO ADD/UPDATE PASSWORD */
 router.put('/:id', (req, res) => {
   console.log('PUT request received');
   //take the req.params.id, query the database to find the user with the matching Id, if it finds a matching id
@@ -263,6 +270,8 @@ router.put('/:id', (req, res) => {
     );
 });
 
+
+//****NEED TO ADD / UPDATE PASSWORD */
 router.delete('/:id', (req, res) => {
   User.findByIdAndRemove(req.params.id)
     .then(() => {
