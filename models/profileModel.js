@@ -3,7 +3,9 @@ const { User } = require('./userModel');
 mongoose.Promise = global.Promise;
 const faker = require('faker');
 
-//***** remove created, mongoose auto creates */ timestamp: true 
+//***** remove created, mongoose auto creates */ timestamp: true
+//https://mongoosejs.com/docs/guide.html#timestamps
+//https://github.com/CodeDemos/demo-mongoose-relationships/blob/master/subdocument.js
 const wishListSchema = mongoose.Schema({
   wishItem: String,
   created: {
@@ -12,11 +14,8 @@ const wishListSchema = mongoose.Schema({
   }
 });
 
-// let WishList = mongoose.model('WishList', wishListSchema);
-
 const profileSchema = mongoose.Schema(
   {
-    // _id: mongoose.Schema.Types.ObjectId,
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -64,7 +63,6 @@ profileSchema.methods.serialize = function() {
 
 let Profile = mongoose.model('Profile', profileSchema, 'Profiles');
 
-//Generating random relationship type
 function generateRelationship() {
   const relationship = [
     'Mom',
