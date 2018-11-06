@@ -6,7 +6,10 @@ const { Profile } = require('../models/profileModel');
 const { User } = require('../models/userModel');
 
 router.get('/', (req, res) => {
-  Profile.find()
+  let owner = req.user.id;
+  let owner1;
+  console.log("OWNER>>>>", owner);
+  Profile.find({ owner })
     .then(profiles => {
       res.json({
         profiles: profiles.map(profile => profile.serialize())

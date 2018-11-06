@@ -35,7 +35,7 @@ function localAuth(req, res, next) {
         return Promise.reject(err);
       }
 
-      req.user = user;
+      req.user = user.serialize();
       next();
     })
     .catch((err) => {

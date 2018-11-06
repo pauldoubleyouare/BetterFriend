@@ -1,2 +1,0 @@
-{"owner": {"$oid":"5ba81c0385b4af7933efbc63"}, "name": {"firstName": "Larry", "lastName": "Rosenberg"}, "email": "larry@rosenberg.com", "relationship": "father", "birthday": "date", "phone": "(888)999-1111"}
-{"owner": {"$oid":"5ba81c0385b4af7933efbc63"}, "name": {"firstName": "Hillary", "lastName": "Duff"}, "email": "hillary@duff.com", "relationship": "best friend", "birthday": "date", "phone": "(999)111-2222"}

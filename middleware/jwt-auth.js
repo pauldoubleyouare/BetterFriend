@@ -32,6 +32,7 @@ function jwtAuth(req, res, next) {
     }
 
     req.user = decoded.user;
+    console.log('REQ.USER>>>>.', req.user);
     next();
   });
 }

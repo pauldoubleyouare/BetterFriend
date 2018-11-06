@@ -3,6 +3,7 @@ const { User } = require('./userModel');
 mongoose.Promise = global.Promise;
 const faker = require('faker');
 
+//***** remove created, mongoose auto creates */ timestamp: true 
 const wishListSchema = mongoose.Schema({
   wishItem: String,
   created: {

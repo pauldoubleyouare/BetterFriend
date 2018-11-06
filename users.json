@@ -1,6 +1,0 @@
-{"_id":{"$oid":"5ba6eec925b7302e96eb8b76"},"username":"cooldad","fullName":{"firstName":"Homer","lastName":"Simpson"},"email":"homer@simpson.com"}
-{"_id":{"$oid":"5ba6eec925b7302e96eb8b77"},"username":"coolgirl","fullName":{"firstName":"Lisa","lastName":"Simpson"},"email":"lisa@simpson.com"}
-{"_id":{"$oid":"5ba6eec925b7302e96eb8b78"},"username":"coolguy","fullName":{"firstName":"Bart","lastName":"Simpson"},"email":"bart@simpson.com"}
-{"_id":{"$oid":"5ba81c0385b4af7933efbc63"},"userName":"coolmom","fullName":{"firstName":"Marge","lastName":"Simpson"},"email":"marge@simpson.com"}
-{"_id":{"$oid":"5ba83ab6815f717f6de1f52a"},"fullName":{"firstName":"Ned","lastName":"Flanders"},"userName":"coolneighbor","email":"ned@flanders.com","created":{"$date":"2018-09-24T01:15:34.520Z"},"__v":0}
-{"_id":{"$oid":"5ba84b5c76e4cf88a46c2bb0"},"fullName":{"firstName":"Apu","lastName":"Nahasapeemapetilon"},"userName":"coolclerk","email":"apu@nahasapeemapetilon.com", "profiles": [{}], "created":{"$date":"2018-09-24T02:26:36.799Z"},"__v":0}
