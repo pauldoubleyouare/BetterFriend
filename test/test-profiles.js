@@ -12,8 +12,6 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-//*****Do I need to do the same thing with routing as /api/users/USERID/profiles?
-
 function seedUserData() {
   console.info('Seeding User data');
   const seedData = [];
@@ -71,7 +69,6 @@ function generateProfiles(numberOfProfiles) {
 
 function seedProfileData() {
   console.info('Seeding Profile data');
-  //******* Not sure how this wishItem/wishList things works with the model and schema, getting back [object], [object] */
   return Profile.insertMany(generateProfiles(6));
 }
 
@@ -109,14 +106,10 @@ describe('Profiles API', function() {
         .request(app)
         .get('/api/users/:id/profiles/')
         .then(function(res) {
-          // console.log('RESPONSE>>>>>>..', res);
           res.status.should.equal(200);
           res.should.be.json;
           res.body.should.be.an('object');
           profileId = res.body.profiles[0].id;
-          // console.log(profileId);
-
-          // console.log('PROFILES ON GET /profiles>>>>>', JSON.stringify(res.body.profiles));
         });
     });
 
@@ -128,8 +121,6 @@ describe('Profiles API', function() {
           res.should.have.status(200);
           res.should.be.json;
           res.body.should.be.an('object');
-          // console.log("response body>>>>>>>", res.body);
-          // console.log('resbodyId>>>>', res.body.profiles.id)
           res.body.profile._id.should.equal(profileId);
           res.body.profile.should.include.keys(
             '_id',
@@ -143,9 +134,6 @@ describe('Profiles API', function() {
   });
 
   describe('POST Profile endpoint', function() {
-    //Seed User data
-    //create Profile under User
-    //check to make sure that Profile has 'owner'
     before(function() {
       return seedUserData();
     });
@@ -156,16 +144,13 @@ describe('Profiles API', function() {
 
     it('Should create one new Profile with User ID attached', function() {
       let newProfile = generateProfiles(1);
-      // console.log('NEW PROFILE OWNER>>>>>>', newProfile);
       let ownerId = newProfile[0].owner;
 
-      // console.log("NEW PROFILE>>>>>>", newProfile.fullName.firstName);
       return chai
         .request(app)
         .post(`/api/users/${ownerId}/profiles/`)
         .send(newProfile[0])
         .then(function(res) {
-          // console.log("POST RESPONSE BODY>>>>", res.body);
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.an('object');
@@ -185,8 +170,6 @@ describe('Profiles API', function() {
     });
 
     it('Should update one Profile', function() {
-      //first we need a profile to update
-      //
       seedProfileData();
       let profileToUpdate = {
         fullName: {
@@ -198,10 +181,8 @@ describe('Profiles API', function() {
 
       return Profile.findOne()
         .then(function(profile) {
-          console.log('PROFILE>>>>>', profile);
           profileToUpdate.id = profile.id;
           profileToUpdate.owner = profile.owner;
-          console.log('PROFILE TO UPDATE>>>>>>>', profileToUpdate);
           return chai
             .request(app)
             .put(
@@ -212,12 +193,10 @@ describe('Profiles API', function() {
             .send(profileToUpdate);
         })
         .then(function(res) {
-          // console.log("RESPONSE BODY>>>>>", res.body);
           res.should.have.status(202);
           return Profile.findById(profileToUpdate.id);
         })
         .then(function(updatedProfile) {
-          console.log('THE REAL DEAL>>>>>>>>>>>>', updatedProfile);
           updatedProfile.id.should.equal(profileToUpdate.id);
           updatedProfile.owner.should.deep.equal(profileToUpdate.owner);
         });
@@ -236,7 +215,6 @@ describe('Profiles API', function() {
     it('Should DELETE a Profile given the ID', function() {
       return Profile.findOne()
         .then(function(profile) {
-          console.log('PORIFLE IN DB>>>>>>>>', profile);
           let profileToDelete = profile;
           return chai
             .request(app)
@@ -247,7 +225,6 @@ describe('Profiles API', function() {
             );
         })
         .then(function(res) {
-          console.log('PROFILE RESPONSE>>>>>>', res.body);
           res.should.have.status(200);
         });
     });
