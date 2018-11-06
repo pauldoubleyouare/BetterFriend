@@ -25,10 +25,12 @@ const userSchema = mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Profile'
       }
-    ],
-    created: {
-      type: Date,
-      default: Date.now
+    ]
+  },
+  {
+    timestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at'
     }
   },
   { collection: 'User' }

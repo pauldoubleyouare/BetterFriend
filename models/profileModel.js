@@ -38,10 +38,12 @@ const profileSchema = mongoose.Schema(
       zipcode: Number
     },
     phone: String,
-    wishList: [wishListSchema],
-    created: {
-      type: Date,
-      default: Date.now
+    wishList: [wishListSchema]
+  },
+  {
+    timestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at'
     }
   },
   { collection: 'Profile' }
@@ -57,7 +59,8 @@ profileSchema.methods.serialize = function() {
     birthday: this.birthday,
     address: this.address,
     phone: this.phone,
-    wishList: this.wishList
+    wishList: this.wishList,
+    created: this.created_at
   };
 };
 
