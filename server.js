@@ -5,7 +5,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const cors = require('cors');
 
 mongoose.Promise = global.Promise;
 
@@ -22,9 +21,6 @@ app.use(morgan('common'));
 
 //Static webserver
 app.use(express.static('public'));
-
-//Enable CORS support
-app.use(cors());
 
 //Parse request body
 app.use(express.json());
