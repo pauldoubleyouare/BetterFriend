@@ -5,15 +5,34 @@ const router = express.Router();
 const { Profile } = require('../models/profileModel');
 const { User } = require('../models/userModel');
 
+// add routes for Wishes just do Create and Delete - validate that item doesn't already exist (on front end)
 
 
-// add routes for Wishes just do Create and Delete - validate that item doesn't already exist (on front end) 
 
-// router.post('/:id/wishItem', ())
+
+router.post('/:id/wishItem', (req, res) => {
+  //we need to return the Profile in question
+  // push an item into the Wish array
+  //return the profile w/ the new wish
+  Profile.findByIdAndUpdate(req.params.id, 
+    {"$push": {
+      wishList: {
+        
+      }
+    }})
+});
+
+router.delete('/:id/wishItem/:id', (req, res) => {
+  //we need to find the profile
+  // delete the item in question, assuming by id
+});
+
+
+
+
 let owner;
 
 router.get('/', (req, res) => {
-  // console.log('REQ.USER>>>>>', req.user);
   owner = req.user._id;
   Profile.find({ owner })
     .then(profiles => {
@@ -42,11 +61,10 @@ router.get('/:id', (req, res) => {
     });
 });
 
-
 router.post('/', (req, res) => {
   owner = req.user._id;
-  console.log("owner>>>>>>>>", owner);
-  
+  console.log('owner>>>>>>>>', owner);
+
   User.findById(owner)
     .then(user => {
       return Profile.create(Object.assign({}, req.body, { owner: owner }));
