@@ -5,8 +5,16 @@ const router = express.Router();
 const { Profile } = require('../models/profileModel');
 const { User } = require('../models/userModel');
 
+
+
+// add routes for Wishes just do Create and Delete - validate that item doesn't already exist (on front end) 
+
+// router.post('/:id/wishItem', ())
+
+
 router.get('/', (req, res) => {
-  let owner = req.user.id;
+  console.log('REQ.USER>>>>>', req.user);
+  let owner = req.user._id;
   Profile.find({ owner })
     .then(profiles => {
       res.json({
@@ -24,7 +32,7 @@ router.get('/:id', (req, res) => {
   Profile.findById(req.params.id)
     .then(profile => {
       res.json({
-        profile: profile
+        profile: profile.serialize()
       });
       return profile;
     })
@@ -33,6 +41,7 @@ router.get('/:id', (req, res) => {
       res.status(500).json({ error: err });
     });
 });
+
 
 router.post('/', (req, res) => {
   User.findById(req.userId)

@@ -11,15 +11,15 @@ const { Profile } = require('../models/profileModel');
 // api/profiles/:id
 // api/users/:id/profiles/:id
 
-router.use(
-  '/:id/profiles/',
-  (req, res, next) => {
-    req.userId = req.params.id;
+// router.use(
+//   '/:id/profiles/',
+//   (req, res, next) => {
+//     req.userId = req.params.id;
 
-    next();
-  },
-  profileRoutes
-);
+//     next();
+//   },
+//   profileRoutes
+// );
 
 router.get('/', (req, res) => {
   User.find()

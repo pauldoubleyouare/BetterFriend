@@ -6,7 +6,10 @@ const faker = require('faker');
 //***** remove created, mongoose auto creates */ timestamp: true
 //https://mongoosejs.com/docs/guide.html#timestamps
 //https://github.com/CodeDemos/demo-mongoose-relationships/blob/master/subdocument.js
-const wishListSchema = mongoose.Schema({
+
+// change name to wishSchema
+//change dates to timestamps
+const wishSchema = mongoose.Schema({
   wishItem: String,
   created: {
     type: Date,
@@ -14,6 +17,7 @@ const wishListSchema = mongoose.Schema({
   }
 });
 
+//virtual for full name - remove fullname, two properties for first /last (last name required)
 const profileSchema = mongoose.Schema(
   {
     owner: {
@@ -30,24 +34,28 @@ const profileSchema = mongoose.Schema(
     },
     email: String,
     relationship: String,
-    birthday: String,
-    address: {
+    birthday: String, //make this a date not string
+    address: { //make these separate fields
       streetName: String,
       city: String,
       state: String,
       zipcode: Number
     },
     phone: String,
-    wishList: [wishListSchema]
+    wishList: [wishSchema]
   },
   {
+    //just need to put timestamps = true
     timestamps: {
-      createdAt: 'created_at',
-      updatedAt: 'updated_at'
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
     }
   },
   { collection: 'Profile' }
 );
+
+//on front end, add conditional if there is a last name firstname+lastName
+//don't serve crap data via api
 
 profileSchema.methods.serialize = function() {
   return {
@@ -60,7 +68,7 @@ profileSchema.methods.serialize = function() {
     address: this.address,
     phone: this.phone,
     wishList: this.wishList,
-    created: this.created_at
+    created: this.createdAt
   };
 };
 
