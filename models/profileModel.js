@@ -9,12 +9,13 @@ const faker = require('faker');
 
 // change name to wishSchema
 //change dates to timestamps
-const wishSchema = mongoose.Schema({
-  wishItem: String
-},
-{
-  timestamps: true
-}
+const wishSchema = mongoose.Schema(
+  {
+    wishItem: String
+  },
+  {
+    timestamps: true
+  }
 );
 
 //virtual for full name - remove fullname, two properties for first /last (last name required)
@@ -25,17 +26,19 @@ const profileSchema = mongoose.Schema(
       ref: 'User',
       required: true
     },
-    fullName: {
-      firstName: {
-        type: String,
-        required: true
-      },
-      lastName: String
+    firstName: {
+      type: String,
+      required: true
+    },
+    lastName: {
+      type: String,
+      required: true
     },
     email: String,
     relationship: String,
     birthday: Date, //make this a date not string
-    address: { //make these separate fields
+    address: {
+      //make these separate fields
       streetName: String,
       city: String,
       state: String,
@@ -57,7 +60,8 @@ profileSchema.methods.serialize = function() {
   return {
     owner: this.owner,
     id: this._id,
-    fullName: this.fullName.firstName + ' ' + this.fullName.lastName,
+    firstName: this.firstName,
+    lastName: this.lastName,
     relationship: this.relationship,
     email: this.email,
     birthday: this.birthday,
