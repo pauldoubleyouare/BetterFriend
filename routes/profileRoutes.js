@@ -11,8 +11,7 @@ router.post('/:id/wishItem', (req, res) => {
   //we need to return the Profile in question
   // push an item into the Wish array
   //return the profile w/ the new wish
-  console.log('REQBODY>>>>>>>>', req.body);
-  console.log('WISHITEM>>>>>', req.body.wishItem);
+
   Profile.findByIdAndUpdate(
     req.params.id,
     {
@@ -24,21 +23,44 @@ router.post('/:id/wishItem', (req, res) => {
     },
     { new: true }
   )
+    .then(profile => {
+      res.json({
+        profile: profile.serialize()
+      });
+      return profile;
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err });
+    });
+});
+
+router.delete('/:id/wishItem', (req, res) => {
+  //we need to find the profile
+  // delete the item in question, assuming by id
+  console.log('REQBODY>>>>>>>>', req.body);
+  console.log('WISHITEM>>>>>', req.body.wishList);
+  Profile.findByIdAndUpdate(
+    req.params.id,
+    {
+      $pull: {
+        wishList: {
+          _id: req.body._id
+        }
+      }
+    },
+    { new: true }
+  )
   .then(profile => {
     res.json({
       profile: profile.serialize()
     });
-    return profile
+    return profile;
   })
   .catch(err => {
     console.error(err);
-    res.status(500).json({ error: err });
+    res.status(500).json({ error: err});
   });
-});
-
-router.delete('/:id/wishItem/:id', (req, res) => {
-  //we need to find the profile
-  // delete the item in question, assuming by id
 });
 
 let owner;
