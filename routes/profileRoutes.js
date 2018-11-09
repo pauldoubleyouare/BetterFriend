@@ -38,8 +38,8 @@ router.post('/:id/wishItem', (req, res) => {
 router.delete('/:id/wishItem', (req, res) => {
   //we need to find the profile
   // delete the item in question, assuming by id
-  console.log('REQBODY>>>>>>>>', req.body);
-  console.log('WISHITEM>>>>>', req.body.wishList);
+  // console.log('REQBODY>>>>>>>>', req.body);
+  // console.log('WISHITEM>>>>>', req.body.wishList);
   Profile.findByIdAndUpdate(
     req.params.id,
     {
