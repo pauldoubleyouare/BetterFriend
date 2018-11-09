@@ -7,19 +7,33 @@ const { User } = require('../models/userModel');
 
 // add routes for Wishes just do Create and Delete - validate that item doesn't already exist (on front end)
 
-
-
-
 router.post('/:id/wishItem', (req, res) => {
   //we need to return the Profile in question
   // push an item into the Wish array
   //return the profile w/ the new wish
-  Profile.findByIdAndUpdate(req.params.id, 
-    {"$push": {
-      wishList: {
-        
+  console.log('REQBODY>>>>>>>>', req.body);
+  console.log('WISHITEM>>>>>', req.body.wishItem);
+  Profile.findByIdAndUpdate(
+    req.params.id,
+    {
+      $push: {
+        wishList: {
+          wishItem: req.body.wishItem
+        }
       }
-    }})
+    },
+    { new: true }
+  )
+  .then(profile => {
+    res.json({
+      profile: profile.serialize()
+    });
+    return profile
+  })
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({ error: err });
+  });
 });
 
 router.delete('/:id/wishItem/:id', (req, res) => {
@@ -27,17 +41,15 @@ router.delete('/:id/wishItem/:id', (req, res) => {
   // delete the item in question, assuming by id
 });
 
-
-
-
 let owner;
 
 router.get('/', (req, res) => {
-  owner = req.user._id;
+  owner = req.user.id;
+  console.log('OWNER>>>>>>', owner);
   Profile.find({ owner })
     .then(profiles => {
       res.json({
-        profiles: profiles.map(profile => profile.serialize())
+        profiles: profiles.map(profile => profile)
       });
       return profiles;
     })

@@ -36,9 +36,8 @@ const profileSchema = mongoose.Schema(
     },
     email: String,
     relationship: String,
-    birthday: Date, //make this a date not string
+    birthday: Date, 
     address: {
-      //make these separate fields
       streetName: String,
       city: String,
       state: String,
@@ -52,6 +51,10 @@ const profileSchema = mongoose.Schema(
   },
   { collection: 'Profile' }
 );
+
+profileSchema.virtual('fullName').get(function() {
+  return this.firstName + ' ' + this.lastName;
+});
 
 //on front end, add conditional if there is a last name firstname+lastName
 //don't serve crap data via api
