@@ -6,13 +6,6 @@ const profileRoutes = require('./profileRoutes');
 const { User } = require('../models/userModel');
 const { Profile } = require('../models/profileModel');
 
-// api/users/:id
-// api/users/:id/profiles/
-// api/profiles/:id
-// api/users/:id/profiles/:id
-
-
-
 router.get('/', (req, res) => {
   User.find()
     .then(users => {

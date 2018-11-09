@@ -5,64 +5,6 @@ const router = express.Router();
 const { Profile } = require('../models/profileModel');
 const { User } = require('../models/userModel');
 
-// add routes for Wishes just do Create and Delete - validate that item doesn't already exist (on front end)
-
-router.post('/:id/wishItem', (req, res) => {
-  //we need to return the Profile in question
-  // push an item into the Wish array
-  //return the profile w/ the new wish
-
-  Profile.findByIdAndUpdate(
-    req.params.id,
-    {
-      $push: {
-        wishList: {
-          wishItem: req.body.wishItem
-        }
-      }
-    },
-    { new: true }
-  )
-    .then(profile => {
-      res.json({
-        profile: profile.serialize()
-      });
-      return profile;
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: err });
-    });
-});
-
-router.delete('/:id/wishItem', (req, res) => {
-  //we need to find the profile
-  // delete the item in question, assuming by id
-  // console.log('REQBODY>>>>>>>>', req.body);
-  // console.log('WISHITEM>>>>>', req.body.wishList);
-  Profile.findByIdAndUpdate(
-    req.params.id,
-    {
-      $pull: {
-        wishList: {
-          _id: req.body._id
-        }
-      }
-    },
-    { new: true }
-  )
-  .then(profile => {
-    res.json({
-      profile: profile.serialize()
-    });
-    return profile;
-  })
-  .catch(err => {
-    console.error(err);
-    res.status(500).json({ error: err});
-  });
-});
-
 let owner;
 
 router.get('/', (req, res) => {
@@ -147,6 +89,56 @@ router.delete('/:id', (req, res) => {
       res.status(200).json(data.fullName.firstName + ' was deleted')
     )
     .catch(err => res.status(500).json({ err: err }));
+});
+
+// Wish endpoints
+//*** Probably need to add some validation in here? Or, since we're controlling the flow from the front end, not neccessary? */
+router.post('/:id/wishItem', (req, res) => {
+  Profile.findByIdAndUpdate(
+    req.params.id,
+    {
+      $push: {
+        wishList: {
+          wishItem: req.body.wishItem
+        }
+      }
+    },
+    { new: true }
+  )
+    .then(profile => {
+      res.json({
+        profile: profile.serialize()
+      });
+      return profile;
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err });
+    });
+});
+
+router.delete('/:id/wishItem', (req, res) => {
+  Profile.findByIdAndUpdate(
+    req.params.id,
+    {
+      $pull: {
+        wishList: {
+          _id: req.body._id
+        }
+      }
+    },
+    { new: true }
+  )
+    .then(profile => {
+      res.json({
+        profile: profile.serialize()
+      });
+      return profile;
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err });
+    });
 });
 
 module.exports = router;
