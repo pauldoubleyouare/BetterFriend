@@ -89,7 +89,7 @@ describe('Users API', function() {
       return tearDownDb();
     });
 
-    it.only('Should create one new User', function() {
+    it('Should create one new User', function() {
       const newUser = {
         userName: faker.internet.userName(),
         password: faker.internet.password(),

@@ -40,7 +40,7 @@ router.get('/:id', (req, res) => {
 
 //*****How would I dig into the fullName object to make sure that firstName and lastName are there, right now throwing a 500  */
 router.post('/', (req, res, next) => {
-  const requiredFields = ['userName', 'password', 'email'];
+  const requiredFields = ['userName', 'password', 'firstName', 'lastName', 'email'];
   const missingField = requiredFields.find(field => !(field in req.body));
   // console.log('MISSING FIELD>>>>>>>>>>>>>>', missingField);
 
@@ -117,12 +117,9 @@ router.post('/', (req, res, next) => {
     });
   }
 
-  //****Don't quite understand how fullName will work, since I have it as another aboject fullName: {frstname, lastname} */
-  //***** Also don't know what the fullName ="" does/is */
   let { userName, password, email } = req.body;
   let firstName = req.body.firstName.trim();
   let lastName = req.body.lastName.trim();
-  // fullName = fullName.trim();
 
   return User.find({ userName })
     .count()
@@ -141,8 +138,8 @@ router.post('/', (req, res, next) => {
       return User.create({
         userName,
         password: hash,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        firstName: firstName,
+        lastName: lastName,
         email
       });
     })
