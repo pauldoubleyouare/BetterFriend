@@ -6,43 +6,15 @@ const profileRoutes = require('./profileRoutes');
 const { User } = require('../models/userModel');
 const { Profile } = require('../models/profileModel');
 
-router.get('/', (req, res) => {
-  User.find()
-    .then(users => {
-      res.json({
-        users: users.map(user => user.serialize())
-      });
-
-      return users;
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: err });
-    });
-});
-
-router.get('/:id', (req, res) => {
-  let id = req.params.id;
-
-  User.findById(id)
-    .then(user => {
-      return Profile.find({ owner: id }).then(profiles => {
-        user.profiles = profiles;
-        return user;
-      });
-    })
-    .then(user => res.json(user.serialize()))
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'internal server error' });
-    });
-});
-
-//*****How would I dig into the fullName object to make sure that firstName and lastName are there, right now throwing a 500  */
 router.post('/', (req, res, next) => {
-  const requiredFields = ['userName', 'password', 'firstName', 'lastName', 'email'];
+  const requiredFields = [
+    'userName',
+    'password',
+    'firstName',
+    'lastName',
+    'email'
+  ];
   const missingField = requiredFields.find(field => !(field in req.body));
-  // console.log('MISSING FIELD>>>>>>>>>>>>>>', missingField);
 
   // ===========Login/user credential validation=============//
   if (missingField) {
@@ -65,7 +37,6 @@ router.post('/', (req, res, next) => {
     field => field in req.body && typeof req.body[field] !== 'string'
   );
 
-  //******** next() calls the next middleware function, but is that where does this get error message get processed? inside of server.js? ******/
   if (nonStringField) {
     return res.status(422).json({
       code: 422,
@@ -154,6 +125,55 @@ router.post('/', (req, res, next) => {
     });
 });
 
+//=====Admin use, GET all Users=====//
+router.get('/', (req, res) => {
+  User.find()
+    .then(users => {
+      res.json({
+        users: users.map(user => user.serialize())
+      });
+
+      return users;
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err });
+    });
+});
+
+//****NEED TO ADD / UPDATE PASSWORD */
+router.delete('/:id', (req, res) => {
+  User.findByIdAndRemove(req.params.id)
+    .then(() => {
+      console.log(`${req.params.id} has been deleted`);
+      return res
+        .status(200)
+        .json({ message: `${req.params.id} has been deleted` });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: 'yeah, something got messed up' });
+    });
+});
+
+//=====User Management, GET User by ID=====//
+router.get('/:id', (req, res) => {
+  let id = req.params.id;
+
+  User.findById(id)
+    .then(user => {
+      return Profile.find({ owner: id }).then(profiles => {
+        user.profiles = profiles;
+        return user;
+      });
+    })
+    .then(user => res.json(user.serialize()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'internal server error' });
+    });
+});
+
 //*****NEED TO ADD/UPDATE PASSWORD */
 router.put('/:id', (req, res) => {
   console.log('PUT request received');
@@ -184,21 +204,6 @@ router.put('/:id', (req, res) => {
     .catch(err =>
       res.status(500).json({ message: err + 'Internal server error' })
     );
-});
-
-//****NEED TO ADD / UPDATE PASSWORD */
-router.delete('/:id', (req, res) => {
-  User.findByIdAndRemove(req.params.id)
-    .then(() => {
-      console.log(`${req.params.id} has been deleted`);
-      return res
-        .status(200)
-        .json({ message: `${req.params.id} has been deleted` });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ error: 'yeah, something got messed up' });
-    });
 });
 
 module.exports = router;
