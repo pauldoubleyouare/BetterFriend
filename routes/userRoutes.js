@@ -40,9 +40,9 @@ router.get('/:id', (req, res) => {
 
 //*****How would I dig into the fullName object to make sure that firstName and lastName are there, right now throwing a 500  */
 router.post('/', (req, res, next) => {
-  const requiredFields = ['userName', 'fullName', 'password', 'email'];
+  const requiredFields = ['userName', 'password', 'email'];
   const missingField = requiredFields.find(field => !(field in req.body));
-  console.log('MISSING FIELD>>>>>>>>>>>>>>', missingField);
+  // console.log('MISSING FIELD>>>>>>>>>>>>>>', missingField);
 
   // ===========Login/user credential validation=============//
   if (missingField) {
@@ -54,7 +54,13 @@ router.post('/', (req, res, next) => {
     });
   }
 
-  const stringFields = ['userName', 'password', 'email'];
+  const stringFields = [
+    'userName',
+    'password',
+    'firstName',
+    'lastName',
+    'email'
+  ];
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   );
@@ -114,8 +120,8 @@ router.post('/', (req, res, next) => {
   //****Don't quite understand how fullName will work, since I have it as another aboject fullName: {frstname, lastname} */
   //***** Also don't know what the fullName ="" does/is */
   let { userName, password, email } = req.body;
-  let firstName = req.body.fullName.firstName.trim();
-  let lastName = req.body.fullName.lastName.trim();
+  let firstName = req.body.firstName.trim();
+  let lastName = req.body.lastName.trim();
   // fullName = fullName.trim();
 
   return User.find({ userName })
@@ -135,10 +141,8 @@ router.post('/', (req, res, next) => {
       return User.create({
         userName,
         password: hash,
-        fullName: {
-          firstName: req.body.fullName.firstName,
-          lastName: req.body.fullName.lastName
-        },
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email
       });
     })

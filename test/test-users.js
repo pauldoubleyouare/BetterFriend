@@ -79,7 +79,7 @@ describe('Users API', function() {
           res.should.be.json;
           res.body.should.be.an('object');
           res.body.id.should.equal(userId);
-          res.body.should.include.keys('id', 'userName', 'fullName', 'email');
+          res.body.should.include.keys('id', 'userName', 'password', 'email');
         });
     });
   });
@@ -89,15 +89,14 @@ describe('Users API', function() {
       return tearDownDb();
     });
 
-    it('Should create one new User', function() {
+    it.only('Should create one new User', function() {
       const newUser = {
         userName: faker.internet.userName(),
-        fullName: {
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName()
-        },
+        password: faker.internet.password(),
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
         email: faker.internet.email(),
-        password: faker.internet.password()
+        
       };
       let responseId;
       return chai
@@ -109,7 +108,7 @@ describe('Users API', function() {
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.an('object');
-          res.body.should.include.keys('id', 'userName', 'fullName', 'email');
+          res.body.should.include.keys('id', 'userName', 'firstName', 'lastName', 'email');
 
           res.body.should.exist;
           return User.findById(responseId);
@@ -118,7 +117,8 @@ describe('Users API', function() {
           user.id.should.exist;
           user.userName.should.equal(newUser.userName);
           user.email.should.equal(newUser.email);
-          user.fullName.should.deep.include(newUser.fullName);
+          user.firstName.should.equal(newUser.firstName);
+          user.lastName.should.equal(newUser.lastName)
         });
     });
   });

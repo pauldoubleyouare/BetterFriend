@@ -15,10 +15,8 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    fullName: {
-      firstName: { type: String, required: true },
-      lastName: { type: String }
-    },
+    firstName: { type: String, default: "FIRSTNAME" },
+    lastName: { type: String, default: "LASTNAME" },
     email: { type: String, required: true },
     profiles: [
       {
@@ -36,13 +34,12 @@ const userSchema = mongoose.Schema(
   { collection: 'User' }
 );
 
-// what this is doing, is creating a method .serialize that allows us
-//to control what data we're going to be responding with (which gets called in server.js)
 userSchema.methods.serialize = function() {
   return {
     id: this._id,
     userName: this.userName,
-    fullName: this.fullName.firstName + ' ' + this.fullName.lastName,
+    firstName: this.firstName,
+    lastName: this.lastName,
     email: this.email,
     profiles: this.profiles
   };
