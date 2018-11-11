@@ -21,7 +21,7 @@ router.post('/', (req, res, next) => {
     return res.status(422).json({
       code: 422,
       reason: 'ValidationError',
-      message: `Missing field in request body`,
+      message: `Missing ${missingField} in request body`,
       location: missingField
     });
   }
@@ -55,13 +55,13 @@ router.post('/', (req, res, next) => {
     return res.status(422).json({
       code: 422,
       reason: 'ValidationError',
-      message: `Cannot start or end with a space`,
+      message: `${nonTrimmedField} cannot start or end with a blank space`,
       location: nonTrimmedField
     });
   }
 
   const sizedFields = {
-    userName: { min: 3 },
+    userName: { min: 3, max: 20 },
     password: { min: 8, max: 72 }
   };
 
@@ -82,8 +82,8 @@ router.post('/', (req, res, next) => {
       code: 422,
       reason: 'ValidationError',
       message: tooSmallField
-        ? `Must be at least ${sizedFields[tooSmallField].min} characters long`
-        : `Must be at most ${sizedFields[tooLargeField].max} characters long`,
+        ? `${tooSmallField} must be at least ${sizedFields[tooSmallField].min} characters long`
+        : `${tooLargeField} must be at most ${sizedFields[tooLargeField].max} characters long`,
       location: tooSmallField || tooLargeField
     });
   }

@@ -88,37 +88,198 @@ describe('Users API', function() {
     after(function() {
       return tearDownDb();
     });
+    const userName = faker.internet.userName();
+    const password = faker.internet.password();
+    const firstName = faker.name.firstName();
+    const lastName = faker.name.lastName();
+    const email = faker.internet.email();
 
     it('Should create one new User', function() {
-      const newUser = {
-        userName: faker.internet.userName(),
-        password: faker.internet.password(),
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-        email: faker.internet.email(),
-        
-      };
       let responseId;
       return chai
         .request(app)
         .post('/api/users/')
-        .send(newUser)
+        .send({ userName, password, firstName, lastName, email })
         .then(function(res) {
           responseId = res.body.id;
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.an('object');
-          res.body.should.include.keys('id', 'userName', 'firstName', 'lastName', 'email');
+          res.body.should.include.keys(
+            'id',
+            'userName',
+            'firstName',
+            'lastName',
+            'email'
+          );
 
           res.body.should.exist;
           return User.findById(responseId);
         })
         .then(function(user) {
           user.id.should.exist;
-          user.userName.should.equal(newUser.userName);
-          user.email.should.equal(newUser.email);
-          user.firstName.should.equal(newUser.firstName);
-          user.lastName.should.equal(newUser.lastName)
+          user.userName.should.equal(userName);
+          user.email.should.equal(email);
+          user.firstName.should.equal(firstName);
+          user.lastName.should.equal(lastName);
+        });
+    });
+
+    it('Should reject users with missing userName', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({ password, firstName, lastName, email })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal('Missing userName in request body');
+        });
+    });
+
+    it('Should reject users with missing password', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({ userName, firstName, lastName, email })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal('Missing password in request body');
+        });
+    });
+
+    it('Should reject users with non-string password', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({ userName, password: 1234, firstName, lastName, email })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal('Incorect field type: expected string');
+        });
+    });
+
+    it('Should reject users with non-trimmed userName', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({
+          userName: ` ${userName} `,
+          password,
+          firstName,
+          lastName,
+          email
+        })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal(
+            'userName cannot start or end with a blank space'
+          );
+        });
+    });
+
+    it('Should reject users with non-trimmed password', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({
+          userName,
+          password: ` ${password} `,
+          firstName,
+          lastName,
+          email
+        })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal(
+            'password cannot start or end with a blank space'
+          );
+        });
+    });
+
+    it('Should reject users with userName less than 3 characters', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({ userName: 'aa', password, firstName, lastName, email })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal(
+            'userName must be at least 3 characters long'
+          );
+        });
+    });
+
+    it('Should reject users with userName greater than 20 characters', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({
+          userName: new Array(21).fill('a').join(''),
+          password,
+          firstName,
+          lastName,
+          email
+        })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal(
+            'userName must be at most 20 characters long'
+          );
+        });
+    });
+
+    it('Should reject users with passwords less than 8 characters', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({ userName, password: 'aaaaaaa', firstName, lastName, email })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal(
+            'password must be at least 8 characters long'
+          );
+        });
+    });
+
+    it('Should reject users with password greater than 72 characters', function() {
+      return chai
+        .request(app)
+        .post('/api/users')
+        .send({
+          userName,
+          password: new Array(73).fill('x').join(''),
+          firstName,
+          lastName,
+          email
+        })
+        .then(res => {
+          res.should.have.status(422);
+          res.body.message.should.equal(
+            'password must be at most 72 characters long'
+          );
+        });
+    });
+
+    it('Should reject users with a duplicate userName', function() {
+      return User.create({
+        userName,
+        password,
+        firstName,
+        lastName,
+        email
+      })
+        .then(() => 
+          chai.request(app).post('/api/users').send({
+            userName,
+            password,
+            firstName,
+            lastName,
+            email
+          })
+        )
+        .then(res => {
+          expect(res).to.have.status(422);
+          expect(res.body.message).to.equal('Username already taken');
         });
     });
   });
