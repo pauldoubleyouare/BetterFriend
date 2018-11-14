@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const { Profile } = require('../models/profileModel');
 const { User } = require('../models/userModel');
+const mongoose = require('mongoose');
 
 let owner;
 
@@ -38,7 +39,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  owner = req.user._id;
+  owner = req.user.id;
   User.findById(owner)
     .then(user => {
       return Profile.create(Object.assign({}, req.body, { owner: owner }));
@@ -90,11 +91,47 @@ router.delete('/:id', (req, res) => {
 });
 
 // Wish endpoints
-// ****make sure the current user owns the profile that the wish is getting added to
-// owner of profile should be current user (both post and delete)
-// find by ownerID and profile - to ensure the current user is accessing the correct profile/wishitem
-// so lost on this
+router.post('/:id/wishItem', (req, res, next) => {
+  const newWishItem = req.body.wishItem;
+  const userId = req.user.id;
+  const profileId = req.params.id;
+  //If req.params.id === Profile.owner {$push}????
+  console.log('NEW WISH>>>>>>>>>>', newWishItem);
+  console.log('NEW WISH OWNER>>>>>>>', userId);
 
+  if (!newWishItem) {
+    const err = new Error(`Missing ${newWishItem} in request body`);
+    err.status = 400;
+    return next(err);
+  }
+  if (!mongoose.Types.ObjectId.isValid(profileId)) {
+    const err = new Error('Id is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  Profile.findOneAndUpdate(
+    { _id: profileId, owner: userId },
+    {
+      $push: {
+        wishList: {
+          wishItem: req.body.wishItem
+        }
+      }
+    },
+    { new: true }
+  )
+    .then(profile => {
+      res.json({
+        profile: profile.serialize()
+      });
+      return profile;
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err });
+    });
+});
 
 router.delete('/:id/wishItem', (req, res) => {
   Profile.findByIdAndUpdate(
