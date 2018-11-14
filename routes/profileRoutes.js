@@ -94,44 +94,7 @@ router.delete('/:id', (req, res) => {
 // owner of profile should be current user (both post and delete)
 // find by ownerID and profile - to ensure the current user is accessing the correct profile/wishitem
 // so lost on this
-router.post('/:id/wishItem', (req, res, next) => {
-  const newWishItem = req.body.wishItem;
-  const userId = req.user.id;
-  const profileId = req.params.id;
 
-  //If req.params.id === Profile.owner {$push}????
-
-  console.log('NEW WISH>>>>>>>>>>', newWishItem);
-  console.log('NEW WISH OWNER>>>>>>>', userId);
-
-  if(!newWishItem) {
-    const err = new Error(`Missing ${newWishItem} in request body`);
-    err.status = 400;
-    return next(err);
-  }
-
-  Profile.findByIdAndUpdate(
-    req.params.id,
-    {
-      $push: {
-        wishList: {
-          wishItem: req.body.wishItem
-        }
-      }
-    },
-    { new: true }
-  )
-    .then(profile => {
-      res.json({
-        profile: profile.serialize()
-      });
-      return profile;
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: err });
-    });
-});
 
 router.delete('/:id/wishItem', (req, res) => {
   Profile.findByIdAndUpdate(
