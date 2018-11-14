@@ -133,9 +133,11 @@ router.post('/:id/wishItem', (req, res, next) => {
     });
 });
 
+//Need 3 things here - 1) userId from JWT 2) req.params.id (profileId) 3) wishId
 router.delete('/:id/wishItem', (req, res) => {
-  Profile.findByIdAndUpdate(
-    req.params.id,
+  const userId = req.user.id;
+  const profileId = req.params.id;
+  Profile.findOneAndUpdate({_id: profileId, owner: userId},
     {
       $pull: {
         wishList: {
