@@ -90,9 +90,11 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-  Profile.findByIdAndRemove(req.params.id)
+  const userId = req.user.id;
+  const profileId = req.params.id;
+  Profile.findOneAndRemove({_id: profileId, owner: userId})
     .then(data =>
-      res.status(200).json(data.fullName.firstName + ' was deleted')
+      res.status(200).json(data.firstName + ' was deleted')
     )
     .catch(err => res.status(500).json({ err: err }));
 });
