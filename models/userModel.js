@@ -40,8 +40,7 @@ userSchema.methods.serialize = function() {
     userName: this.userName,
     firstName: this.firstName,
     lastName: this.lastName,
-    email: this.email,
-    profiles: this.profiles
+    email: this.email
   };
 };
 
