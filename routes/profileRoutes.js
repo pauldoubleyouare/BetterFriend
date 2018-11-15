@@ -10,7 +10,6 @@ let owner;
 
 router.get('/', (req, res) => {
   owner = req.user.id;
-  console.log('OWNER>>>>>>', owner);
   Profile.find({ owner })
     .then(profiles => {
       res.json({
@@ -25,8 +24,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  Profile.findById(req.params.id)
+  Profile.findOne({ _id: req.params.id, owner: req.user.id })
     .then(profile => {
+      console.log('PROFILE BY ID>>>>>>>>>', profile);
       res.json({
         profile: profile.serialize()
       });
@@ -50,7 +50,9 @@ router.post('/', (req, res) => {
 
 // Updating a Profile
 router.put('/:id', (req, res) => {
-  if (!(req.body.id && req.params.id && req.body.id === req.params.id)) {
+  const userId = req.user.id;
+  const profileId = req.params.id;
+  if (!(req.body._id && req.params.id && req.body._id === req.params.id)) {
     let message = `Request params:${req.params.id} should match request body: ${
       req.body.id
     } and they both should exist`;
@@ -58,7 +60,8 @@ router.put('/:id', (req, res) => {
   }
   let updatedFields = {};
   let updateableFields = [
-    'fullName',
+    'firstName',
+    'lastName',
     'email',
     'relationship',
     'birthday',
@@ -73,9 +76,13 @@ router.put('/:id', (req, res) => {
     }
   });
 
-  Profile.findByIdAndUpdate(req.params.id, { $set: updatedFields })
-    .then(user => {
-      return res.status(202).json('Updated:' + { user: user });
+  Profile.findOneAndUpdate(
+    { _id: profileId, owner: userId },
+    { $set: updatedFields }
+  )
+    .then(profile => {
+      console.log('PROFILE>>>>>>', profile);
+      return res.status(202).json({ profile: profile.serialize() });
     })
     .catch(err =>
       res.status(500).json({ error: err + 'Internal server error' })
@@ -95,9 +102,6 @@ router.post('/:id/wishItem', (req, res, next) => {
   const newWishItem = req.body.wishItem;
   const userId = req.user.id;
   const profileId = req.params.id;
-  //If req.params.id === Profile.owner {$push}????
-  console.log('NEW WISH>>>>>>>>>>', newWishItem);
-  console.log('NEW WISH OWNER>>>>>>>', userId);
 
   if (!newWishItem) {
     const err = new Error(`Missing ${newWishItem} in request body`);
@@ -137,7 +141,8 @@ router.post('/:id/wishItem', (req, res, next) => {
 router.delete('/:id/wishItem', (req, res) => {
   const userId = req.user.id;
   const profileId = req.params.id;
-  Profile.findOneAndUpdate({_id: profileId, owner: userId},
+  Profile.findOneAndUpdate(
+    { _id: profileId, owner: userId },
     {
       $pull: {
         wishList: {
