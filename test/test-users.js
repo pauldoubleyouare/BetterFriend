@@ -295,10 +295,8 @@ describe('Users API', function() {
     it('Should update one user', function() {
       let userToUpdate = {
         userName: 'jseinfeld',
-        fullName: {
-          firstName: 'Jerry',
-          lastName: 'Seinfeld'
-        },
+        firstName: 'Jerry',
+        lastName: 'Seinfeld',
         email: 'jerry@seinfeld.com'
       };
 
