@@ -11,7 +11,6 @@ const config = require('../config');
 const router = express.Router();
 
 const createAuthToken = function(user) {
-  console.log('USER>>>>>', user);
   return new Promise(function(resolve, reject) {
     jwt.sign(
       { user },
@@ -28,7 +27,6 @@ const createAuthToken = function(user) {
 };
 
 router.post('/login', localAuth, (req, res, next) => {
-  console.log('REQUEST.USER>>>>>>>>', req.user);
   createAuthToken(req.user)
     .then(authToken => {
       res.json({ authToken });

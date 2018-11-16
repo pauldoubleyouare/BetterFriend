@@ -2,7 +2,6 @@
 
 const express = require('express');
 const router = express.Router();
-const profileRoutes = require('./profileRoutes');
 const { User } = require('../models/userModel');
 const { Profile } = require('../models/profileModel');
 

@@ -18,15 +18,17 @@ function seedUserData() {
   for (let i = 1; i <= 5; i++) {
     seedData.push({
       userName: faker.internet.userName(),
-      fullName: {
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName()
-      },
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email()
       // profiles: [{id: faker.random.uuid()}, {id: faker.random.uuid()}, {id: faker.random.uuid()}]
     });
   }
-  return User.insertMany(seedData);
+  return User.insertMany(seedData)
+    .then(([users]) => {
+      user = users[0];
+      token = jwt.sign({ user }, JWT_SECRET, { subject: user.userName });
+    });
 }
 
 function generateProfiles(numberOfProfiles) {
@@ -48,10 +50,8 @@ function generateProfiles(numberOfProfiles) {
   for (let i = 1; i <= numberOfProfiles; i++) {
     profilesData.push({
       owner: mongoose.Types.ObjectId(),
-      fullName: {
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName()
-      },
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email(),
       relationship: generateRelationship(),
       wishList: [
@@ -83,6 +83,10 @@ function tearDownDb() {
 }
 
 describe('Profiles API', function() {
+  
+  let user;
+  let token;
+
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
@@ -101,11 +105,14 @@ describe('Profiles API', function() {
     });
 
     let profileId;
-    it('Should return all profiles associated with a User ID', function() {
-      return chai
-        .request(app)
-        .get('/api/users/:id/profiles/')
-        .then(function(res) {
+    it('Should GET Profiles that belong to the User requesting', function() {
+      const dbPromise = Profile.find({owner});
+      const apiPromise = chai.request(app)
+        .get('/api/profiles')
+        .set('Authorization', `Bearer ${token}`);
+
+      return Promise.all([dbPromise, apiPromise])
+        .then(([data, res]) => {
           res.status.should.equal(200);
           res.should.be.json;
           res.body.should.be.an('object');
@@ -116,7 +123,7 @@ describe('Profiles API', function() {
     it('Should return one Profile via id', function() {
       return chai
         .request(app)
-        .get(`/api/users/:id/profiles/${profileId}`)
+        .get(`/api/profiles/${profileId}`)
         .then(function(res) {
           res.should.have.status(200);
           res.should.be.json;
@@ -148,14 +155,19 @@ describe('Profiles API', function() {
 
       return chai
         .request(app)
-        .post(`/api/users/${ownerId}/profiles/`)
+        .post(`/api/profiles/`)
         .send(newProfile[0])
         .then(function(res) {
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.an('object');
           res.body.should.exist;
-          res.body.profile.should.include.keys('owner', 'id', 'fullName');
+          res.body.profile.should.include.keys(
+            'owner',
+            'id',
+            'firstName',
+            'lastName'
+          );
         });
     });
   });
@@ -172,10 +184,8 @@ describe('Profiles API', function() {
     it('Should update one Profile', function() {
       seedProfileData();
       let profileToUpdate = {
-        fullName: {
-          firstName: 'Cosmo',
-          lastName: 'Kramer'
-        },
+        firstName: 'Cosmo',
+        lastName: 'Kramer',
         email: 'cosmo@kramer.com'
       };
 
@@ -186,7 +196,7 @@ describe('Profiles API', function() {
           return chai
             .request(app)
             .put(
-              `/api/users/${profileToUpdate.owner}/profiles/${
+              `/api//profiles/${
                 profileToUpdate.id
               }`
             )
@@ -219,7 +229,7 @@ describe('Profiles API', function() {
           return chai
             .request(app)
             .delete(
-              `/api/users/${profileToDelete.owner}/profiles/${
+              `/api/profiles/${
                 profileToDelete.id
               }`
             );

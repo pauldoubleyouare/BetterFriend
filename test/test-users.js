@@ -283,6 +283,8 @@ describe('Users API', function() {
     });
   });
 
+
+  //**************This is the test that's logging the user's password to the terminal... not sure how to fix!?******** */
   describe('PUT User endpoint', function() {
     before(function() {
       return seedUserData();
