@@ -17,7 +17,7 @@ function localAuth(req, res, next) {
     .then(_user => {
       user = _user;
 
-      if(!user) {
+      if (!user) {
         const err = new Error('Invalid credentials');
         err.status = 401;
         err.location = 'userName';
@@ -27,7 +27,6 @@ function localAuth(req, res, next) {
       // return user.validatePassword(password);
     })
     .then(isValid => {
-
       if (!isValid) {
         const err = new Error('Invalid credentials');
         err.status = 401;
@@ -38,7 +37,7 @@ function localAuth(req, res, next) {
       req.user = user.serialize();
       next();
     })
-    .catch((err) => {
+    .catch(err => {
       next(err);
     });
 }

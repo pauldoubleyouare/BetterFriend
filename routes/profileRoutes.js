@@ -26,7 +26,6 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   Profile.findOne({ _id: req.params.id, owner: req.user.id })
     .then(profile => {
-      console.log('PROFILE BY ID>>>>>>>>>', profile);
       res.json({
         profile: profile.serialize()
       });
@@ -81,7 +80,6 @@ router.put('/:id', (req, res) => {
     { $set: updatedFields }
   )
     .then(profile => {
-      console.log('PROFILE>>>>>>', profile);
       return res.status(202).json({ profile: profile.serialize() });
     })
     .catch(err =>

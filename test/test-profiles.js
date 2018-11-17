@@ -86,6 +86,7 @@ describe('Profiles API', function() {
   
   let user;
   let token;
+  let profileId;
 
   before(function() {
     return runServer(TEST_DATABASE_URL);
@@ -95,7 +96,7 @@ describe('Profiles API', function() {
     return closeServer();
   });
 
-  describe('GET Profile endpoint', function() {
+  describe('GET Profiles endpoint', function() {
     before(function() {
       return seedProfileData();
     });
@@ -104,8 +105,10 @@ describe('Profiles API', function() {
       return tearDownDb();
     });
 
-    let profileId;
-    it('Should GET Profiles that belong to the User requesting', function() {
+    
+    it.only('Should GET Profiles that belong to the User requesting', function() {
+      user = req.user;
+      console.log('USER>>>>', user);
       const dbPromise = Profile.find({owner});
       const apiPromise = chai.request(app)
         .get('/api/profiles')

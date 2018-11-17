@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config');
 
 function jwtAuth(req, res, next) {
-  
   const auth = req.header('Authorization');
 
   if (!auth) {
@@ -24,7 +23,6 @@ function jwtAuth(req, res, next) {
   }
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
-
     if (err) {
       err.message = 'Invalid JWT';
       err.status = 401;
@@ -32,7 +30,6 @@ function jwtAuth(req, res, next) {
     }
 
     req.user = decoded.user;
-    console.log('REQ.USER>>>>.', req.user);
     next();
   });
 }

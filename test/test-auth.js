@@ -56,7 +56,6 @@ describe('BetterFriend - Login', function() {
         .then(res => {
           expect(res).to.have.status(400);
           expect(res.body.message).to.equal('No credentials provided');
-          console.log("RESPONSE BODY>>>>>", res.body);
         });
     });
 
@@ -123,13 +122,122 @@ describe('BetterFriend - Login', function() {
   });
 
   describe('POST /api/refresh', function() {
-    it.only('Should reject requests when no "Authorization" header is sent', function() {
+    it('Should reject requests when no "Authorization" header is sent', function() {
       return chai.request(app)
         .post('/api/refresh')
         .then(res => {
           expect(res).to.have.status(401);
           res.body.message.should.equal('No "Authorization" header found');
         });
+    });
+
+    it('Should rejet request when "Authorization" token type is NOT "Bearer"', function() {
+      const token = jwt.sign({ user }, JWT_SECRET, { subject: userName, expiresIn: '7d'});
+
+      return chai.request(app)
+        .post('/api/refresh')
+        .set('Authorization', `Nonsense ${token}`)
+        .then(res => {
+          expect(res).to.have.status(401);
+          expect(res.body.message).to.equal('No "Bearer" token found');
+        });
+    });
+
+    it('Should reject request when "Authorization" with "Bearer" type does NOT contain a token', function() {
+      return chai.request(app)
+        .post('/api/refresh')
+        .set('Authorization', 'Bearer ')
+        .then(res => {
+          expect(res).to.have.status(401);
+          expect(res.body.message).to.equal('No "Bearer" token found');
+        });
+    });
+
+    it('Should reject request when HWT is signed with the WRONG secret key', function() {
+      const user = {userName, firstName };
+      const token = jwt.sign({ user }, 'INVALID', { subject: userName, expiresIn: '7d'});
+
+      return chai.request(app)
+        .post('/api/refresh')
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          expect(res).to.have.status(401);
+          expect(res.body.message).to.equal('Invalid JWT');
+        });
+    });
+
+    it('Should reject request when JWT "expiresIn" data has EXPIRED', function() {
+      const user = { userName, firstName };
+      const token = jwt.sign({ user }, JWT_SECRET, { subject: userName, expiresIn: '0' });
+
+      return chai.request(app)
+        .post('/api/refresh')
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          expect(res).to.have.status(401);
+          expect(res.body.message).to.equal('Invalid JWT');
+        });
+    });
+
+    context('When sent "Authorization" header containing a valid JWT "Bearer" token', function() {
+
+      it('Should return 200 OK and an object with an "authToken" property and a valid JWT', function() {
+        const token = jwt.sign({ user }, JWT_SECRET, { subject: userName, expiresIn: '1m' });
+        return chai.request(app)
+          .post('/api/refresh')
+          .set('Authorization', `Bearer ${token}`)
+          .then(res => {
+            expect(res).to.have.status(200);
+            res.body.should.be.an('object');
+            res.body.authToken.should.be.a('string');
+            jwt.verify(res.body.authToken, JWT_SECRET);
+          });
+      });
+
+      it('Should return a valid JWT with correct "id", "userName", "firstName", "lastName", and "email"', function() {
+        const token = jwt.sign({ user }, JWT_SECRET, { subject: userName, expiresIn: '1m' });
+        return chai.request(app)
+          .post('/api/refresh')
+          .set('Authorization', `Bearer ${token}`)
+          .then(res => {
+            const payload = jwt.verify(res.body.authToken, JWT_SECRET);
+            expect(payload.user.userName).to.equal(userName);
+            expect(payload.user.firstName).to.equal(firstName);
+            expect(payload.user.lastName).to.equal(lastName);
+            expect(payload.user.email).to.equal(email);
+            console.log('PAYLOAD', payload);
+          });
+      });
+
+      //**** This is failing, and I'm assuming it's because of the User model, and not using the .set() method to delete passwords */
+      //https://github.com/Thinkful-Ed/noteful-app/blob/master/models/user.js// 
+      it('Should return a JWT that does NOT contain a password', function() {
+        const token = jwt.sign({ user }, JWT_SECRET, { subject: userName, expiresIn: '1m' });
+        return chai.request(app)
+          .post('/api/refresh')
+          .set('Authorization', `Bearer ${token}`)
+          .then(res => {
+            const payload = jwt.verify(res.body.authToken, JWT_SECRET);
+            expect(payload.user).to.not.have.property('password');
+          });
+      });
+
+      it('Should return a valid JWT with a newer "expiresIn" date', function() {
+        const token = jwt.sign({ user }, JWT_SECRET, { subject: userName, expiresIn: '1m'});
+        const decoded = jwt.decode(token);
+
+        return chai.request(app)
+          .post('/api/refresh')
+          .set('Authorization', `Bearer ${token}`)
+          .then(res => {
+            const payload = jwt.verify(res.body.authToken, JWT_SECRET);
+            console.log("PAYLOAD.USER>>>>>", payload);
+            expect(payload.exp).to.be.greaterThan(decoded.exp);
+            console.log('DECODED?>>>>>', decoded);
+          });
+      });
+
+
     });
 
 

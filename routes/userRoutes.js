@@ -198,7 +198,6 @@ router.put('/:id', (req, res) => {
 
   User.findByIdAndUpdate(req.params.id, { $set: fieldsToUpdate })
     .then(user => {
-      console.log(user);
       return res.status(204).end();
     })
     .catch(err =>
