@@ -9,63 +9,15 @@ const { JWT_SECRET, TEST_DATABASE_URL } = require('../config');
 const { Profile } = require('../models/profileModel');
 const { User } = require('../models/userModel');
 
+const seedUsers = require('../db/Users');
+const seedProfiles = require('../db/Profiles');
+
 const faker = require('faker');
 const mongoose = require('mongoose');
 
 chai.use(chaiHttp);
 const expect = chai.expect;
 const should = chai.should();
-
-function generateUsers() {
-  console.info('Seeding User data');
-  const usersData = [];
-  for (let i = 1; i <= 5; i++) {
-    usersData.push({
-      userName: faker.internet.userName(),
-      password: faker.internet.password(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email()
-    });
-  }
-  return usersData;
-}
-
-function generateProfiles(numberOfProfiles) {
-  function generateRelationship() {
-    const relationship = [
-      'Mom',
-      'Dad',
-      'Friend',
-      'Brother',
-      'Sister',
-      'Boyfriend',
-      'Girlfriend',
-      'Aunt',
-      'Uncle'
-    ];
-    return relationship[Math.floor(Math.random() * relationship.length)];
-  }
-  const profilesData = [];
-  for (let i = 1; i <= numberOfProfiles; i++) {
-    profilesData.push({
-      owner: mongoose.Types.ObjectId(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email(),
-      relationship: generateRelationship(),
-      wishList: [
-        {
-          wishItem: faker.random.words()
-        },
-        {
-          wishItem: faker.random.words()
-        }
-      ]
-    });
-  }
-  return profilesData;
-}
 
 function tearDownDb() {
   return new Promise((resolve, reject) => {
@@ -88,8 +40,8 @@ describe('Profiles API', function() {
 
   beforeEach(function() {
     return Promise.all([
-      User.insertMany(generateUsers()),
-      Profile.insertMany(generateProfiles(10))
+      User.insertMany(seedUsers),
+      Profile.insertMany(seedProfiles)
     ]).then(([users]) => {
       user = users[0];
       token = jwt.sign({ user }, JWT_SECRET, { subject: user.userName });
