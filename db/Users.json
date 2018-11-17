@@ -1,0 +1,37 @@
+[{
+	"_id": {
+		"$oid": "5bf090f62cadd230a411a832"
+	},
+	"firstName": "Casimir",
+	"lastName": "Abbott",
+	"profiles": [],
+	"userName": "Genevieve.Zboncak",
+	"password": "06N6_RFW_iDEgkk",
+	"email": "Duncan_Hagenes53@gmail.com",
+	"created_at": {
+		"$date": "2018-11-17T22:06:46.113Z"
+	},
+	"updated_at": {
+		"$date": "2018-11-17T22:06:46.113Z"
+	},
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "5bf091289a5cad30c391ebdd"
+	},
+	"firstName": "Blanca",
+	"lastName": "Balistreri",
+	"profiles": [],
+	"userName": "Ross.Krajcik",
+	"password": "KKUORVnpEY1fYAD",
+	"email": "Cary.Leannon@gmail.com",
+	"created_at": {
+		"$date": "2018-11-17T22:07:36.312Z"
+	},
+	"updated_at": {
+		"$date": "2018-11-17T22:07:36.312Z"
+	},
+	"__v": 0
+}]
+
