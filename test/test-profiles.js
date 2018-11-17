@@ -1,34 +1,34 @@
 const chai = require('chai');
 const mocha = require('mocha');
 const chaiHttp = require('chai-http');
+const jwt = require('jsonwebtoken');
+
 const { app, runServer, closeServer } = require('../server');
-const expect = chai.expect;
+const { JWT_SECRET, TEST_DATABASE_URL } = require('../config');
+
 const { Profile } = require('../models/profileModel');
 const { User } = require('../models/userModel');
-const { TEST_DATABASE_URL } = require('../config');
+
 const faker = require('faker');
 const mongoose = require('mongoose');
-const should = chai.should();
 
 chai.use(chaiHttp);
+const expect = chai.expect;
+const should = chai.should();
 
-function seedUserData() {
+function generateUsers() {
   console.info('Seeding User data');
-  const seedData = [];
+  const usersData = [];
   for (let i = 1; i <= 5; i++) {
-    seedData.push({
+    usersData.push({
       userName: faker.internet.userName(),
+      password: faker.internet.password(),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email()
-      // profiles: [{id: faker.random.uuid()}, {id: faker.random.uuid()}, {id: faker.random.uuid()}]
     });
   }
-  return User.insertMany(seedData)
-    .then(([users]) => {
-      user = users[0];
-      token = jwt.sign({ user }, JWT_SECRET, { subject: user.userName });
-    });
+  return usersData;
 }
 
 function generateProfiles(numberOfProfiles) {
@@ -67,11 +67,6 @@ function generateProfiles(numberOfProfiles) {
   return profilesData;
 }
 
-function seedProfileData() {
-  console.info('Seeding Profile data');
-  return Profile.insertMany(generateProfiles(6));
-}
-
 function tearDownDb() {
   return new Promise((resolve, reject) => {
     console.warn('Deleting database');
@@ -83,7 +78,6 @@ function tearDownDb() {
 }
 
 describe('Profiles API', function() {
-  
   let user;
   let token;
   let profileId;
@@ -92,35 +86,41 @@ describe('Profiles API', function() {
     return runServer(TEST_DATABASE_URL);
   });
 
+  beforeEach(function() {
+    return Promise.all([
+      User.insertMany(generateUsers()),
+      Profile.insertMany(generateProfiles(10))
+    ]).then(([users]) => {
+      user = users[0];
+      token = jwt.sign({ user }, JWT_SECRET, { subject: user.userName });
+    });
+  });
+
   after(function() {
     return closeServer();
   });
 
+  afterEach(function() {
+    return tearDownDb();
+  });
+
   describe('GET Profiles endpoint', function() {
-    before(function() {
-      return seedProfileData();
-    });
-
-    after(function() {
-      return tearDownDb();
-    });
-
-    
     it.only('Should GET Profiles that belong to the User requesting', function() {
-      user = req.user;
-      console.log('USER>>>>', user);
-      const dbPromise = Profile.find({owner});
-      const apiPromise = chai.request(app)
+      console.log('USER>>>>>', user);
+      let owner = user._id;
+      const dbPromise = Profile.find({ owner });
+      const apiPromise = chai
+        .request(app)
         .get('/api/profiles')
         .set('Authorization', `Bearer ${token}`);
 
-      return Promise.all([dbPromise, apiPromise])
-        .then(([data, res]) => {
-          res.status.should.equal(200);
-          res.should.be.json;
-          res.body.should.be.an('object');
-          profileId = res.body.profiles[0].id;
-        });
+      return Promise.all([dbPromise, apiPromise]).then(([data, res]) => {
+        res.status.should.equal(200);
+        res.should.be.json;
+        res.body.should.be.an('object');
+        // res.body.should.have.length(data.length);
+        console.log('RESPONSE BODY>>>>>', res.body);
+      });
     });
 
     it('Should return one Profile via id', function() {
@@ -198,11 +198,7 @@ describe('Profiles API', function() {
           profileToUpdate.owner = profile.owner;
           return chai
             .request(app)
-            .put(
-              `/api//profiles/${
-                profileToUpdate.id
-              }`
-            )
+            .put(`/api//profiles/${profileToUpdate.id}`)
             .send(profileToUpdate);
         })
         .then(function(res) {
@@ -231,11 +227,7 @@ describe('Profiles API', function() {
           let profileToDelete = profile;
           return chai
             .request(app)
-            .delete(
-              `/api/profiles/${
-                profileToDelete.id
-              }`
-            );
+            .delete(`/api/profiles/${profileToDelete.id}`);
         })
         .then(function(res) {
           res.should.have.status(200);
