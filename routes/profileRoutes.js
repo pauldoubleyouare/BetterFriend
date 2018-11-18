@@ -24,10 +24,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   Profile.findOne({ _id: req.params.id, owner: req.user.id })
     .then(profile => {
-      res.json({
-        profile: profile.serialize()
-      });
-      return profile;
+      res.json(profile.serialize());
     })
     .catch(err => {
       console.error(err);

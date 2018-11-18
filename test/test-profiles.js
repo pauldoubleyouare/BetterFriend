@@ -61,10 +61,8 @@ describe('Profiles API', function() {
   
 
   describe('GET Profiles endpoint', function() {
-    it.only('Should GET Profiles that belong to the User requesting', function() {
-      console.log("USER>>>>>", user);
+    it('Should GET Profiles that belong to the User requesting', function() {
       let ownerId = user.id;
-      console.log('USER_ID>>>>', user.id);
       const dbPromise = Profile.find({ owner: ownerId });
       const apiPromise = chai
         .request(app)
@@ -75,15 +73,13 @@ describe('Profiles API', function() {
         res.status.should.equal(200);
         res.should.be.json;
         res.body.should.be.an('array');
-        console.log('DATA>>>>>', data);
-        console.log('RESPONSE BODY>>>>', res.body);
         expect(res.body.length).to.equal(data.length);
       });
     });
 
     it('Should return a list of Profiles with the correct fields and values', function() {
-      let ownerId = user._id;
-      const dbPromise = Profile.find({ ownerId });
+      let ownerId = user.id;
+      const dbPromise = Profile.find({ owner: ownerId });
       const apiPromise = chai.request(app)
         .get('/api/profiles')
         .set('Authorization', `Bearer ${token}`);
@@ -93,18 +89,15 @@ describe('Profiles API', function() {
           res.status.should.equal(200);
           res.body.forEach(function(item, i) {
             item.should.be.an('object');
-            console.log('ITEM>>>>', item);
-            console.log('DATA>>>>', data)
-            item.should.have.all.keys('owner', 'id', 'firstName', 'lastName', 'email', 'relationship', 'birthday', 'address', 'phone', 'wishList');
-            expect(item.id).to.equal(data[i]._id);
-            expect(item.owner).to.equal(data[i].owner);
+            item.should.include.keys('owner', '_id', 'firstName', 'lastName', 'email', 'relationship', 'birthday', 'address', 'phone', 'createdAt', 'updatedAt');
+            expect(item._id).to.equal(data[i]._id.toHexString());
+            expect(item.owner).to.equal(data[i].owner.toHexString());
             expect(item.firstName).to.equal(data[i].firstName);
             expect(item.lastName).to.equal(data[i].lastName);
             expect(item.email).to.equal(data[i].email);
             expect(item.relationship).to.equal(data[i].relationship);
-            expect(item.birthday).to.equal(data[i].birthday);
+            expect(Date(item.birthday)).to.equal(Date(data[i].birthday));
             expect(item.phone).to.equal(data[i].phone);
-            expect(item.wishList).to.equal(data[i].wishList);
           });
         });
     });
