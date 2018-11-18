@@ -8,14 +8,12 @@ const mongoose = require('mongoose');
 
 let owner;
 
+
 router.get('/', (req, res) => {
   owner = req.user.id;
   Profile.find({ owner })
     .then(profiles => {
-      res.json({
-        profiles: profiles.map(profile => profile)
-      });
-      return profiles;
+      res.json(profiles);
     })
     .catch(err => {
       console.error(err);
@@ -90,10 +88,8 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   const userId = req.user.id;
   const profileId = req.params.id;
-  Profile.findOneAndRemove({_id: profileId, owner: userId})
-    .then(data =>
-      res.status(200).json(data.firstName + ' was deleted')
-    )
+  Profile.findOneAndRemove({ _id: profileId, owner: userId })
+    .then(data => res.status(200).json(data.firstName + ' was deleted'))
     .catch(err => res.status(500).json({ err: err }));
 });
 

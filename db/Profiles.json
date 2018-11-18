@@ -8,6 +8,8 @@
       "zipcode": "96273"
     },
     "owner": "5bf090f62cadd230a411a832",
+    "email": "some@email.com",
+    "phone": "555-555-1212",
     "firstName": "Alysha",
     "lastName": "Howell",
     "relationship": "Mom",
@@ -45,6 +47,8 @@
       "zipcode": "07268-4620"
     },
     "owner": "5bf091289a5cad30c391ebdd",
+    "email": "some@email.com",
+    "phone": "555-555-1212",
     "firstName": "Davon",
     "lastName": "Graham",
     "relationship": "Friend",
@@ -82,6 +86,8 @@
       "zipcode": "67791"
     },
     "owner": "5bf090f62cadd230a411a832",
+    "email": "some@email.com",
+    "phone": "555-555-1212",
     "firstName": "Dawson",
     "lastName": "Walker",
     "relationship": "Dad",
@@ -119,6 +125,8 @@
       "zipcode": "09615-8456"
     },
     "owner": "5bf090f62cadd230a411a832",
+    "email": "some@email.com",
+    "phone": "555-555-1212",
     "firstName": "Adolphus",
     "lastName": "Feil",
     "relationship": "Dad",
@@ -156,6 +164,8 @@
       "zipcode": "59770-8917"
     },
     "owner": "5bf091289a5cad30c391ebdd",
+    "email": "some@email.com",
+    "phone": "555-555-1212",
     "firstName": "Elinor",
     "lastName": "Corwin",
     "relationship": "Friend",
@@ -193,6 +203,8 @@
       "zipcode": "02094"
     },
     "owner": "5bf091289a5cad30c391ebdd",
+    "email": "some@email.com",
+    "phone": "555-555-1212",
     "firstName": "Eliezer",
     "lastName": "O'Reilly",
     "relationship": "Mom",

@@ -62,7 +62,7 @@ profileSchema.virtual('fullName').get(function() {
 profileSchema.methods.serialize = function() {
   return {
     owner: this.owner,
-    id: this._id,
+    _id: this._id,
     firstName: this.firstName,
     lastName: this.lastName,
     relationship: this.relationship,

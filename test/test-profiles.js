@@ -19,6 +19,8 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 const should = chai.should();
 
+
+
 function tearDownDb() {
   return new Promise((resolve, reject) => {
     console.warn('Deleting database');
@@ -28,6 +30,7 @@ function tearDownDb() {
       .catch(err => reject(err));
   });
 }
+
 
 describe('Profiles API', function() {
   let user;
@@ -43,7 +46,7 @@ describe('Profiles API', function() {
       User.insertMany(seedUsers),
       Profile.insertMany(seedProfiles)
     ]).then(([users]) => {
-      user = users[0];
+      user = users[0].serialize();
       token = jwt.sign({ user }, JWT_SECRET, { subject: user.userName });
     });
   });
@@ -55,12 +58,14 @@ describe('Profiles API', function() {
   afterEach(function() {
     return tearDownDb();
   });
+  
 
   describe('GET Profiles endpoint', function() {
     it.only('Should GET Profiles that belong to the User requesting', function() {
-      console.log('USER>>>>>', user);
-      let owner = user._id;
-      const dbPromise = Profile.find({ owner });
+      console.log("USER>>>>>", user);
+      let ownerId = user.id;
+      console.log('USER_ID>>>>', user.id);
+      const dbPromise = Profile.find({ owner: ownerId });
       const apiPromise = chai
         .request(app)
         .get('/api/profiles')
@@ -69,10 +74,39 @@ describe('Profiles API', function() {
       return Promise.all([dbPromise, apiPromise]).then(([data, res]) => {
         res.status.should.equal(200);
         res.should.be.json;
-        res.body.should.be.an('object');
-        // res.body.should.have.length(data.length);
-        console.log('RESPONSE BODY>>>>>', res.body);
+        res.body.should.be.an('array');
+        console.log('DATA>>>>>', data);
+        console.log('RESPONSE BODY>>>>', res.body);
+        expect(res.body.length).to.equal(data.length);
       });
+    });
+
+    it('Should return a list of Profiles with the correct fields and values', function() {
+      let ownerId = user._id;
+      const dbPromise = Profile.find({ ownerId });
+      const apiPromise = chai.request(app)
+        .get('/api/profiles')
+        .set('Authorization', `Bearer ${token}`);
+
+      return Promise.all([dbPromise, apiPromise])
+        .then(([data, res]) => {
+          res.status.should.equal(200);
+          res.body.forEach(function(item, i) {
+            item.should.be.an('object');
+            console.log('ITEM>>>>', item);
+            console.log('DATA>>>>', data)
+            item.should.have.all.keys('owner', 'id', 'firstName', 'lastName', 'email', 'relationship', 'birthday', 'address', 'phone', 'wishList');
+            expect(item.id).to.equal(data[i]._id);
+            expect(item.owner).to.equal(data[i].owner);
+            expect(item.firstName).to.equal(data[i].firstName);
+            expect(item.lastName).to.equal(data[i].lastName);
+            expect(item.email).to.equal(data[i].email);
+            expect(item.relationship).to.equal(data[i].relationship);
+            expect(item.birthday).to.equal(data[i].birthday);
+            expect(item.phone).to.equal(data[i].phone);
+            expect(item.wishList).to.equal(data[i].wishList);
+          });
+        });
     });
 
     it('Should return one Profile via id', function() {
@@ -87,7 +121,8 @@ describe('Profiles API', function() {
           res.body.profile.should.include.keys(
             '_id',
             'owner',
-            'fullName',
+            'firstName',
+            'lastName',
             'email',
             'relationship'
           );
