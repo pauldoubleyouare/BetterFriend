@@ -19,8 +19,6 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 const should = chai.should();
 
-
-
 function tearDownDb() {
   return new Promise((resolve, reject) => {
     console.warn('Deleting database');
@@ -30,7 +28,6 @@ function tearDownDb() {
       .catch(err => reject(err));
   });
 }
-
 
 describe('Profiles API', function() {
   let user;
@@ -58,9 +55,8 @@ describe('Profiles API', function() {
   afterEach(function() {
     return tearDownDb();
   });
-  
 
-  describe('GET Profiles endpoint', function() {
+  describe('GET All Profiles endpoint', function() {
     it('Should GET Profiles that belong to the User requesting', function() {
       let ownerId = user.id;
       const dbPromise = Profile.find({ owner: ownerId });
@@ -80,49 +76,99 @@ describe('Profiles API', function() {
     it('Should return a list of Profiles with the correct fields and values', function() {
       let ownerId = user.id;
       const dbPromise = Profile.find({ owner: ownerId });
-      const apiPromise = chai.request(app)
+      const apiPromise = chai
+        .request(app)
         .get('/api/profiles')
         .set('Authorization', `Bearer ${token}`);
 
-      return Promise.all([dbPromise, apiPromise])
-        .then(([data, res]) => {
-          res.status.should.equal(200);
-          res.body.forEach(function(item, i) {
-            item.should.be.an('object');
-            item.should.include.keys('owner', '_id', 'firstName', 'lastName', 'email', 'relationship', 'birthday', 'address', 'phone', 'createdAt', 'updatedAt');
-            expect(item._id).to.equal(data[i]._id.toHexString());
-            expect(item.owner).to.equal(data[i].owner.toHexString());
-            expect(item.firstName).to.equal(data[i].firstName);
-            expect(item.lastName).to.equal(data[i].lastName);
-            expect(item.email).to.equal(data[i].email);
-            expect(item.relationship).to.equal(data[i].relationship);
-            expect(Date(item.birthday)).to.equal(Date(data[i].birthday));
-            expect(item.phone).to.equal(data[i].phone);
-          });
+      return Promise.all([dbPromise, apiPromise]).then(([data, res]) => {
+        res.status.should.equal(200);
+        res.body.forEach(function(item, i) {
+          item.should.be.an('object');
+          item.should.include.keys(
+            'owner',
+            '_id',
+            'firstName',
+            'lastName',
+            'email',
+            'relationship',
+            'birthday',
+            'address',
+            'phone',
+            'createdAt',
+            'updatedAt'
+          );
+          expect(item._id).to.equal(data[i]._id.toHexString());
+          expect(item.owner).to.equal(data[i].owner.toHexString());
+          expect(item.firstName).to.equal(data[i].firstName);
+          expect(item.lastName).to.equal(data[i].lastName);
+          expect(item.email).to.equal(data[i].email);
+          expect(item.relationship).to.equal(data[i].relationship);
+          expect(Date(item.birthday)).to.equal(Date(data[i].birthday));
+          expect(item.phone).to.equal(data[i].phone);
         });
+      });
     });
+  });
 
+  describe('GET /api/profiles/:id endpoint', function() {
     it('Should return one Profile via id', function() {
-      return chai
-        .request(app)
-        .get(`/api/profiles/${profileId}`)
-        .then(function(res) {
+      let profileData;
+      ownerId = user.id;
+      return Profile.findOne({ owner: ownerId })
+        .then(rawProfileData => {
+          profileData = rawProfileData;
+          return chai
+            .request(app)
+            .get(`/api/profiles/${profileData.id}`)
+            .set('Authorization', `Bearer ${token}`);
+        })
+        .then(res => {
           res.should.have.status(200);
           res.should.be.json;
           res.body.should.be.an('object');
-          res.body.profile._id.should.equal(profileId);
-          res.body.profile.should.include.keys(
+          res.body.should.include.keys(
             '_id',
             'owner',
             'firstName',
             'lastName',
             'email',
-            'relationship'
+            'relationship',
+            'address',
+            'wishList',
+            'birthday',
+            'phone'
           );
+          res.body._id.should.equal(profileData._id.toHexString());
+          res.body.owner.should.equal(profileData.owner.toHexString());
         });
     });
-  });
 
+    it('Should respond with a 400 for an invalid id', function() {
+      const badId = 'TERRIBLE-ID';
+
+      return chai
+        .request(app)
+        .get(`/api/profiles/${badId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          res.should.have.status(400);
+          console.log('RESPONSE BODY>>>>>', res.body);
+          res.body.message.should.equal('The "id" is not valid');
+        });
+    });
+
+    it.only('Should respond with a 404 for non-existent id', function() {
+      return chai.request(app)
+        .get('/api/profiles/DOESNOTEXIST')
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          res.should.have.status(404);
+          res.body.message.should.equal('No profiles with that "id" found');
+        });
+    });
+
+  });
   describe('POST Profile endpoint', function() {
     before(function() {
       return seedUserData();

@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 let owner;
 
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   owner = req.user.id;
   Profile.find({ owner })
     .then(profiles => {
@@ -21,14 +21,28 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
-  Profile.findOne({ _id: req.params.id, owner: req.user.id })
+router.get('/:id', (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The "id" is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  Profile.findOne({ _id: req.params.id, owner: userId })
     .then(profile => {
-      res.json(profile.serialize());
+      if (profile) {
+        res.json(profile.serialize());
+      } else {
+        const err = new Error('No profiles with that "id" found');
+        err.status = 404;
+        next(err);
+      }
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: err });
+      next(err);
     });
 });
 
