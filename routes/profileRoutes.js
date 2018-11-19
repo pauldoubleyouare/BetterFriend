@@ -46,15 +46,70 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   owner = req.user.id;
+
+  const requiredFields = [
+    'firstName',
+    'lastName',
+  ];
+  const missingField = requiredFields.find(field => !(field in req.body));
+
+  if (missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: `Missing ${missingField} in request body`,
+      location: missingField
+    });
+  }
+
+  const stringFields = [
+    'firstName',
+    'lastName',
+    'email',
+    'relationship',
+    'email',
+    'phone'
+  ];
+  const nonStringField = stringFields.find(
+    field => field in req.body && typeof req.body[field] !== 'string'
+  );
+
+  if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: `Incorect field type: expected string`,
+      location: nonStringField
+    });
+  }
+
+  const newProfile = {
+    owner: owner,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    relationship: req.body.relationship,
+    birthday: req.body.birthday,
+    address: {
+      streetName: req.body.address.streetName,
+      city: req.body.address.city,
+      state: req.body.address.state,
+      zipcode: req.body.address.zipcode
+    },
+    phone: req.body.phone
+  }
+
   User.findById(owner)
-    .then(user => {
-      return Profile.create(Object.assign({}, req.body, { owner: owner }));
-    })
-    .then(profile => res.status(201).json({ profile: profile.serialize() }))
-    .catch(e => res.status(500).json({ errors: e }));
+  .then(user => {
+    return Profile.create(newProfile);
+  })
+  .then(profile => res.status(201).json(profile.serialize()))
+  .catch(e => res.status(500).json({ errors: e }));
+
 });
+
 
 // Updating a Profile
 router.put('/:id', (req, res) => {

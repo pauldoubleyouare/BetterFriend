@@ -32,7 +32,6 @@ function tearDownDb() {
 describe('Profiles API', function() {
   let user;
   let token;
-  let profileId;
 
   before(function() {
     return runServer(TEST_DATABASE_URL);
@@ -158,8 +157,9 @@ describe('Profiles API', function() {
         });
     });
 
-    it.only('Should respond with a 404 for non-existent id', function() {
-      return chai.request(app)
+    it('Should respond with a 404 for non-existent id', function() {
+      return chai
+        .request(app)
         .get('/api/profiles/DOESNOTEXIST')
         .set('Authorization', `Bearer ${token}`)
         .then(res => {
@@ -167,37 +167,55 @@ describe('Profiles API', function() {
           res.body.message.should.equal('No profiles with that "id" found');
         });
     });
-
   });
+
   describe('POST Profile endpoint', function() {
-    before(function() {
-      return seedUserData();
-    });
-
-    after(function() {
-      return tearDownDb();
-    });
-
-    it('Should create one new Profile with User ID attached', function() {
-      let newProfile = generateProfiles(1);
-      let ownerId = newProfile[0].owner;
+    it.only('Should create and return one new Profile with User ID attached', function() {
+      let newProfile = {
+        owner: user.id,
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        relationship: 'Friend',
+        phone: '555-555-1212',
+        birthday: faker.date.past(),
+        address: {
+          streetName: faker.address.streetName(),
+          city: faker.address.city(),
+          state: faker.address.state(),
+          zipcode: faker.address.zipCode()
+        },
+        wishList: [
+          { wishItem: faker.random.words() },
+          { wishItem: faker.random.words() },
+          { wishItem: faker.random.words() }
+        ]
+      };
+      let body;
 
       return chai
         .request(app)
         .post(`/api/profiles/`)
-        .send(newProfile[0])
+        .set('Authorization', `Bearer ${token}`)
+        .send(newProfile)
         .then(function(res) {
+          body = res.body;
+          res.body.should.exist;
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.an('object');
-          res.body.should.exist;
-          res.body.profile.should.include.keys(
+          
+          res.body.should.include.keys(
             'owner',
-            'id',
+            '_id',
             'firstName',
             'lastName'
           );
-        });
+          return Profile.findOne({ owner: user.id, _id: body._id });
+        })
+        .then(data => {
+          body._id.should.equal(data._id.toHexString());
+          body.owner.should.equal(data.owner.toHexString());
+        })
     });
   });
 
