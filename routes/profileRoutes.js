@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 let owner;
 
-
+//GET Profiles
 router.get('/', (req, res, next) => {
   owner = req.user.id;
   Profile.find({ owner })
@@ -21,6 +21,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
+//GET Profile by ID
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
   const userId = req.user.id;
@@ -46,6 +47,7 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
+//POST new Profile
 router.post('/', (req, res, next) => {
   owner = req.user.id;
 
@@ -111,8 +113,8 @@ router.post('/', (req, res, next) => {
 });
 
 
-// Updating a Profile
-router.put('/:id', (req, res) => {
+// PUT updating a Profile
+router.put('/:id', (req, res, next) => {
   const userId = req.user.id;
   const profileId = req.params.id;
   if (!(req.body._id && req.params.id && req.body._id === req.params.id)) {

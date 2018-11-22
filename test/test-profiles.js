@@ -170,7 +170,8 @@ describe('Profiles API', function() {
   });
 
   describe('POST Profile endpoint', function() {
-    it.only('Should create and return one new Profile with User ID attached', function() {
+  
+    it('Should create and return one new Profile when given valid data', function() {
       let newProfile = {
         owner: user.id,
         firstName: faker.name.firstName(),
@@ -194,7 +195,7 @@ describe('Profiles API', function() {
 
       return chai
         .request(app)
-        .post(`/api/profiles/`)
+        .post(`/api/profiles`)
         .set('Authorization', `Bearer ${token}`)
         .send(newProfile)
         .then(function(res) {
@@ -215,18 +216,38 @@ describe('Profiles API', function() {
         .then(data => {
           body._id.should.equal(data._id.toHexString());
           body.owner.should.equal(data.owner.toHexString());
-        })
+        });
     });
+
+    it('Should return an error when missing a required field', function() {
+      const badProfile = { "something": "not valid"};
+      return chai.request(app)
+        .post('/api/profiles')
+        .set('Authorization', `Bearer ${token}`)
+        .send(badProfile)
+        .then(res => {
+          res.should.have.status(422);
+          res.should.be.json;
+          res.body.message.should.equal('Missing firstName in request body' || 'Missing lastName in request body');
+        });
+    });
+
+    //***Do I need to write a test for every field? */
+    it.only('Should reject any non-string fields', function() {
+      const nonStringTestFields = { "firstName": 42, "lastName": "Rooster" };
+      return chai.request(app)
+        .post('/api/profiles')
+        .set('Authorization', `Bearer ${token}`)
+        .send(nonStringTestFields)
+        .then(res => {
+          res.should.have.status(422);
+          res.should.be.json;
+          res.body.message.should.equal('Incorrect field type: expected string');
+        });
+      });
   });
 
   describe('PUT Profile endpoint', function() {
-    before(function() {
-      return seedUserData(), seedProfileData();
-    });
-
-    after(function() {
-      return tearDownDb();
-    });
 
     it('Should update one Profile', function() {
       seedProfileData();
