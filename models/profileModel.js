@@ -102,22 +102,22 @@ let Profile = mongoose.model('Profile', profileSchema, 'Profiles');
 // });
 
 // let jerrysDad = new Profile({
-//   owner: "5bf091289a5cad30c391ebdd",
-//   firstName: faker.name.firstName(),
-//   lastName: faker.name.lastName(),
-//   relationship: generateRelationship(),
-//   birthday: faker.date.past(),
-//   address: {
-//     streetName: faker.address.streetName(),
-//     city: faker.address.city(),
-//     state: faker.address.state(),
-//     zipcode: faker.address.zipCode()
-//   },
-//   wishList: [
-//     { wishItem: faker.random.words() },
-//     { wishItem: faker.random.words() },
-//     { wishItem: faker.random.words() }
-//   ]
+  // owner: "5bf091289a5cad30c391ebdd",
+  // firstName: faker.name.firstName(),
+  // lastName: faker.name.lastName(),
+  // relationship: generateRelationship(),
+  // birthday: faker.date.past(),
+  // address: {
+  //   streetName: faker.address.streetName(),
+  //   city: faker.address.city(),
+  //   state: faker.address.state(),
+  //   zipcode: faker.address.zipCode()
+  // },
+  // wishList: [
+  //   { wishItem: faker.random.words() },
+  //   { wishItem: faker.random.words() },
+  //   { wishItem: faker.random.words() }
+  // ]
 // });
 
 // jerrysDad.save(err => {

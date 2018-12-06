@@ -233,7 +233,7 @@ describe('Profiles API', function() {
     });
 
     //***Do I need to write a test for every field? */
-    it.only('Should reject any non-string fields', function() {
+    it('Should reject any non-string fields', function() {
       const nonStringTestFields = { "firstName": 42, "lastName": "Rooster" };
       return chai.request(app)
         .post('/api/profiles')
