@@ -250,42 +250,59 @@ describe('Profiles API', function() {
   describe('PUT Profile endpoint', function() {
 
     it('Should update one Profile', function() {
-      seedProfileData();
       let profileToUpdate = {
         firstName: 'Cosmo',
         lastName: 'Kramer',
         email: 'cosmo@kramer.com'
       };
+      let ownerId = user.id;
 
-      return Profile.findOne()
+      return Profile.findOne({ "owner": ownerId })
         .then(function(profile) {
-          profileToUpdate.id = profile.id;
+          profileToUpdate._id = profile._id;
           profileToUpdate.owner = profile.owner;
           return chai
             .request(app)
-            .put(`/api//profiles/${profileToUpdate.id}`)
+            .put(`/api/profiles/${profileToUpdate._id}`)
+            .set('Authorization', `Bearer ${token}`)
             .send(profileToUpdate);
         })
         .then(function(res) {
+          console.log("RESPONSE BODY>>>>>", res.body);
           res.should.have.status(202);
-          return Profile.findById(profileToUpdate.id);
+          return Profile.findById(profileToUpdate._id);
         })
         .then(function(updatedProfile) {
-          updatedProfile.id.should.equal(profileToUpdate.id);
-          updatedProfile.owner.should.deep.equal(profileToUpdate.owner);
+          updatedProfile.id.should.equal(profileToUpdate._id.toHexString());
+          console.log("UPDATED PROFILE.OWNER>>>>", updatedProfile.owner);
+          console.log("PROFILE TO UPDATE.owner>>>>>", profileToUpdate.owner);
+          updatedProfile.owner.toHexString().should.equal(profileToUpdate.owner.toHexString());
         });
     });
+
+    it.only('Should respond with a 400 if the profile ID in the params does not exist', function() {
+
+    });
+
+
+    it.only('Should respond with a 400 if the profile ID is not in the request body', function() {
+
+    });
+
+
+    it.only('Should respond with a 400 if the profile ID in the body does not match the profile ID in the params', function() {
+
+    });
+
+
+    it.only('Should respond with a 500 is the profile does not belong to the user', function() {
+
+    });
+
   });
 
   describe('DELETE Profile endpoint', function() {
-    before(function() {
-      return seedUserData(), seedProfileData();
-    });
-
-    after(function() {
-      return tearDownDb();
-    });
-
+    
     it('Should DELETE a Profile given the ID', function() {
       return Profile.findOne()
         .then(function(profile) {

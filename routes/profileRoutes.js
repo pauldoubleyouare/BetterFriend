@@ -98,7 +98,7 @@ router.post('/', (req, res, next) => {
       streetName: req.body.address.streetName,
       city: req.body.address.city,
       state: req.body.address.state,
-      zipcode: req.body.address.zipcode
+      zipCode: req.body.address.zipCode
     },
     phone: req.body.phone
   }
@@ -118,9 +118,7 @@ router.put('/:id', (req, res, next) => {
   const userId = req.user.id;
   const profileId = req.params.id;
   if (!(req.body._id && req.params.id && req.body._id === req.params.id)) {
-    let message = `Request params:${req.params.id} should match request body: ${
-      req.body.id
-    } and they both should exist`;
+    let message = `Request params:${req.params.id} should match request body: ${req.body.id} and they both should exist`;
     res.status(400).json({ message: message });
   }
   let updatedFields = {};
@@ -131,8 +129,7 @@ router.put('/:id', (req, res, next) => {
     'relationship',
     'birthday',
     'address',
-    'phone',
-    'wishList'
+    'phone'
   ];
 
   updateableFields.forEach(field => {
@@ -146,7 +143,7 @@ router.put('/:id', (req, res, next) => {
     { $set: updatedFields }
   )
     .then(profile => {
-      return res.status(202).json({ profile: profile.serialize() });
+      return res.status(202).json(`Profile ${profileId} updated`);
     })
     .catch(err =>
       res.status(500).json({ error: err + 'Internal server error' })

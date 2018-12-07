@@ -41,7 +41,7 @@ const profileSchema = mongoose.Schema(
       streetName: String,
       city: String,
       state: String,
-      zipcode: String
+      zipCode: String
     },
     phone: String,
     wishList: [wishSchema]
@@ -111,7 +111,7 @@ let Profile = mongoose.model('Profile', profileSchema, 'Profiles');
   //   streetName: faker.address.streetName(),
   //   city: faker.address.city(),
   //   state: faker.address.state(),
-  //   zipcode: faker.address.zipCode()
+  //   zipCode: faker.address.zipCode()
   // },
   // wishList: [
   //   { wishItem: faker.random.words() },
