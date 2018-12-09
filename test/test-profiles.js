@@ -152,7 +152,6 @@ describe('Profiles API', function() {
         .set('Authorization', `Bearer ${token}`)
         .then(res => {
           res.should.have.status(400);
-          console.log('RESPONSE BODY>>>>>', res.body);
           res.body.message.should.equal('The "id" is not valid');
         });
     });
@@ -170,7 +169,6 @@ describe('Profiles API', function() {
   });
 
   describe('POST Profile endpoint', function() {
-  
     it('Should create and return one new Profile when given valid data', function() {
       let newProfile = {
         owner: user.id,
@@ -204,13 +202,8 @@ describe('Profiles API', function() {
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.an('object');
-          
-          res.body.should.include.keys(
-            'owner',
-            '_id',
-            'firstName',
-            'lastName'
-          );
+
+          res.body.should.include.keys('owner', '_id', 'firstName', 'lastName');
           return Profile.findOne({ owner: user.id, _id: body._id });
         })
         .then(data => {
@@ -220,35 +213,40 @@ describe('Profiles API', function() {
     });
 
     it('Should return an error when missing a required field', function() {
-      const badProfile = { "something": "not valid"};
-      return chai.request(app)
+      const badProfile = { something: 'not valid' };
+      return chai
+        .request(app)
         .post('/api/profiles')
         .set('Authorization', `Bearer ${token}`)
         .send(badProfile)
         .then(res => {
           res.should.have.status(422);
           res.should.be.json;
-          res.body.message.should.equal('Missing firstName in request body' || 'Missing lastName in request body');
+          res.body.message.should.equal(
+            'Missing firstName in request body' ||
+              'Missing lastName in request body'
+          );
         });
     });
 
-    //***Do I need to write a test for every field? */
     it('Should reject any non-string fields', function() {
-      const nonStringTestFields = { "firstName": 42, "lastName": "Rooster" };
-      return chai.request(app)
+      const nonStringTestFields = { firstName: 42, lastName: 'Rooster' };
+      return chai
+        .request(app)
         .post('/api/profiles')
         .set('Authorization', `Bearer ${token}`)
         .send(nonStringTestFields)
         .then(res => {
           res.should.have.status(422);
           res.should.be.json;
-          res.body.message.should.equal('Incorrect field type: expected string');
+          res.body.message.should.equal(
+            'Incorrect field type: expected string'
+          );
         });
-      });
+    });
   });
 
   describe('PUT Profile endpoint', function() {
-
     it('Should update one Profile', function() {
       let profileToUpdate = {
         firstName: 'Cosmo',
@@ -257,7 +255,7 @@ describe('Profiles API', function() {
       };
       let ownerId = user.id;
 
-      return Profile.findOne({ "owner": ownerId })
+      return Profile.findOne({ owner: ownerId })
         .then(function(profile) {
           profileToUpdate._id = profile._id;
           profileToUpdate.owner = profile.owner;
@@ -268,51 +266,118 @@ describe('Profiles API', function() {
             .send(profileToUpdate);
         })
         .then(function(res) {
-          console.log("RESPONSE BODY>>>>>", res.body);
           res.should.have.status(202);
           return Profile.findById(profileToUpdate._id);
         })
         .then(function(updatedProfile) {
           updatedProfile.id.should.equal(profileToUpdate._id.toHexString());
-          console.log("UPDATED PROFILE.OWNER>>>>", updatedProfile.owner);
-          console.log("PROFILE TO UPDATE.owner>>>>>", profileToUpdate.owner);
-          updatedProfile.owner.toHexString().should.equal(profileToUpdate.owner.toHexString());
+          updatedProfile.owner
+            .toHexString()
+            .should.equal(profileToUpdate.owner.toHexString());
         });
     });
 
-    it.only('Should respond with a 400 if the profile ID in the params does not exist', function() {
+    it('Should respond with a 400 if req.params.id is not a valid profileId', function() {
+      let profileToUpdate = { firstName: 'Cosmo', lastName: 'Kramer' };
 
+      return Profile.findOne({ owner: user.id })
+        .then(function(profile) {
+          profileToUpdate._id = profile._id;
+          profileToUpdate.owner = profile.owner;
+          return chai
+            .request(app)
+            .put(`/api/profiles/1`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(profileToUpdate);
+        })
+        .then(res => {
+          res.should.have.status(400);
+          res.body.message.should.equal(
+            `Request parameter id (1) should match request body id (${
+              profileToUpdate._id
+            }) and they both should exist`
+          );
+        });
     });
 
+    it('Should respond with a 400 if the profile ID is not in the request body', function() {
+      let profileToUpdate = { firstName: 'Cosmo', lastName: 'Kramer' };
+      let profileId;
 
-    it.only('Should respond with a 400 if the profile ID is not in the request body', function() {
-
+      return Profile.findOne({ owner: user.id })
+        .then(function(profile) {
+          profileToUpdate.owner = profile.owner;
+          profileId = profile.id;
+          return chai
+            .request(app)
+            .put(`/api/profiles/${profileId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(profileToUpdate);
+        })
+        .then(res => {
+          res.should.have.status(400);
+          res.body.message.should.equal(
+            `Request parameter id (${profileId}) should match request body id (undefined) and they both should exist`
+          );
+        });
     });
-
 
     it.only('Should respond with a 400 if the profile ID in the body does not match the profile ID in the params', function() {
+      let profileToUpdate = {
+        firstName: 'Cosmo',
+        lastName: 'Kramer',
+        _id: 'DOESNOTEXIST'
+      };
+      let profileId;
 
+      return Profile.findOne({ owner: user.id })
+        .then(function(profile) {
+          profileToUpdate.owner = profile.owner;
+          profileId = profile.id;
+          return chai
+            .request(app)
+            .put(`/api/profiles/${profileId}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(profileToUpdate);
+        })
+        .then(res => {
+          res.should.have.status(400);
+          res.body.message.should.equal(
+            `Request parameter id (${profileId}) should match request body id (DOESNOTEXIST) and they both should exist`
+          );
+        });
     });
-
-
-    it.only('Should respond with a 500 is the profile does not belong to the user', function() {
-
-    });
-
   });
 
   describe('DELETE Profile endpoint', function() {
-    
     it('Should DELETE a Profile given the ID', function() {
-      return Profile.findOne()
-        .then(function(profile) {
-          let profileToDelete = profile;
+      let data;
+      return Profile.findOne({ owner: user.id })
+        .then(_data => {
+          data = _data;
           return chai
             .request(app)
-            .delete(`/api/profiles/${profileToDelete.id}`);
+            .delete(`/api/profiles/${data.id}`)
+            .set('Authorization', `Bearer ${token}`);
         })
         .then(function(res) {
-          res.should.have.status(200);
+          res.should.have.status(204);
+
+          res.body.should.be.empty;
+          return Profile.findById(data._id);
+        })
+        .then(profile => {
+          expect(profile).to.be.null;
+        });
+    });
+
+    it('Should respond with a 204 when Profile id does not exist', function() {
+      return chai
+        .request(app)
+        .delete('/api/profiles/DOESNOTEXIST')
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          res.should.have.status(204);
         });
     });
   });

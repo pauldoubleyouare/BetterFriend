@@ -51,10 +51,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
   owner = req.user.id;
 
-  const requiredFields = [
-    'firstName',
-    'lastName',
-  ];
+  const requiredFields = ['firstName', 'lastName'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -101,26 +98,31 @@ router.post('/', (req, res, next) => {
       zipCode: req.body.address.zipCode
     },
     phone: req.body.phone
-  }
+  };
 
   User.findById(owner)
-  .then(user => {
-    return Profile.create(newProfile);
-  })
-  .then(profile => res.status(201).json(profile.serialize()))
-  .catch(e => res.status(500).json({ errors: e }));
-
+    .then(user => {
+      return Profile.create(newProfile);
+    })
+    .then(profile => res.status(201).json(profile.serialize()))
+    .catch(e => res.status(500).json({ errors: e }));
 });
-
 
 // PUT updating a Profile
 router.put('/:id', (req, res, next) => {
   const userId = req.user.id;
   const profileId = req.params.id;
+
   if (!(req.body._id && req.params.id && req.body._id === req.params.id)) {
-    let message = `Request params:${req.params.id} should match request body: ${req.body.id} and they both should exist`;
-    res.status(400).json({ message: message });
+    const err = new Error(
+      `Request parameter id (${req.params.id}) should match request body id (${
+        req.body._id
+      }) and they both should exist`
+    );
+    err.status = 400;
+    return next(err);
   }
+
   let updatedFields = {};
   let updateableFields = [
     'firstName',
@@ -150,12 +152,22 @@ router.put('/:id', (req, res, next) => {
     );
 });
 
-router.delete('/:id', (req, res) => {
+//DELETE Profile
+router.delete('/:id', (req, res, next) => {
   const userId = req.user.id;
   const profileId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(profileId)) {
+    const err = new Error('The "id" is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
   Profile.findOneAndRemove({ _id: profileId, owner: userId })
-    .then(data => res.status(200).json(data.firstName + ' was deleted'))
-    .catch(err => res.status(500).json({ err: err }));
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(err => next(err));
 });
 
 // Wish endpoints
