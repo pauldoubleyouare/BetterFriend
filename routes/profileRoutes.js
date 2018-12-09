@@ -199,7 +199,7 @@ router.post('/:id/wishItem', (req, res, next) => {
     { new: true }
   )
     .then(profile => {
-      res.json({
+      res.status(201).json({
         profile: profile.serialize()
       });
       return profile;
@@ -210,7 +210,6 @@ router.post('/:id/wishItem', (req, res, next) => {
     });
 });
 
-//Need 3 things here - 1) userId from JWT 2) req.params.id (profileId) 3) wishId
 router.delete('/:id/wishItem', (req, res) => {
   const userId = req.user.id;
   const profileId = req.params.id;
@@ -226,7 +225,7 @@ router.delete('/:id/wishItem', (req, res) => {
     { new: true }
   )
     .then(profile => {
-      res.json({
+      res.status(204).json({
         profile: profile.serialize()
       });
       return profile;

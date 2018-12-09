@@ -16,6 +16,8 @@ const faker = require('faker');
 const mongoose = require('mongoose');
 
 chai.use(chaiHttp);
+chai.use(require('chai-like'));
+chai.use(require('chai-things'));
 const expect = chai.expect;
 const should = chai.should();
 
@@ -55,6 +57,7 @@ describe('Profiles API', function() {
     return tearDownDb();
   });
 
+  //=====Tests for GET to /profiles=====//
   describe('GET All Profiles endpoint', function() {
     it('Should GET Profiles that belong to the User requesting', function() {
       let ownerId = user.id;
@@ -110,6 +113,7 @@ describe('Profiles API', function() {
     });
   });
 
+  //=====Tests for GET to /profiles/:id=====//
   describe('GET /api/profiles/:id endpoint', function() {
     it('Should return one Profile via id', function() {
       let profileData;
@@ -168,6 +172,7 @@ describe('Profiles API', function() {
     });
   });
 
+  //=====Tests for POST to /profiles=====//
   describe('POST Profile endpoint', function() {
     it('Should create and return one new Profile when given valid data', function() {
       let newProfile = {
@@ -246,6 +251,7 @@ describe('Profiles API', function() {
     });
   });
 
+  //=====Tests for PUT to /profiles=====//
   describe('PUT Profile endpoint', function() {
     it('Should update one Profile', function() {
       let profileToUpdate = {
@@ -322,7 +328,7 @@ describe('Profiles API', function() {
         });
     });
 
-    it.only('Should respond with a 400 if the profile ID in the body does not match the profile ID in the params', function() {
+    it('Should respond with a 400 if the profile ID in the body does not match the profile ID in the params', function() {
       let profileToUpdate = {
         firstName: 'Cosmo',
         lastName: 'Kramer',
@@ -349,6 +355,7 @@ describe('Profiles API', function() {
     });
   });
 
+  //=====Tests for DELETE to /profiles=====//
   describe('DELETE Profile endpoint', function() {
     it('Should DELETE a Profile given the ID', function() {
       let data;
@@ -380,5 +387,42 @@ describe('Profiles API', function() {
           res.should.have.status(204);
         });
     });
+  });
+
+  //=====Tests for POST to /profiles/:id/wishItem=====//
+  describe('POST WishList endpoint', function() {
+    it.only('Should create a new wishItem', function() {
+      let newWish = { wishItem: 'cool wish' };
+      let data;
+      let profileId;
+      return Profile.findOne({ owner: user.id })
+        .then(_data => {
+          data = _data;
+          profileId = data._id;
+          return chai
+            .request(app)
+            .post(`/api/profiles/${profileId}/wishItem`)
+            .set(`Authorization`, `Bearer ${token}`)
+            .send(newWish);
+        })
+        .then(function(res) {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.body.should.be.an('object');
+          res.body.profile.wishList.should.be.an('array');
+          res.body.profile.wishList[0].should.include.keys('wishItem');
+          return Profile.findOne({ owner: user.id, _id: profileId });
+        })
+        .then(function(data) {
+          data.wishList.should.be
+            .an('array')
+            .that.contains.something.like(newWish);
+        });
+    });
+  });
+
+  //=====Tests for DELETE to /profiles/:id/wishItem=====//
+  describe('DELETE WishList endpoint', function() {
+    it('Should delete a new wishItem', function() {});
   });
 });
