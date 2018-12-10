@@ -177,7 +177,7 @@ router.post('/:id/wishItem', (req, res, next) => {
   const profileId = req.params.id;
 
   if (!newWishItem) {
-    const err = new Error(`Missing ${newWishItem} in request body`);
+    const err = new Error(`Missing wishItem in request body`);
     err.status = 400;
     return next(err);
   }
@@ -210,9 +210,16 @@ router.post('/:id/wishItem', (req, res, next) => {
     });
 });
 
-router.delete('/:id/wishItem', (req, res) => {
+router.delete('/:id/wishItem', (req, res, next) => {
   const userId = req.user.id;
   const profileId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(profileId)) {
+      const err = new Error('The ID is not valid');
+      err.status = 400;
+      return next(err);
+  }
+
   Profile.findOneAndUpdate(
     { _id: profileId, owner: userId },
     {

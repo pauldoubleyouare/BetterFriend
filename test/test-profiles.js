@@ -391,7 +391,7 @@ describe('Profiles API', function() {
 
   //=====Tests for POST to /profiles/:id/wishItem=====//
   describe('POST WishList endpoint', function() {
-    it.only('Should create a new wishItem', function() {
+    it('Should create a new wishItem', function() {
       let newWish = { wishItem: 'cool wish' };
       let data;
       let profileId;
@@ -419,10 +419,72 @@ describe('Profiles API', function() {
             .that.contains.something.like(newWish);
         });
     });
+
+    it('Should respond with a 400 if there is no wishItem in the request body', function() {
+      let newWish = {};
+      let data;
+      let profileId;
+      return Profile.findOne({ owner: user.id })
+        .then(_data => {
+          data = _data;
+          profileId = data._id;
+          return chai
+            .request(app)
+            .post(`/api/profiles/${profileId}/wishItem`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(newWish);
+        })
+        .then(function(res) {
+          res.should.have.status(400);
+          res.body.message.should.equal('Missing wishItem in request body');
+        });
+    });
+
+    it('Should respond with a 400 if the Profile ID is not a valid ObjectId', function() {
+      let newWish = { wishItem: 'cool wish' };
+      let data;
+      return Profile.findOne({ owner: user.id })
+        .then(_data => {
+          data = _data;
+          profileId = data._id;
+          return chai
+            .request(app)
+            .post(`/api/profiles/1/wishItem`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(newWish);
+        })
+        .then(function(res) {
+          res.should.have.status(400);
+          res.body.message.should.equal('Id is not valid');
+        });
+    });
   });
 
+  //******Not sure how else to test if the wishList array has one less, or has been successfully deleted, other than status code?? */
   //=====Tests for DELETE to /profiles/:id/wishItem=====//
   describe('DELETE WishList endpoint', function() {
-    it('Should delete a new wishItem', function() {});
+    it('Should delete a wishItem', function() {
+      let data;
+      let profileId;
+      let wishToDelete;
+      let wishId;
+      return Profile.findOne({ owner: user.id })
+        .then(_data => {
+          data = _data;
+          profileId = data._id;
+          wishId = data.wishList[0]._id;
+          wishToDelete = {_id: wishId}
+          return chai
+            .request(app)
+            .delete(`/api/profiles/${profileId}/wishItem`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(wishToDelete)
+        })
+        .then(function(res) {
+          res.should.have.status(204);
+          console.log('RESPONSE BODY>>>>>', res.body.profile);
+          res.body.should.be.empty;
+        });
+    });
   });
 });
