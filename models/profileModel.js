@@ -36,12 +36,12 @@ const profileSchema = mongoose.Schema(
     },
     email: String,
     relationship: String,
-    birthday: Date, 
+    birthday: Date,
     address: {
       streetName: String,
       city: String,
       state: String,
-      zipcode: Number
+      zipCode: String
     },
     phone: String,
     wishList: [wishSchema]
@@ -62,7 +62,7 @@ profileSchema.virtual('fullName').get(function() {
 profileSchema.methods.serialize = function() {
   return {
     owner: this.owner,
-    id: this._id,
+    _id: this._id,
     firstName: this.firstName,
     lastName: this.lastName,
     relationship: this.relationship,
@@ -77,53 +77,51 @@ profileSchema.methods.serialize = function() {
 
 let Profile = mongoose.model('Profile', profileSchema, 'Profiles');
 
-function generateRelationship() {
-  const relationship = [
-    'Mom',
-    'Dad',
-    'Friend',
-    'Brother',
-    'Sister',
-    'Boyfriend',
-    'Girlfriend',
-    'Aunt',
-    'Uncle'
-  ];
-  return relationship[Math.floor(Math.random() * relationship.length)];
-}
+// function generateRelationship() {
+//   const relationship = [
+//     'Mom',
+//     'Dad',
+//     'Friend',
+//     'Brother',
+//     'Sister',
+//     'Boyfriend',
+//     'Girlfriend',
+//     'Aunt',
+//     'Uncle'
+//   ];
+//   return relationship[Math.floor(Math.random() * relationship.length)];
+// }
 
 // let jerry = new User({
 //         _id: new mongoose.Types.ObjectId(),
 //         userName: faker.internet.userName(),
-//         fullName: {
-//             firstName: faker.name.firstName(),
-//             lastName: faker.name.lastName()
-//         },
+//         password: faker.internet.password(),
+//         firstName: faker.name.firstName(),
+//         lastName: faker.name.lastName(),
 //         email: faker.internet.email()
 // });
 
-// jerry.save(err => {
-//         if (err) console.log(err);
+// let jerrysDad = new Profile({
+  // owner: "5bf091289a5cad30c391ebdd",
+  // firstName: faker.name.firstName(),
+  // lastName: faker.name.lastName(),
+  // relationship: generateRelationship(),
+  // birthday: faker.date.past(),
+  // address: {
+  //   streetName: faker.address.streetName(),
+  //   city: faker.address.city(),
+  //   state: faker.address.state(),
+  //   zipCode: faker.address.zipCode()
+  // },
+  // wishList: [
+  //   { wishItem: faker.random.words() },
+  //   { wishItem: faker.random.words() },
+  //   { wishItem: faker.random.words() }
+  // ]
+// });
 
-//         let jerrysDad = new Profile({
-//             owner: jerry._id,
-//             fullName: {
-//                 firstName: faker.name.firstName(),
-//                 lastName: faker.name.lastName()
-//             },
-//             relationship: generateRelationship(),
-//             birthday: faker.date.past(),
-//             address: faker.address.streetName(),
-//             wishList: [
-//                 {wishItem: faker.random.words()},
-//                 {wishItem: faker.random.words()},
-//                 {wishItem: faker.random.words()}
-//             ]
-//         });
-
-//         jerrysDad.save(err => {
-//             if (err) console.log(err);
-//         });
-//     });
+// jerrysDad.save(err => {
+//   if (err) console.log(err);
+// });
 
 module.exports = { Profile };

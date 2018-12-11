@@ -4,18 +4,16 @@ const express = require('express');
 const router = express.Router();
 const { Profile } = require('../models/profileModel');
 const { User } = require('../models/userModel');
+const mongoose = require('mongoose');
 
 let owner;
 
-router.get('/', (req, res) => {
+//GET Profiles
+router.get('/', (req, res, next) => {
   owner = req.user.id;
-  console.log('OWNER>>>>>>', owner);
   Profile.find({ owner })
     .then(profiles => {
-      res.json({
-        profiles: profiles.map(profile => profile)
-      });
-      return profiles;
+      res.json(profiles);
     })
     .catch(err => {
       console.error(err);
@@ -23,10 +21,185 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
-  Profile.findById(req.params.id)
+//GET Profile by ID
+router.get('/:id', (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The "id" is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  Profile.findOne({ _id: req.params.id, owner: userId })
     .then(profile => {
-      res.json({
+      if (profile) {
+        res.json(profile.serialize());
+      } else {
+        const err = new Error('No profiles with that "id" found');
+        err.status = 404;
+        next(err);
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
+//POST new Profile
+router.post('/', (req, res, next) => {
+  owner = req.user.id;
+
+  const requiredFields = ['firstName', 'lastName'];
+  const missingField = requiredFields.find(field => !(field in req.body));
+
+  if (missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: `Missing ${missingField} in request body`,
+      location: missingField
+    });
+  }
+
+  const stringFields = [
+    'firstName',
+    'lastName',
+    'email',
+    'relationship',
+    'email',
+    'phone'
+  ];
+  const nonStringField = stringFields.find(
+    field => field in req.body && typeof req.body[field] !== 'string'
+  );
+
+  if (nonStringField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: `Incorrect field type: expected string`,
+      location: nonStringField
+    });
+  }
+
+  const newProfile = {
+    owner: owner,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    relationship: req.body.relationship,
+    birthday: req.body.birthday,
+    address: {
+      streetName: req.body.address.streetName,
+      city: req.body.address.city,
+      state: req.body.address.state,
+      zipCode: req.body.address.zipCode
+    },
+    phone: req.body.phone
+  };
+
+  User.findById(owner)
+    .then(user => {
+      return Profile.create(newProfile);
+    })
+    .then(profile => res.status(201).json(profile.serialize()))
+    .catch(e => res.status(500).json({ errors: e }));
+});
+
+// PUT updating a Profile
+router.put('/:id', (req, res, next) => {
+  const userId = req.user.id;
+  const profileId = req.params.id;
+
+  if (!(req.body._id && req.params.id && req.body._id === req.params.id)) {
+    const err = new Error(
+      `Request parameter id (${req.params.id}) should match request body id (${
+        req.body._id
+      }) and they both should exist`
+    );
+    err.status = 400;
+    return next(err);
+  }
+
+  let updatedFields = {};
+  let updateableFields = [
+    'firstName',
+    'lastName',
+    'email',
+    'relationship',
+    'birthday',
+    'address',
+    'phone'
+  ];
+
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updatedFields[field] = req.body[field];
+    }
+  });
+
+  Profile.findOneAndUpdate(
+    { _id: profileId, owner: userId },
+    { $set: updatedFields }
+  )
+    .then(profile => {
+      return res.status(202).json(`Profile ${profileId} updated`);
+    })
+    .catch(err =>
+      res.status(500).json({ error: err + 'Internal server error' })
+    );
+});
+
+//DELETE Profile
+router.delete('/:id', (req, res, next) => {
+  const userId = req.user.id;
+  const profileId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(profileId)) {
+    const err = new Error('The "id" is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  Profile.findOneAndRemove({ _id: profileId, owner: userId })
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(err => next(err));
+});
+
+// Wish endpoints
+router.post('/:id/wishItem', (req, res, next) => {
+  const newWishItem = req.body.wishItem;
+  const userId = req.user.id;
+  const profileId = req.params.id;
+
+  if (!newWishItem) {
+    const err = new Error(`Missing wishItem in request body`);
+    err.status = 400;
+    return next(err);
+  }
+  if (!mongoose.Types.ObjectId.isValid(profileId)) {
+    const err = new Error('Id is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  Profile.findOneAndUpdate(
+    { _id: profileId, owner: userId },
+    {
+      $push: {
+        wishList: {
+          wishItem: req.body.wishItem
+        }
+      }
+    },
+    { new: true }
+  )
+    .then(profile => {
+      res.status(201).json({
         profile: profile.serialize()
       });
       return profile;
@@ -37,68 +210,18 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
-  owner = req.user._id;
-  User.findById(owner)
-    .then(user => {
-      return Profile.create(Object.assign({}, req.body, { owner: owner }));
-    })
-    .then(profile => res.status(201).json({ profile: profile.serialize() }))
-    .catch(e => res.status(500).json({ errors: e }));
-});
+router.delete('/:id/wishItem', (req, res, next) => {
+  const userId = req.user.id;
+  const profileId = req.params.id;
 
-// Updating a Profile
-router.put('/:id', (req, res) => {
-  if (!(req.body.id && req.params.id && req.body.id === req.params.id)) {
-    let message = `Request params:${req.params.id} should match request body: ${
-      req.body.id
-    } and they both should exist`;
-    res.status(400).json({ message: message });
+  if (!mongoose.Types.ObjectId.isValid(profileId)) {
+      const err = new Error('The ID is not valid');
+      err.status = 400;
+      return next(err);
   }
-  let updatedFields = {};
-  let updateableFields = [
-    'fullName',
-    'email',
-    'relationship',
-    'birthday',
-    'address',
-    'phone',
-    'wishList'
-  ];
 
-  updateableFields.forEach(field => {
-    if (field in req.body) {
-      updatedFields[field] = req.body[field];
-    }
-  });
-
-  Profile.findByIdAndUpdate(req.params.id, { $set: updatedFields })
-    .then(user => {
-      return res.status(202).json('Updated:' + { user: user });
-    })
-    .catch(err =>
-      res.status(500).json({ error: err + 'Internal server error' })
-    );
-});
-
-router.delete('/:id', (req, res) => {
-  Profile.findByIdAndRemove(req.params.id)
-    .then(data =>
-      res.status(200).json(data.fullName.firstName + ' was deleted')
-    )
-    .catch(err => res.status(500).json({ err: err }));
-});
-
-// Wish endpoints
-// ****make sure the current user owns the profile that the wish is getting added to
-// owner of profile should be current user (both post and delete)
-// find by ownerID and profile - to ensure the current user is accessing the correct profile/wishitem
-// so lost on this
-
-
-router.delete('/:id/wishItem', (req, res) => {
-  Profile.findByIdAndUpdate(
-    req.params.id,
+  Profile.findOneAndUpdate(
+    { _id: profileId, owner: userId },
     {
       $pull: {
         wishList: {
@@ -109,7 +232,7 @@ router.delete('/:id/wishItem', (req, res) => {
     { new: true }
   )
     .then(profile => {
-      res.json({
+      res.status(204).json({
         profile: profile.serialize()
       });
       return profile;

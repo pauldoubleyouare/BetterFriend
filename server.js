@@ -32,6 +32,17 @@ app.use('/api/users', userRouter);
 //Protected Routers
 app.use('/api/profiles', jwtAuth, profileRouter);
 
+//Custom Error Handler
+app.use((err, req, res, next) => {
+  if (err.status) {
+    const errBody = Object.assign({}, err, { message: err.message });
+    res.status(err.status).json(errBody);
+  } else {
+    res.status(500).json({ message: "Internal Server Error"});
+    console.error(err);
+  }
+});
+
 let server;
 
 function runServer(databaseUrl = DATABASE_URL, port = PORT) {

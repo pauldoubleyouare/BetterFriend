@@ -28,10 +28,9 @@ function seedUserData() {
   for (let i = 1; i <= 5; i++) {
     seedData.push({
       userName: faker.internet.userName(),
-      fullName: {
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName()
-      },
+      password: faker.internet.password(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email()
       // profiles: [{id: faker.random.uuid()}, {id: faker.random.uuid()}, {id: faker.random.uuid()}]
     });
@@ -79,7 +78,7 @@ describe('Users API', function() {
           res.should.be.json;
           res.body.should.be.an('object');
           res.body.id.should.equal(userId);
-          res.body.should.include.keys('id', 'userName', 'password', 'email');
+          res.body.should.include.keys('id', 'userName', 'firstName', 'lastName', 'email');
         });
     });
   });
@@ -284,6 +283,8 @@ describe('Users API', function() {
     });
   });
 
+
+  //**************This is the test that's logging the user's password to the terminal... not sure how to fix!?******** */
   describe('PUT User endpoint', function() {
     before(function() {
       return seedUserData();
@@ -296,10 +297,8 @@ describe('Users API', function() {
     it('Should update one user', function() {
       let userToUpdate = {
         userName: 'jseinfeld',
-        fullName: {
-          firstName: 'Jerry',
-          lastName: 'Seinfeld'
-        },
+        firstName: 'Jerry',
+        lastName: 'Seinfeld',
         email: 'jerry@seinfeld.com'
       };
 
