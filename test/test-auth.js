@@ -240,7 +240,7 @@ describe('BetterFriend - Login', function() {
 
         //**** This is failing, and I'm assuming it's because of the User model, and not using the .set() method to delete passwords */
         //https://github.com/Thinkful-Ed/noteful-app/blob/master/models/user.js//
-        it.only('Should return a JWT that does NOT contain a password', function() {
+        it('Should return a JWT that does NOT contain a password', function() {
           const token = jwt.sign({ user }, JWT_SECRET, {
             subject: userName,
             expiresIn: '1m'
