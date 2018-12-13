@@ -7,6 +7,7 @@ const { User } = require('../models/userModel');
 const { TEST_DATABASE_URL } = require('../config');
 const faker = require('faker');
 const mongoose = require('mongoose');
+const seedUsers = require('../db/Users');
 
 const should = chai.should();
 
@@ -22,21 +23,21 @@ function tearDownDb() {
   });
 }
 
-function seedUserData() {
-  console.info('Seeding User data');
-  const seedData = [];
-  for (let i = 1; i <= 5; i++) {
-    seedData.push({
-      userName: faker.internet.userName(),
-      password: faker.internet.password(),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email()
-      // profiles: [{id: faker.random.uuid()}, {id: faker.random.uuid()}, {id: faker.random.uuid()}]
-    });
-  }
-  return User.insertMany(seedData);
-}
+// function seedUserData() {
+//   console.info('Seeding User data');
+//   const seedData = [];
+//   for (let i = 1; i <= 5; i++) {
+//     seedData.push({
+//       userName: faker.internet.userName(),
+//       password: faker.internet.password(),
+//       firstName: faker.name.firstName(),
+//       lastName: faker.name.lastName(),
+//       email: faker.internet.email()
+//       // profiles: [{id: faker.random.uuid()}, {id: faker.random.uuid()}, {id: faker.random.uuid()}]
+//     });
+//   }
+//   return User.insertMany(seedData);
+// }
 
 describe('Users API', function() {
   before(function() {
@@ -47,14 +48,23 @@ describe('Users API', function() {
     return closeServer();
   });
 
-  describe('GET Users Endpoint', function() {
-    before(function() {
-      return seedUserData();
+  beforeEach(function() {
+    return Promise.all([
+      User.insertMany(seedUsers),
+    ]).then(([users]) => {
+      user = users[0].serialize();
+      token = jwt.sign({ user }, JWT_SECRET, { subject: user.userName });
     });
+  });
 
-    after(function() {
-      return tearDownDb();
-    });
+  afterEach(function() {
+    return tearDownDb();
+  });
+
+
+  describe('GET Users Endpoint', function() {
+
+
 
     let userId;
     it('Should return all User documents on GET request', function() {
@@ -87,11 +97,11 @@ describe('Users API', function() {
     after(function() {
       return tearDownDb();
     });
-    const userName = faker.internet.userName();
-    const password = faker.internet.password();
-    const firstName = faker.name.firstName();
-    const lastName = faker.name.lastName();
-    const email = faker.internet.email();
+    const userName = 'userName';
+    const password = 'password';
+    const firstName = 'firstName';
+    const lastName = 'lastName';
+    const email = 'cool@email.com';
 
     it('Should create one new User', function() {
       let responseId;
