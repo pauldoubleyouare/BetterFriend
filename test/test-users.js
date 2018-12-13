@@ -4,10 +4,11 @@ const chaiHttp = require('chai-http');
 const { app, runServer, closeServer } = require('../server');
 const expect = chai.expect;
 const { User } = require('../models/userModel');
-const { TEST_DATABASE_URL } = require('../config');
+const { TEST_DATABASE_URL, JWT_SECRET } = require('../config');
 const faker = require('faker');
 const mongoose = require('mongoose');
 const seedUsers = require('../db/Users');
+const jwt = require('jsonwebtoken');
 
 const should = chai.should();
 
