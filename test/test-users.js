@@ -297,13 +297,13 @@ describe('Users API', function() {
 
   //**************This is the test that's logging the user's password to the terminal... not sure how to fix!?******** */
   describe('PUT User endpoint', function() {
-    before(function() {
-      return seedUserData();
-    });
+    // before(function() {
+    //   return seedUserData();
+    // });
 
-    after(function() {
-      return tearDownDb();
-    });
+    // after(function() {
+    //   return tearDownDb();
+    // });
 
     it('Should update one user', function() {
       let userToUpdate = {
@@ -333,13 +333,13 @@ describe('Users API', function() {
   });
 
   describe('DELETE User endpoint', function() {
-    before(function() {
-      return seedUserData();
-    });
+    // before(function() {
+    //   return seedUserData();
+    // });
 
-    after(function() {
-      return tearDownDb();
-    });
+    // after(function() {
+    //   return tearDownDb();
+    // });
 
     let userToDelete;
 
