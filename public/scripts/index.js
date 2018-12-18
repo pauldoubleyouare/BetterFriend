@@ -1,7 +1,7 @@
 'use strict';
 
 $(document).ready(function() {
-  betterFriend.bindEventListeners();
-
-  betterFriend.render();
+  // betterFriend.bindEventListeners();
+  betterFriend.renderCreateAccountPage();
+  betterFriend.renderHomePage();
 });
