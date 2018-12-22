@@ -2,6 +2,7 @@
 
 const betterFriend = (function() {
   //this is a test
+  //another test
 
   function showSuccessMessage(message) {
     const element = $('.jsMessage');
@@ -95,7 +96,7 @@ const betterFriend = (function() {
           loginForm[0].reset();
           console.log('RESPONSE>>>>>', response);
           console.log('STORE>>>>>', store);
-          showSuccessMessage(`Woohoo! Welcome to back ${response.firstName}`);
+          showSuccessMessage(`Woohoo! Welcome back ${response.firstName}`);
         })
         .catch(handleErrors);
       renderDashboardPage();
