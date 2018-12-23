@@ -2,7 +2,7 @@
 
 const store = (function() {
   return {
-    user: {},
+    currentUser: [],
     profiles: [],
     authToken: ''
   };

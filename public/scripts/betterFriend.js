@@ -45,17 +45,6 @@ const betterFriend = (function() {
     });
   }
 
-  function renderDashboardPage() {
-    $('main').html(`
-    <section class="page dashboard">
-      <h1>Dashboard Page</h1>
-      <button class="btn createNewFriend">Create New Friend Profile</button>
-      <button class="btn existingFriend">Existing Friend</button>
-      <button class="btn logout">Log Out</button>
-    </section>
-    `);
-  }
-
   function renderLoginPage() {
     $('main').html(`
       <section class="page login">
@@ -97,9 +86,11 @@ const betterFriend = (function() {
           console.log('RESPONSE>>>>>', response);
           console.log('STORE>>>>>', store);
           showSuccessMessage(`Woohoo! Welcome back ${response.firstName}`);
+          renderDashboardPage();
+            // return api.search('/api/users/')
         })
         .catch(handleErrors);
-      renderDashboardPage();
+      
     });
 
     $('#createBfAccount').on('click', function() {
@@ -170,13 +161,128 @@ const betterFriend = (function() {
     });
   }
 
-  function generateLoginPage() {}
+  function renderDashboardPage() {
+    //need to make GET requests to pull in the users profile pages
+    $('main').html(`
+    <section class="page dashboard">
+      <h1>Dashboard Page</h1>
+      <button class="btn createNewFriend">Create New Friend Profile</button>
+      <button class="btn existingFriend">Existing Friend</button>
+      <button class="btn logout">Log Out</button>
+    </section>
+    `);
 
-  function generateCreateAccountPage() {}
+    $(".btn.createNewFriend").on("click", function() {
+      renderCreateFriendPage();
+    });
+    $(".btn.existingFriend").on("click", function() {
+      renderFriendProfilePage();
+    });
+    $(".btn.logout").on("click", function() {
+      localStorage.removeItem('authToken');
+      showSuccessMessage(`Log out successful`);
+      renderHomePage();
+    });
+  }
 
-  function generateProfilesList() {}
+  function renderCreateFriendPage() {
+    $('main').html(`
+    <section class="page createFriend">
+		<h1>Create Friend Page</h1>
+		<form id="createFriendForm" class="jsCreateFriendForm">
+			<fieldset>
+				<legend>Create New Person</legend>
+				<div>
+					<label for="firstName">First name:</label>
+					<input type="text" name="firstName" class="jsNewFriendFirstNameEntry" placeholder="First name" required>
+				</div>
+				<div>
+						<label for="lastName">Last name:</label>
+						<input type="text" name="lastName" class="jsNewFriendLastNameEntry" placeholder="Last name" required>
+				</div>
+				<div>
+						<label for="email">Email:</label>
+						<input type="text" name="email" class="jsNewFriendEmailEntry" placeholder="email@address.com">
+				</div>
+				<div>
+						<label for="relationship">Relationship:</label>
+						<input type="text" name="relationship" class="jsNewFriendRelationshipEntry" placeholder="Mom, dad, best friend etc.">
+				</div>
+				<div>
+						<label for="birthday">Birthday:</label>
+						<input type="date" name="birthday" class="jsNewFriendBirthdayEntry" placeholder="12/15/1950">
+        </div>
+        <div>
+          <label for="phone">Phone:</label>
+          <input type="text" name="phone" class="jsNewFriendPhoneEntry" placeholder="(555) 867-5309">
+        </div>
+				<fieldset>
+					<legend>Address:</legend>
+					<div>
+							<label for="street">Street:</label>
+							<input type="text" name="street" class="jsNewFriendStreetEntry" placeholder="1428 Elm Street">
+					</div>
+					<div>
+							<label for="city">City:</label>
+							<input type="text" name="city" class="jsNewFriendCityEntry" placeholder="Los Angeles">
+					</div>
+					<div>
+							<label for="state">State:</label>
+							<input type="text" name="state" class="jsNewFriendStateEntry" placeholder="California">
+					</div>
+					<div>
+							<label for="zipcode">Zip:</label>
+							<input type="text" name="zipcode" class="jsNewFriendZipCodeEntry" placeholder="90046">
+					</div>
+        </fieldset>
+        <button type="submit" class="btn jsCreateNewProfile">Create</button>
+        <button type="reset" class="btn resetNewFriendForm">Reset</button>
+        <button class="btn jsCancelNewFriendCreate" id="createBfAccount">Cancel</button>
+        <button class="btn jsBackToDashboard">Back to Dashboard</button>
+			</fieldset>
+		</form>
+	  </section>
+    `);
 
-  function generateWishList() {}
+    $('.jsCreateFriendForm').on('submit', function(event) {
+      event.preventDefault();
+      // Need to grab every value of the new profile and make a POST to /api/profiles
+      const newProfileForm = $(event.currentTarget);
+      const newProfile = {
+        firstName: $('.jsNewFriendFirstNameEntry').val(),
+        lastName: $('.jsNewFriendLastNameEntry').val(),
+        email: $('.jsNewFriendEmailEntry').val(),
+        relationship: $('.jsNewFriendRelationshipEntry').val(),
+        birthday: $('.jsNewFriendBirthdayEntry').val(),
+        address: {
+          streetName: $('.jsNewFriendStreetEntry').val(),
+          city: $('.jsNewFriendCityEntry').val(),
+          state: $('.jsNewFriendStateEntry').val(),
+          zipCode: $('.jsNewFriendZipCodeEntry').val()
+        },
+        phone: $('.jsNewFriendPhoneEntry').val()
+      };
+
+      api.create('/api/profiles', newProfile)
+        .then(response => {
+          newProfileForm[0].reset();
+          console.log('RESPONSE>>>>', response)
+          showSuccessMessage(`${newProfile.firstName} has been added to your Dashboard!`);
+        })
+        .catch(handleErrors);
+    });
+
+    $('.jsCancelNewFriendCreate').on('click', function() {
+      renderDashboardPage();
+    });
+
+    $('.jsBackToDashboard').on('click', function() {
+      renderDashboardPage();
+    });
+
+
+  }
+
 
   //===== Event Handlers =====//
   function handleCreateAccountSubmit() {}
