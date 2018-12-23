@@ -23,20 +23,22 @@ const betterFriend = (function() {
     showFailureMessage(err.responseJSON.message);
   }
 
+  function jwtDecoder(token) {
+    let decoded = jwt_decode(token);
+  }
+
   //=====Render Functions=====//
 
   // =====HTML Functions=====//
   function renderHomePage() {
-    $('main').html(
-      `
+    $('main').html(`
     <section class="page home">
     <h1>Home Page</h1>
       <h4>Never give boring presents again</h4>
       <button class="btn login">Login</button>
       <button class="btn createBfAccount">Create Account</button>
     </section>
-    `
-    );
+    `);
     $('.btn.login').on('click', function() {
       renderLoginPage();
     });
@@ -82,15 +84,12 @@ const betterFriend = (function() {
         .then(response => {
           store.authToken = response.authToken;
           store.authorized = true;
+          store.currentUser = jwt_decode(store.authToken);
           loginForm[0].reset();
-          console.log('RESPONSE>>>>>', response);
-          console.log('STORE>>>>>', store);
-          showSuccessMessage(`Woohoo! Welcome back ${response.firstName}`);
+          showSuccessMessage(`Woohoo! Welcome back, ${store.currentUser.user.firstName}!`);
           renderDashboardPage();
-            // return api.search('/api/users/')
         })
         .catch(handleErrors);
-      
     });
 
     $('#createBfAccount').on('click', function() {
@@ -172,13 +171,13 @@ const betterFriend = (function() {
     </section>
     `);
 
-    $(".btn.createNewFriend").on("click", function() {
+    $('.btn.createNewFriend').on('click', function() {
       renderCreateFriendPage();
     });
-    $(".btn.existingFriend").on("click", function() {
+    $('.btn.existingFriend').on('click', function() {
       renderFriendProfilePage();
     });
-    $(".btn.logout").on("click", function() {
+    $('.btn.logout').on('click', function() {
       localStorage.removeItem('authToken');
       showSuccessMessage(`Log out successful`);
       renderHomePage();
@@ -263,11 +262,14 @@ const betterFriend = (function() {
         phone: $('.jsNewFriendPhoneEntry').val()
       };
 
-      api.create('/api/profiles', newProfile)
+      api
+        .create('/api/profiles', newProfile)
         .then(response => {
           newProfileForm[0].reset();
-          console.log('RESPONSE>>>>', response)
-          showSuccessMessage(`${newProfile.firstName} has been added to your Dashboard!`);
+          console.log('RESPONSE>>>>', response);
+          showSuccessMessage(
+            `${newProfile.firstName} has been added to your Dashboard!`
+          );
         })
         .catch(handleErrors);
     });
@@ -279,10 +281,7 @@ const betterFriend = (function() {
     $('.jsBackToDashboard').on('click', function() {
       renderDashboardPage();
     });
-
-
   }
-
 
   //===== Event Handlers =====//
   function handleCreateAccountSubmit() {}
