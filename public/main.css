@@ -1,4 +1,8 @@
 
+* {
+	box-sizing: border-box
+}
+
 footer {
 	position: fixed;
 	color: black;
@@ -30,4 +34,9 @@ footer {
 	display: block;
 	margin: 0 auto;
 	
+}
+
+.jsProfilesContainer {
+	width: 400px;
+	height: 400px;
 }

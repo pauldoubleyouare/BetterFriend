@@ -27,9 +27,7 @@ const betterFriend = (function() {
     let decoded = jwt_decode(token);
   }
 
-  //=====Render Functions=====//
-
-  // =====HTML Functions=====//
+  //=====Render HTML Functions=====//
   function renderHomePage() {
     $('main').html(`
     <section class="page home">
@@ -86,7 +84,9 @@ const betterFriend = (function() {
           store.authorized = true;
           store.currentUser = jwt_decode(store.authToken);
           loginForm[0].reset();
-          showSuccessMessage(`Woohoo! Welcome back, ${store.currentUser.user.firstName}!`);
+          showSuccessMessage(
+            `Welcome back, ${store.currentUser.user.firstName}!`
+          );
           renderDashboardPage();
         })
         .catch(handleErrors);
@@ -165,13 +165,13 @@ const betterFriend = (function() {
     $('main').html(`
     <section class="page dashboard">
       <h1>Dashboard Page</h1>
-      <button class="btn createNewFriend">Create New Friend Profile</button>
+      <button class="btn jsCreateNewFriend">Create New Friend Profile</button>
       <button class="btn existingFriend">Existing Friend</button>
       <button class="btn logout">Log Out</button>
     </section>
     `);
 
-    $('.btn.createNewFriend').on('click', function() {
+    $('.jsCreateNewFriend').on('click', function() {
       renderCreateFriendPage();
     });
     $('.btn.existingFriend').on('click', function() {
@@ -192,11 +192,11 @@ const betterFriend = (function() {
 			<fieldset>
 				<legend>Create New Person</legend>
 				<div>
-					<label for="firstName">First name:</label>
+					<label for="firstName">*First name:</label>
 					<input type="text" name="firstName" class="jsNewFriendFirstNameEntry" placeholder="First name" required>
 				</div>
 				<div>
-						<label for="lastName">Last name:</label>
+						<label for="lastName">*Last name:</label>
 						<input type="text" name="lastName" class="jsNewFriendLastNameEntry" placeholder="Last name" required>
 				</div>
 				<div>
@@ -266,9 +266,9 @@ const betterFriend = (function() {
         .create('/api/profiles', newProfile)
         .then(response => {
           newProfileForm[0].reset();
-          console.log('RESPONSE>>>>', response);
+          store.profiles.push(response);
           showSuccessMessage(
-            `${newProfile.firstName} has been added to your Dashboard!`
+            `${newProfile.firstName} has been added to your Dashboard`
           );
         })
         .catch(handleErrors);
@@ -283,12 +283,111 @@ const betterFriend = (function() {
     });
   }
 
-  //===== Event Handlers =====//
-  function handleCreateAccountSubmit() {}
+  function renderDashboardPage() {
+    //Need to create the HTML template of the page (header and buttons)
+    //need to make a GET to /api/profiles
+    //need to generate HTML for each object in the response (just a thumbnail and first/last name)
+    //when you click on a profile, you should be taken to that users profile page
+    // click on profile, get data-id
+    $('main').html(`
+      <section class="page dashboard">
+        <h1>Dashboard Page</h1>
+        <button class="btn jsCreateNewFriend">Create New Friend Profile</button>
+        <div class="jsProfilesContainer"></div>
+      </section>
+    `);
 
-  function handleLoginSubmit() {}
+    api
+      .search('/api/profiles')
+      .then(dbResponse => {
+        store.profiles = dbResponse;
+        let targetedProfileId;
+        let htmlProfiles = store.profiles.map(function(profile) {
+          return `
+          <div class="jsDashboardProfile" data-id="${profile._id}">
+            <div>${profile.firstName} ${profile.lastName}</div>
+          </div>
+          `
+        });
+        $('.jsProfilesContainer').html(htmlProfiles); 
+        $('.jsDashboardProfile').on('click', function() {
+          targetedProfileId = $(this).attr("data-id");
+          renderFriendProfilePage(targetedProfileId);
+        });
+      })
+      .catch(handleErrors);
+    
+    $('.jsCreateNewFriend').on('click', function() {
+      renderCreateFriendPage();
+    });
+  }
 
-  //=====  =====//
+  function renderFriendProfilePage(profileId) {
+    console.log('PASSED PROFILE ID>>>>>', profileId);
+    api.search(`/api/profiles/${profileId}`)
+      .then(profile => {
+        console.log('RESPONSE from profiles/:id >>>>', profile);
+        $('main').html(`
+        <section class="page currentFriendProfile">
+          <h1>Profile Page</h1>
+            <div class="jsProfileData">
+              <img class="centerBlock friendProfilePhoto" src="">
+              <div class="friendFullName">${profile.firstName + " " + profile.lastName}</div>
+              <div class="friendEmail">${profile.email}</div>
+              <div class="friendRelationship">${profile.relationship}</div>
+              <div class="friendBirthday">${profile.birthday}</div>
+              <div class="friendPhoneNumber">${profile.phone}</div>
+              <div class="friendAddress">Address:
+                <div class="friendAddressStreet">${profile.address.streetName}</div>
+                <div class="friendAddressCity">${profile.address.city}</div>
+                <div class="friendAddressState">${profile.address.state}</div>
+                <div class="friendAddressZip">${profile.address.zipCode}</div>
+              </div>
+            </div><br>
+            <form id="wishListForm">
+              Add wish list item:<br>
+              <input type="text" class="wishListInput">
+              <input type="submit" value="Add" id="addWishItem">
+            </form>
+            <div class="wishList"></div>
+            <button class="btn editFriend">Edit Friend</button>
+            <button class="btn dashboard">Back to Dashboard</button>	
+          </section>
+        `);
+        $(".btn.editFriend").on("click", function() {
+          renderEditFriendPage();
+        });
+        $(".btn.dashboard").on("click", function() {
+          renderDashboardPage();
+        });
+        $(".viewFriendProfile").on("click", "#addWishItem", function(event) {
+          let wishListItem = $(".wishListInput").val();
+          $(".wishListInput").val('');
+          event.preventDefault();
+          $(".wishList").append(`
+            <li>
+              <span class="wishListItem">${wishListItem}</span>
+              <div class="wishListItemControls">
+                <button class="deleteWishListItem">
+                  <span class="deleteButtonLabel">Delete</span>
+                </button>
+              </div>
+            </li>
+          `)
+        });
+      
+        $(".viewFriendProfile").on("click", ".deleteWishListItem", function(e) {
+          e.preventDefault();
+          $(this).closest('li').remove();
+        });
+      })
+      .catch(handleErrors);
+
+
+    
+  }
+
+
 
   return {
     renderHomePage: renderHomePage,
