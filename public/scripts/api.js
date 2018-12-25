@@ -42,11 +42,13 @@ const api = (function() {
     });
   };
 
-  const remove = function(path) {
+  const remove = function(path, obj) {
     return $.ajax({
       type: 'DELETE',
       url: path,
-      dataType: 'application/json',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(obj),
       headers: { Authorization: `Bearer ${store.authToken}` }
     });
   };

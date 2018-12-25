@@ -314,13 +314,17 @@ const betterFriend = (function() {
               <img class="centerBlock friendProfilePhoto" src="">
               <button class="btn jsEditFriend">Edit Friend</button>
               <button class="btn jsBackToDashboard">Back to Dashboard</button>	
-              <div class="friendFullName">${profile.firstName + ' ' + profile.lastName}</div>
+              <div class="friendFullName">${profile.firstName +
+                ' ' +
+                profile.lastName}</div>
               <div class="friendEmail">${profile.email}</div>
               <div class="friendRelationship">${profile.relationship}</div>
               <div class="friendBirthday">${profile.birthday}</div>
               <div class="friendPhoneNumber">${profile.phone}</div>
               <div class="friendAddress">Address:
-                <div class="friendAddressStreet">${profile.address.streetName}</div>
+                <div class="friendAddressStreet">${
+                  profile.address.streetName
+                }</div>
                 <div class="friendAddressCity">${profile.address.city}</div>
                 <div class="friendAddressState">${profile.address.state}</div>
                 <div class="friendAddressZip">${profile.address.zipCode}</div>
@@ -342,8 +346,8 @@ const betterFriend = (function() {
         `);
         let htmlWishList = profile.wishList.map(function(wish) {
           return `
-          <li>
-            <span class="wishListItem" data-id="${wish._id}">${wish.wishItem}</span>
+          <li data-id="${wish._id}">
+            <span class="wishListItem">${wish.wishItem}</span>
             <div class="wishListItemControls">
               <button class="jsDeleteWishItem">
                 <span class="deleteButtonLabel">Delete</span>
@@ -374,8 +378,8 @@ const betterFriend = (function() {
               let wishItemId = response._id;
               $('.jsWishItemEntry').val('');
               $('.jsWishListData').append(`
-                <li>
-                  <span class="wishListItem" data-id="${wishItemId}">${response.wishItem}</span>
+                <li data-id="${wishItemId}">
+                  <span class="wishListItem">${response.wishItem}</span>
                   <div class="wishListItemControls">
                     <button class="jsDeleteWishItem">
                       <span class="deleteButtonLabel">Delete</span>
@@ -389,7 +393,20 @@ const betterFriend = (function() {
 
         $('.currentProfile').on('click', '.jsDeleteWishItem', function(event) {
           event.preventDefault();
-
+          let currentListItem = $(this).closest('li');
+          let currentListItemId = currentListItem.attr('data-id');
+          let wishToRemove = {
+            _id: currentListItemId
+          };
+          // console.log('CURRENTITEM>>>>>', currentListItem);
+          // console.log('CURRENTITEM>>>>>', currentListItemId);
+          api
+            .remove(`api/profiles/${profileId}/wishItem`, wishToRemove)
+            .then(res => {
+              console.log('RESPONSE FROM DELETE>>>>>', res);
+              showSuccessMessage(`Deleted ${currentListItemId}`);
+            })
+            .catch(handleErrors)
           $(this)
             .closest('li')
             .remove();
