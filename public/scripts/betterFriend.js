@@ -307,32 +307,37 @@ const betterFriend = (function() {
           <div class="jsDashboardProfile" data-id="${profile._id}">
             <div>${profile.firstName} ${profile.lastName}</div>
           </div>
-          `
+          `;
         });
-        $('.jsProfilesContainer').html(htmlProfiles); 
+        $('.jsProfilesContainer').html(htmlProfiles);
         $('.jsDashboardProfile').on('click', function() {
-          targetedProfileId = $(this).attr("data-id");
+          targetedProfileId = $(this).attr('data-id');
           renderFriendProfilePage(targetedProfileId);
         });
       })
       .catch(handleErrors);
-    
+
     $('.jsCreateNewFriend').on('click', function() {
       renderCreateFriendPage();
     });
   }
 
   function renderFriendProfilePage(profileId) {
-    console.log('PASSED PROFILE ID>>>>>', profileId);
-    api.search(`/api/profiles/${profileId}`)
+    //need to populate wishList from Profile object
+    //need to 
+    api
+      .search(`/api/profiles/${profileId}`)
       .then(profile => {
-        console.log('RESPONSE from profiles/:id >>>>', profile);
+        console.log('PROFIlE>>>>>', profile);
+
         $('main').html(`
-        <section class="page currentFriendProfile">
+        <section class="page currentProfile">
           <h1>Profile Page</h1>
             <div class="jsProfileData">
               <img class="centerBlock friendProfilePhoto" src="">
-              <div class="friendFullName">${profile.firstName + " " + profile.lastName}</div>
+              <button class="btn jsEditFriend">Edit Friend</button>
+              <button class="btn jsBackToDashboard">Back to Dashboard</button>	
+              <div class="friendFullName">${profile.firstName + ' ' + profile.lastName}</div>
               <div class="friendEmail">${profile.email}</div>
               <div class="friendRelationship">${profile.relationship}</div>
               <div class="friendBirthday">${profile.birthday}</div>
@@ -344,50 +349,67 @@ const betterFriend = (function() {
                 <div class="friendAddressZip">${profile.address.zipCode}</div>
               </div>
             </div><br>
-            <form id="wishListForm">
-              Add wish list item:<br>
-              <input type="text" class="wishListInput">
-              <input type="submit" value="Add" id="addWishItem">
+            <form id="jsWishListForm">
+              <fieldset>
+                <legend>Add wish list item:<br></legend>
+                  <div>
+                    <label for="wishItem">Wish idea:</label>
+                    <input type="text" name="wishItem" class="jsWishItemEntry">
+                  </div>
+                  <button type="submit" id="jsAddWishItem">Add Wish</button>
+              </fieldset>
             </form>
-            <div class="wishList"></div>
-            <button class="btn editFriend">Edit Friend</button>
-            <button class="btn dashboard">Back to Dashboard</button>	
+            <div class="jsWishListData"></div>
           </section>
         `);
-        $(".btn.editFriend").on("click", function() {
-          renderEditFriendPage();
+
+        $('.jsEditFriend').on('click', function() {
+          // renderEditFriendPage();
         });
-        $(".btn.dashboard").on("click", function() {
+
+        $('.jsBackToDashboard').on('click', function() {
           renderDashboardPage();
         });
-        $(".viewFriendProfile").on("click", "#addWishItem", function(event) {
-          let wishListItem = $(".wishListInput").val();
-          $(".wishListInput").val('');
+
+        $('.currentProfile').on('click', '#jsAddWishItem', function(event) {
           event.preventDefault();
-          $(".wishList").append(`
-            <li>
-              <span class="wishListItem">${wishListItem}</span>
-              <div class="wishListItemControls">
-                <button class="deleteWishListItem">
-                  <span class="deleteButtonLabel">Delete</span>
-                </button>
-              </div>
-            </li>
-          `)
+          let wishListItemEntry = $('.jsWishItemEntry').val();
+          let newWishItem = {
+            wishItem: wishListItemEntry
+          };
+          api.create(`api/profiles/${profileId}/wishItem`, newWishItem)
+            .then(response => {
+              console.log('RESPONSE FROM WISHLIST POST>>>>', response);
+              let wishItemId = response._id;
+
+              $('.jsWishItemEntry').val('');
+              $('.jsWishListData').append(`
+                <li>
+                  <span class="wishListItem" data-id="">${wishItemId}</span>
+                  <div class="wishListItemControls">
+                    <button class="jsDeleteWishItem">
+                      <span class="deleteButtonLabel">Delete</span>
+                    </button>
+                  </div>
+                </li>
+              `);
+
+            })
+            .catch(handleErrors);
+
+
         });
-      
-        $(".viewFriendProfile").on("click", ".deleteWishListItem", function(e) {
-          e.preventDefault();
-          $(this).closest('li').remove();
+
+        $('.currentProfile').on('click', '.jsDeleteWishItem', function(event) {
+          event.preventDefault();
+
+          $(this)
+            .closest('li')
+            .remove();
         });
       })
       .catch(handleErrors);
-
-
-    
   }
-
-
 
   return {
     renderHomePage: renderHomePage,

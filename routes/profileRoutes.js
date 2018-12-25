@@ -199,9 +199,23 @@ router.post('/:id/wishItem', (req, res, next) => {
     { new: true }
   )
     .then(profile => {
-      res.status(201).json({
-        profile: profile.serialize()
-      });
+      //
+      let oldestCreatedDate = new Date(profile.wishList[0].createdAt);
+      let currentIndexObject = 0;
+      for (let i = 1; i < profile.wishList.length; i++) {
+        let currentItemDate = new Date(profile.wishList[i].createdAt);
+        if (oldestCreatedDate < currentItemDate) {
+          oldestCreatedDate = currentItemDate;
+          currentIndexObject = i;
+        }
+      }
+      console.log('PROFILE>>>>>', profile);
+      console.log('REQ>BODY>>>>', req.body);
+      //How do I get back the newest item/addition?
+      // let wishResponse = ;
+      res.status(201).json(
+        profile.wishList[currentIndexObject]
+      );
       return profile;
     })
     .catch(err => {
@@ -215,9 +229,9 @@ router.delete('/:id/wishItem', (req, res, next) => {
   const profileId = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(profileId)) {
-      const err = new Error('The ID is not valid');
-      err.status = 400;
-      return next(err);
+    const err = new Error('The ID is not valid');
+    err.status = 400;
+    return next(err);
   }
 
   Profile.findOneAndUpdate(
