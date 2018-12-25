@@ -161,10 +161,7 @@ const betterFriend = (function() {
   }
 
   function renderDashboardPage() {
-    //Need to create the HTML template of the page (header and buttons)
-    //need to make a GET to /api/profiles
     //need to generate HTML for each object in the response (just a thumbnail and first/last name)
-    //when you click on a profile, you should be taken to that users profile page
     // click on profile, get data-id
     $('main').html(`
       <section class="page dashboard">
@@ -346,9 +343,7 @@ const betterFriend = (function() {
         let htmlWishList = profile.wishList.map(function(wish) {
           return `
           <li>
-            <span class="wishListItem" data-id="${
-              wish._id
-            }">${wish.wishItem}</span>
+            <span class="wishListItem" data-id="${wish._id}">${wish.wishItem}</span>
             <div class="wishListItemControls">
               <button class="jsDeleteWishItem">
                 <span class="deleteButtonLabel">Delete</span>
@@ -380,7 +375,7 @@ const betterFriend = (function() {
               $('.jsWishItemEntry').val('');
               $('.jsWishListData').append(`
                 <li>
-                  <span class="wishListItem" data-id="">${wishItemId}</span>
+                  <span class="wishListItem" data-id="${wishItemId}">${response.wishItem}</span>
                   <div class="wishListItemControls">
                     <button class="jsDeleteWishItem">
                       <span class="deleteButtonLabel">Delete</span>
