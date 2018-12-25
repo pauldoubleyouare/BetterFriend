@@ -2,8 +2,8 @@
 
 const store = (function() {
   return {
-    currentUser: [],
+    currentUser: null,
     profiles: [],
-    authToken: ''
+    authToken: null
   };
 }());

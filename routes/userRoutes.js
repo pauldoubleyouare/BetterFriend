@@ -162,7 +162,7 @@ router.delete('/:id', (req, res) => {
 //=====User Management, GET User by ID=====//
 router.get('/:id', (req, res) => {
   let id = req.params.id;
-
+//jwt middleware and check why profile model is being used
   User.findById(id)
     .then(user => {
       return Profile.find({ owner: id }).then(profiles => {
