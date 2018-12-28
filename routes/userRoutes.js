@@ -5,7 +5,7 @@ const router = express.Router();
 const { User } = require('../models/userModel');
 const { Profile } = require('../models/profileModel');
 
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
   const requiredFields = [
     'userName',
     'password',
@@ -197,7 +197,7 @@ router.put('/:id', (req, res) => {
   });
 
   User.findByIdAndUpdate(req.params.id, { $set: fieldsToUpdate })
-    .then(user => {
+    .then(() => {
       return res.status(204).end();
     })
     .catch(err =>

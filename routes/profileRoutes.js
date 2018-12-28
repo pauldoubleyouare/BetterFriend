@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 let owner;
 
 //GET Profiles
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   owner = req.user.id;
   Profile.find({ owner })
     .then(profiles => {
@@ -48,7 +48,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 //POST new Profile
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
   owner = req.user.id;
 
   const requiredFields = ['firstName', 'lastName'];
@@ -101,7 +101,7 @@ router.post('/', (req, res, next) => {
   };
 
   User.findById(owner)
-    .then(user => {
+    .then(() => {
       return Profile.create(newProfile);
     })
     .then(profile => res.status(201).json(profile.serialize()))
@@ -144,7 +144,7 @@ router.put('/:id', (req, res, next) => {
     { _id: profileId, owner: userId },
     { $set: updatedFields }
   )
-    .then(profile => {
+    .then(() => {
       return res.status(202).json(`Profile ${profileId} updated`);
     })
     .catch(err =>
