@@ -1,5 +1,3 @@
-/* global store */
-
 'use strict';
 
 const store = (function() {
