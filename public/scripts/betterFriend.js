@@ -1,3 +1,5 @@
+/* global $ api store */
+
 'use strict';
 
 const betterFriend = (function() {
@@ -27,6 +29,10 @@ const betterFriend = (function() {
     let decoded = jwt_decode(token);
   }
 
+  
+
+
+
   //=====Render HTML Functions=====//
   function renderHomePage() {
     $('main').html(`
@@ -41,58 +47,6 @@ const betterFriend = (function() {
       renderLoginPage();
     });
     $('.btn.createBfAccount').on('click', function() {
-      renderCreateAccountPage();
-    });
-  }
-
-  function renderLoginPage() {
-    $('main').html(`
-      <section class="page login">
-        <h1>Login Page</h1>
-        <form id="loginForm" class="jsLoginForm">
-          <fieldset>
-            <legend>Login</legend>
-            <div>
-              <label for="userName">Username</label>
-              <input type="text" name="userName" class="jsUserNameEntry" placeholder="Username" required>
-            </div>
-            <div>
-              <label for="password">Password</label>
-              <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
-            </div>
-            <button type="submit" class="">Login</button>
-            <button type="reset" class="btn resetLogin">Reset</button>
-            <button class="btn" id="createBfAccount">New? Signup here!</button>
-          </fieldset>
-        </form>
-      </section>
-    `);
-
-    $('.jsLoginForm').on('submit', event => {
-      event.preventDefault();
-
-      const loginForm = $(event.currentTarget);
-      const loginUser = {
-        userName: loginForm.find('.jsUserNameEntry').val(),
-        password: loginForm.find('.jsPasswordEntry').val()
-      };
-
-      api
-        .create('/api/login', loginUser)
-        .then(response => {
-          store.authToken = response.authToken;
-          store.authorized = true;
-          store.currentUser = jwt_decode(store.authToken);
-          loginForm[0].reset();
-          showSuccessMessage(
-            `Welcome back, ${store.currentUser.user.firstName}!`
-          );
-          renderDashboardPage();
-        })
-        .catch(handleErrors);
-    });
-
-    $('#createBfAccount').on('click', function() {
       renderCreateAccountPage();
     });
   }
@@ -160,9 +114,61 @@ const betterFriend = (function() {
     });
   }
 
+
+  function renderLoginPage() {
+    $('main').html(`
+      <section class="page login">
+        <h1>Login Page</h1>
+        <form id="loginForm" class="jsLoginForm">
+          <fieldset>
+            <legend>Login</legend>
+            <div>
+              <label for="userName">Username</label>
+              <input type="text" name="userName" class="jsUserNameEntry" placeholder="Username" required>
+            </div>
+            <div>
+              <label for="password">Password</label>
+              <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
+            </div>
+            <button type="submit" class="">Login</button>
+            <button type="reset" class="btn resetLogin">Reset</button>
+            <button class="btn" id="createBfAccount">New? Signup here!</button>
+          </fieldset>
+        </form>
+      </section>
+    `);
+
+    $('.jsLoginForm').on('submit', event => {
+      event.preventDefault();
+
+      const loginForm = $(event.currentTarget);
+      const loginUser = {
+        userName: loginForm.find('.jsUserNameEntry').val(),
+        password: loginForm.find('.jsPasswordEntry').val()
+      };
+
+      api
+        .create('/api/login', loginUser)
+        .then(response => {
+          store.authToken = response.authToken;
+          store.authorized = true;
+          store.currentUser = jwt_decode(store.authToken);
+          loginForm[0].reset();
+          showSuccessMessage(
+            `Welcome back, ${store.currentUser.user.firstName}!`
+          );
+          renderDashboardPage();
+        })
+        .catch(handleErrors);
+    });
+
+    $('#createBfAccount').on('click', function() {
+      renderCreateAccountPage();
+    });
+  }
+
+  
   function renderDashboardPage() {
-    //need to generate HTML for each object in the response (just a thumbnail and first/last name)
-    // click on profile, get data-id
     $('main').html(`
       <section class="page dashboard">
         <h1>Dashboard Page</h1>
@@ -253,9 +259,7 @@ const betterFriend = (function() {
 					</div>
         </fieldset>
         <button type="submit" class="btn jsCreateNewProfile">Create</button>
-        <button type="reset" class="btn resetNewFriendForm">Reset</button>
         <button class="btn jsCancelNewFriendCreate" id="createBfAccount">Cancel</button>
-        <button class="btn jsBackToDashboard">Back to Dashboard</button>
 			</fieldset>
 		</form>
 	  </section>
@@ -295,15 +299,10 @@ const betterFriend = (function() {
     $('.jsCancelNewFriendCreate').on('click', function() {
       renderDashboardPage();
     });
-
-    $('.jsBackToDashboard').on('click', function() {
-      renderDashboardPage();
-    });
   }
 
   function renderFriendProfilePage(profileId) {
-    //need to populate wishList from Profile object
-    //need to
+    console.log('RENDER FRIEND PROFILE RAN');
     api
       .search(`/api/profiles/${profileId}`)
       .then(profile => {
@@ -359,7 +358,7 @@ const betterFriend = (function() {
         $('.jsWishListData').html(htmlWishList);
 
         $('.jsEditFriend').on('click', function() {
-          // renderEditFriendPage();
+          renderEditFriendPage(profileId);
         });
 
         $('.jsBackToDashboard').on('click', function() {
@@ -398,21 +397,124 @@ const betterFriend = (function() {
           let wishToRemove = {
             _id: currentListItemId
           };
-          // console.log('CURRENTITEM>>>>>', currentListItem);
-          // console.log('CURRENTITEM>>>>>', currentListItemId);
           api
             .remove(`api/profiles/${profileId}/wishItem`, wishToRemove)
             .then(res => {
-              console.log('RESPONSE FROM DELETE>>>>>', res);
               showSuccessMessage(`Deleted ${currentListItemId}`);
             })
-            .catch(handleErrors)
+            .catch(handleErrors);
           $(this)
             .closest('li')
             .remove();
         });
       })
       .catch(handleErrors);
+  }
+
+  function renderEditFriendPage(profileId) {
+    api
+    .search(`/api/profiles/${profileId}`)
+    .then(profile => {
+      console.log('PROFILE ON EDIT FRIEND', profile);
+      $('main').html(`
+      <section class="page editFriend">
+      <h1>EDIT Friend Page</h1>
+      <form id="editFriendForm" class="jsEditFriendForm">
+        <fieldset>
+          <legend>Edit ${profile.firstName}'s Profile</legend>
+          <div>
+            <label for="firstName">First name:</label>
+            <input type="text" name="firstName" class="jsEditFriendFirstNameEntry" placeholder="${profile.firstName}">
+          </div>
+          <div>
+            <label for="lastName">Last name:</label>
+            <input type="text" name="lastName" class="jsEditFriendLastNameEntry" placeholder="${profile.lastName}">
+          </div>
+          <div>
+            <label for="email">Email:</label>
+            <input type="text" name="email" class="jsEditFriendEmailEntry" placeholder="${profile.email}">
+          </div>
+          <div>
+            <label for="relationship">Relationship:</label>
+            <input type="text" name="relationship" class="jsEditFriendRelationshipEntry" placeholder="${profile.relationship}">
+          </div>
+          <div>
+            <label for="birthday">Birthday:</label>
+            <input type="date" name="birthday" class="jsEditFriendBirthdayEntry" placeholder="${profile.birthday}">
+          </div>
+          <div>
+            <label for="phone">Phone:</label>
+            <input type="text" name="phone" class="jsEditFriendPhoneEntry" placeholder="${profile.birthday}">
+          </div>
+          <fieldset>
+            <legend>Address:</legend>
+            <div>
+              <label for="street">Street:</label>
+              <input type="text" name="street" class="jsEditFriendStreetEntry" placeholder="${profile.address.streetName}">
+            </div>
+            <div>
+              <label for="city">City:</label>
+              <input type="text" name="city" class="jsEditFriendCityEntry" placeholder="${profile.address.city}">
+            </div>
+            <div>
+              <label for="state">State:</label>
+              <input type="text" name="state" class="jsEditFriendStateEntry" placeholder="${profile.address.state}">
+            </div>
+            <div>
+              <label for="zipcode">Zip:</label>
+              <input type="text" name="zipcode" class="jsEditFriendZipCodeEntry" placeholder="${profile.address.zipCode}">
+            </div>
+          </fieldset>
+          <button type="submit" class="btn jsSaveEditedProfile">Save</button>
+          <button type="button" class="btn jsCancelEditProfile">Cancel</button>
+        </fieldset>
+      </form>
+      </section>
+      `);
+
+      $('.jsEditFriendForm').on('submit', function(event) {
+        event.preventDefault();
+        // Need to grab every value of the new profile and make a POST to /api/profiles
+        const editProfileForm = $(event.currentTarget);
+        const updatedProfile = {
+          firstName: $('.jsEditFriendFirstNameEntry').val(),
+          lastName: $('.jsEditFriendLastNameEntry').val(),
+          email: $('.jsEditFriendEmailEntry').val(),
+          relationship: $('.jsEditFriendRelationshipEntry').val(),
+          birthday: $('.jsEditFriendBirthdayEntry').val(),
+          phone: $('.jsEditFriendPhoneEntry').val(),
+          address: {
+            streetName: $('.jsEditFriendStreetEntry').val(),
+            city: $('.jsEditFriendCityEntry').val(),
+            state: $('.jsEditFriendStateEntry').val(),
+            zipCode: $('.jsEditFriendZipCodeEntry').val()
+          },
+          _id: profileId
+        };
+  
+        api
+          .update(`/api/profiles/${profileId}`, updatedProfile)
+          .then(response => {
+            editProfileForm[0].reset();
+            console.log('PUT Response', response);
+            // store.profiles.push(response);
+            showSuccessMessage(
+              `${updatedProfile.firstName} has been added to your Dashboard`
+            );
+          })
+          .catch(handleErrors);
+      });
+
+      $('.jsCancelEditProfile').on('click', function() {
+        renderFriendProfilePage(profileId);
+      });
+      })
+    .catch(handleErrors);
+
+
+      // need to make a PUT to /profiles with updated info
+
+    console.log('PROFILE ID IN EDIT FRIEND>>>>>', profileId);
   }
 
   return {
