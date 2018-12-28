@@ -1,10 +1,8 @@
-/* global $ api store */
+/* global $, api, store, localStorage, jwt_decode */
 
 'use strict';
 
 const betterFriend = (function() {
-  //this is a test
-  //another test
 
   function showSuccessMessage(message) {
     const element = $('.jsMessage');
@@ -24,13 +22,6 @@ const betterFriend = (function() {
     }
     showFailureMessage(err.responseJSON.message);
   }
-
-  function jwtDecoder(token) {
-    let decoded = jwt_decode(token);
-  }
-
-  
-
 
 
   //=====Render HTML Functions=====//
@@ -153,6 +144,7 @@ const betterFriend = (function() {
           store.authToken = response.authToken;
           store.authorized = true;
           store.currentUser = jwt_decode(store.authToken);
+          console.log('CURRENT USER', store.currentUser);
           loginForm[0].reset();
           showSuccessMessage(
             `Welcome back, ${store.currentUser.user.firstName}!`
@@ -399,7 +391,8 @@ const betterFriend = (function() {
           };
           api
             .remove(`api/profiles/${profileId}/wishItem`, wishToRemove)
-            .then(res => {
+            .then(() => {
+              // console.log('RESPONSE', res);
               showSuccessMessage(`Deleted ${currentListItemId}`);
             })
             .catch(handleErrors);
