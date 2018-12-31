@@ -1,6 +1,7 @@
 /* global $ store */
 'use strict';
 
+// eslint-disable-next-line no-unused-vars
 const api = (function() {
   const search = function(path, query) {
     return $.ajax({
