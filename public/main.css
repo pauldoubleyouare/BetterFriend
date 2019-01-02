@@ -1,6 +1,109 @@
 
-* {
+* *:before *:after {
 	box-sizing: border-box
+}
+
+html {
+	font-size: 10pt;
+}
+
+body {
+	/* border: 1px solid; */
+	overflow-x: hidden;
+	overflow-y: hidden;
+	display: block;
+	overflow-x: hidden;
+	z-index: 0;
+	background-image: linear-gradient(to top, rgba(31,31,31,0.851), rgba(31,31,31,0.851)), url('/assets/bgImage.jpg');
+	background-position: 0% 0% center;
+	background-size: auto, cover;
+	background-attachment: scroll;
+	color: white;
+}
+
+h1 {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 2.8em;
+}
+
+p {
+	font-family: 'Raleway', sans-serif;
+}
+
+#introDescription {
+	display: block;
+	font-size: 1.2em;
+	line-height: 1.6;
+}
+
+.inner {
+	/* border: 1px solid; */
+	position: relative;
+	z-index: 1;
+	max-width: 100%;
+	width: 60em;
+	text-align: center;
+}
+
+ol, ul {
+	/* border: 1px solid; */
+	list-style: none;
+}
+
+.btn {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+	box-sizing: border-box;
+	text-align: center;
+	width: 12.75em;
+	height: 3.25em;
+	max-width: 100%;
+	color: #ffffff;
+	border: solid 1px #ffffff;
+	border-radius: 1em;
+	margin: 0 0.5em;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+.btn:hover {
+	background-color: #ffffff;
+	color: #000000;
+}
+
+#buttonsHomePage {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-left: 0;
+	margin: 4em 0;
+}
+
+.btn.login {
+	flex: left;
+}
+
+.btn.createBfAccount {
+	flex: right;
+}
+
+.page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	/* z-index: 2; */
+}
+
+.page > .inner {
+	position: relative;
+	max-width: 100%;
+	/* z-index: 1; */
+}
+
+ul {
+	list-style: none;
 }
 
 footer {
@@ -12,7 +115,12 @@ footer {
 	font-family: 'Yellowtail', cursive;
 }
 
-.friendProfilePhoto {
+
+
+
+
+/*OLD CSS*/
+/* .friendProfilePhoto {
 	border-radius: 50%;
 	height: 200px;
 	width: 200px;
@@ -34,9 +142,9 @@ footer {
 	display: block;
 	margin: 0 auto;
 	
-}
+} */
 
-.jsProfilesContainer {
+/* .jsProfilesContainer {
 	width: 400px;
 	height: 400px;
-}
+} */
