@@ -50,7 +50,7 @@ const betterFriend = (function() {
       <section class="page createAccount">
         <div class="inner">
           <h1>Create Account Page</h1>
-          <form id="createAccountForm" class="jsCreateAccountForm">
+          <form id="createAccountForm" class="form jsCreateAccountForm">
             <fieldset>
             <legend>Create Account</legend>
             <div>
@@ -73,9 +73,10 @@ const betterFriend = (function() {
               <label for="email">Email:</label>
               <input type="email" name="email" class="jsEmailEntry" placeholder="email@address.com" required>
             </div>
-            <button class="btn createAccount" type="submit">Create Account</button>
-            <button type="reset" class="btn resetCreateAccountForm">Reset</button>
-            <button class="btn toLoginPage">Have an account? Login here!</button>
+            <div class="buttonsCreateAccount">
+              <button class="btn createAccount" type="submit">Create Account</button>
+              <button class="btn toLoginPage">Have an account? Login here!</button>
+            </div>
             </fieldset>
           </form>
         </div>
@@ -115,7 +116,7 @@ const betterFriend = (function() {
       <section class="page login">
         <div class="inner">
           <h1>Login Page</h1>
-          <form id="loginForm" class="jsLoginForm">
+          <form id="loginForm" class="form jsLoginForm">
             <fieldset>
               <legend>Login</legend>
               <div>
@@ -126,8 +127,7 @@ const betterFriend = (function() {
                 <label for="password">Password</label>
                 <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
               </div>
-              <button type="submit" class="">Login</button>
-              <button type="reset" class="btn resetLogin">Reset</button>
+              <button type="submit" class="btn jsSubmitLogin">Login</button>
               <button class="btn" id="createBfAccount">New? Signup here!</button>
             </fieldset>
           </form>
@@ -170,7 +170,7 @@ const betterFriend = (function() {
       <section class="page dashboard">
         <div class="inner">
           <h1>Dashboard Page</h1>
-          <button class="btn jsCreateNewFriend">Create New Friend Profile</button>
+          <button class="btn jsCreateNewFriend">Create New Friend</button>
           <button class="btn jsLogout">Log Out</button>
           <div class="jsProfilesContainer"></div>
         </div>
@@ -212,7 +212,7 @@ const betterFriend = (function() {
       <section class="page createFriend">
         <div class="inner">
           <h1>Create Friend Page</h1>
-          <form id="createFriendForm" class="jsCreateFriendForm">
+          <form id="createFriendForm" class="form jsCreateFriendForm">
             <fieldset>
               <legend>Create New Person</legend>
               <div>
@@ -331,7 +331,7 @@ const betterFriend = (function() {
                     <div class="friendAddressZip">${profile.address.zipCode}</div>
                   </div>
                 </div><br>
-                <form id="jsWishListForm">
+                <form id="jsWishListForm" class="form">
                   <fieldset>
                     <legend>Add wish list item:<br></legend>
                       <div>
@@ -424,7 +424,7 @@ const betterFriend = (function() {
           <section class="page editFriend">
             <div class="inner">
               <h1>EDIT Friend Page</h1>
-              <form id="editFriendForm" class="jsEditFriendForm">
+              <form id="editFriendForm" class="form jsEditFriendForm">
                 <fieldset>
                   <legend>Edit ${profile.firstName}'s Profile</legend>
                   <div>
