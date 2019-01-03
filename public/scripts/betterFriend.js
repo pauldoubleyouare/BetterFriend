@@ -2,6 +2,8 @@
 
 'use strict';
 
+
+
 // eslint-disable-next-line no-unused-vars
 const betterFriend = (function() {
   function showSuccessMessage(message) {
@@ -29,7 +31,7 @@ const betterFriend = (function() {
       <section class="page home">
         <div class="inner">
           <h1>BetterFriend</h1>
-          <p id="introDescription">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." </p>
+          <p id="introDescription">It's your best friend's birthday. They're having a party and everyone that's going is bringing <i>something</i>. You know exactly what you're getting them, right? Let's be real, you don't. Next year, it's going to be different. Never give another boring gift again. Become a BetterFriend. </p>
           <ul id="buttonsHomePage">
             <li><button class="btn login">Login</button></li>
             <li><button class="btn createBfAccount">Create Account</button></li>
@@ -45,38 +47,38 @@ const betterFriend = (function() {
     });
   }
 
+
   function renderCreateAccountPage() {
     $('main').html(`
       <section class="page createAccount">
         <div class="inner">
-          <h1>Create Account Page</h1>
+          <h1>Create Account</h1>
           <form id="createAccountForm" class="form jsCreateAccountForm">
             <fieldset>
-            <legend>Create Account</legend>
-            <div>
-              <label for="userName">Username:</label>
-              <input type="text"  name="userName" class="jsUserNameEntry" placeholder="Username" required><br>
-            </div>
-            <div>
-              <label for="password">Password:</label>
-              <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
-            </div>
-            <div>
-              <label for="firstName">First name:</label>
-              <input type="text" name="firstName" class="jsFirstNameEntry" placeholder="First name" required><br>
-            </div>
-            <div>
-              <label for="lastName">Last name:</label>
-              <input type="text" name="lastName" class="jsLastNameEntry" placeholder="Last name" required><br>
-            </div>
-            <div>
-              <label for="email">Email:</label>
-              <input type="email" name="email" class="jsEmailEntry" placeholder="email@address.com" required>
-            </div>
-            <div class="buttonsCreateAccount">
-              <button class="btn createAccount" type="submit">Create Account</button>
-              <button class="btn toLoginPage">Have an account? Login here!</button>
-            </div>
+              <div>
+                
+                <input type="text"  name="userName" class="jsUserNameEntry" placeholder="Username" required>
+              </div>
+              <div>
+                
+                <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
+              </div>
+              <div>
+                
+                <input type="text" name="firstName" class="jsFirstNameEntry" placeholder="First name" required>
+              </div>
+              <div>
+                
+                <input type="text" name="lastName" class="jsLastNameEntry" placeholder="Last name" required>
+              </div>
+              <div>
+                
+                <input type="email" name="email" class="jsEmailEntry" placeholder="email@address.com" required>
+              </div>
+              <ul id="buttonsCreateAccount">
+                <li><button class="btn createAccount" type="submit">Create</button></li>
+                <li><button class="btn toLoginPage">Already have an account?</button></li>
+              </ul>
             </fieldset>
           </form>
         </div>
@@ -111,6 +113,8 @@ const betterFriend = (function() {
     });
   }
 
+  //                <label for="userName">Username</label>
+  //                <label for="password">Password</label>
   function renderLoginPage() {
     $('main').html(`
       <section class="page login">
@@ -120,17 +124,15 @@ const betterFriend = (function() {
             <fieldset>
               <legend>Login</legend>
               <div>
-                <label for="userName">Username</label>
                 <input type="text" name="userName" class="jsUserNameEntry" placeholder="Username" required>
               </div>
               <div>
-                <label for="password">Password</label>
                 <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
               </div>
               <button type="submit" class="btn jsSubmitLogin">Login</button>
-              <button class="btn" id="createBfAccount">New? Signup here!</button>
             </fieldset>
           </form>
+          <button class="btn toCreateAccount" id="createBfAccount">New? Signup here!</button>
         </div>
       </section>
     `);
@@ -150,7 +152,9 @@ const betterFriend = (function() {
           store.authToken = response.authToken;
           store.authorized = true;
           store.currentUser = jwt_decode(store.authToken);
-          console.log('CURRENT USER', store.currentUser);
+          localStorage.setItem('authToken', store.authToken);
+          localStorage.setItem('authorized', store.authorized);
+          localStorage.setItem('currentUser', store.currentUser);
           loginForm[0].reset();
           showSuccessMessage(
             `Welcome back, ${store.currentUser.user.firstName}!`
@@ -202,10 +206,14 @@ const betterFriend = (function() {
     });
     $('.jsLogout').on('click', function() {
       localStorage.removeItem('authToken');
+      localStorage.removeItem('authorized');
+      localStorage.removeItem('currentUser');
       showSuccessMessage(`Log out successful`);
       renderHomePage();
     });
   }
+
+
 
   function renderCreateFriendPage() {
     $('main').html(`
@@ -269,7 +277,9 @@ const betterFriend = (function() {
     $('.jsCreateFriendForm').on('submit', function(event) {
       event.preventDefault();
       // Need to grab every value of the new profile and make a POST to /api/profiles
+      //.find('input[name="type"]')
       const newProfileForm = $(event.currentTarget);
+      console.log('FFORM>>>>>', newProfileForm.find('input[name="firstName"]').val());
       const newProfile = {
         firstName: $('.jsNewFriendFirstNameEntry').val(),
         lastName: $('.jsNewFriendLastNameEntry').val(),
@@ -544,6 +554,7 @@ const betterFriend = (function() {
 
   return {
     renderHomePage: renderHomePage,
+    renderDashboardPage: renderDashboardPage,
     renderCreateAccountPage: renderCreateAccountPage
   };
 })();

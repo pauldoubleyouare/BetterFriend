@@ -86,6 +86,13 @@ ol, ul {
 .btn.createBfAccount {
 	flex: right;
 }
+.btn.jsSubmitLogin {
+	margin-top: 1.5em;
+}
+
+.btn.toCreateAccount {
+	margin-top: 3em;
+}
 
 .page {
 	display: flex;
