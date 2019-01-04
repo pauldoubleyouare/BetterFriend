@@ -1,3 +1,17 @@
+/* Color Scheme
+ 
+#FF2D66 indian red (255, 45, 102, 0)
+#27CCC0 aquamarine (39, 204, 192, 0)
+#2B2E3E slate gray (43, 46, 62, 0)
+#1C1E28 back black (28, 30, 40, 0)
+*/
+
+:root {
+	--main-bg-color: #1C1E28;
+	--secondary-bg-color: #2B2E3E;
+	--main-a-color: #FF2D66;
+	--main-button-color: #27CCC0;
+}
 
 * *:before *:after {
 	box-sizing: border-box
@@ -10,11 +24,11 @@ html {
 body {
 	/* border: 1px solid; */
 	overflow-x: hidden;
-	overflow-y: hidden;
+	/* overflow-y: hidden; */
 	display: block;
 	overflow-x: hidden;
 	z-index: 0;
-	background-image: linear-gradient(to top, rgba(31,31,31,0.851), rgba(31,31,31,0.851)), url('/assets/bgImage.jpg');
+	background-image: linear-gradient(to top, rgba(28,30,40,0.851), rgba(28,30,40,0.851)), url('/assets/bgImage.jpg');
 	background-position: 0% 0% center;
 	background-size: auto, cover;
 	background-attachment: scroll;
@@ -26,9 +40,15 @@ h1 {
 	font-size: 2.8em;
 }
 
-p {
+p, a {
 	font-family: 'Raleway', sans-serif;
 }
+
+a {
+	color: var(--main-a-color);
+}
+
+
 
 #introDescription {
 	display: block;
@@ -36,13 +56,65 @@ p {
 	line-height: 1.6;
 }
 
+.wrapper {
+	/* border: 1px solid white; */
+	width: 60em;
+	height: 40em;
+	display: flex;
+	text-align: center;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
 .inner {
-	/* border: 1px solid; */
+	/* border: 1px solid white; */
 	position: relative;
 	z-index: 1;
-	max-width: 100%;
-	width: 60em;
+	max-width: 70%;
+	width: 20em;
+	height: 30em;
 	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color:  rgba(43, 46, 62, .7);
+	border-radius: 0.5em;
+	
+}
+
+/*Forms*/
+
+.breakLine {
+	display: block;
+	height: 1em;
+	border: 0;
+	border-top: 1px solid #ccc;
+	width: 8em;
+	margin: 1em 0;
+	padding: 0;
+}
+
+fieldset {
+	margin: 1em 1em;
+	border: none;
+}
+
+input {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+	box-sizing: border-box;
+	text-align: left;
+	width: 13em;
+	height: 3em;
+	max-width: 100%;
+	color: black;
+	border: solid 1px #ffffff;
+	border-radius: 0.2em;
+	margin: 0.4em 0.5em;
+	padding: 0 1.0em;
+	background-color: white;
 }
 
 ol, ul {
@@ -87,11 +159,13 @@ ol, ul {
 	flex: right;
 }
 .btn.jsSubmitLogin {
-	margin-top: 1.5em;
+	margin-top: 0.5em;
+	background-color: #27CCC0;
+	border: none;
 }
 
 .btn.toCreateAccount {
-	margin-top: 3em;
+	margin-top: 1em;
 }
 
 .page {

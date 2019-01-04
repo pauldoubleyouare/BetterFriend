@@ -29,7 +29,7 @@ const betterFriend = (function() {
   function renderHomePage() {
     $('main').html(`
       <section class="page home">
-        <div class="inner">
+        <div class="wrapper">
           <h1>BetterFriend</h1>
           <p id="introDescription">It's your best friend's birthday. They're having a party and everyone that's going is bringing <i>something</i>. You know exactly what you're getting them, right? Let's be real, you don't. Next year, it's going to be different. Never give another boring gift again. Become a BetterFriend. </p>
           <ul id="buttonsHomePage">
@@ -53,6 +53,7 @@ const betterFriend = (function() {
       <section class="page createAccount">
         <div class="inner">
           <h1>Create Account</h1>
+          <div class="breakLine"></div>
           <form id="createAccountForm" class="form jsCreateAccountForm">
             <fieldset>
               <div>
@@ -77,14 +78,14 @@ const betterFriend = (function() {
               </div>
               <ul id="buttonsCreateAccount">
                 <li><button class="btn createAccount" type="submit">Create</button></li>
-                <li><button class="btn toLoginPage">Already have an account?</button></li>
               </ul>
             </fieldset>
           </form>
+          <a id="toLoginPage">Already have an account?</a>
         </div>
       </section>
     `);
-    $('.btn.toLoginPage').on('click', function() {
+    $('#toLoginPage').on('click', function() {
       renderLoginPage();
     });
 
@@ -118,25 +119,27 @@ const betterFriend = (function() {
   function renderLoginPage() {
     $('main').html(`
       <section class="page login">
-        <div class="inner">
-          <h1>Login Page</h1>
-          <form id="loginForm" class="form jsLoginForm">
-            <fieldset>
-              <legend>Login</legend>
-              <div>
-                <input type="text" name="userName" class="jsUserNameEntry" placeholder="Username" required>
-              </div>
-              <div>
-                <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
-              </div>
-              <button type="submit" class="btn jsSubmitLogin">Login</button>
-            </fieldset>
-          </form>
-          <button class="btn toCreateAccount" id="createBfAccount">New? Signup here!</button>
+        <div class="wrapper">
+          <div class="inner">
+            <h1>Sign In</h1>
+            <div class="breakLine"></div>
+            <form id="loginForm" class="form jsLoginForm">
+              <fieldset>
+                <div>
+                  <input type="text" name="userName" class="jsUserNameEntry" placeholder="Username" required>
+                </div>
+                <div>
+                  <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn jsSubmitLogin">Login</button>
+              </fieldset>
+            </form>
+            <a id="createBfAccount">New? Signup here</a>
+          </div>
         </div>
       </section>
     `);
-
+//<button class="btn toCreateAccount" id="createBfAccount">New? Signup here!</button>
     $('.jsLoginForm').on('submit', event => {
       event.preventDefault();
 
@@ -172,7 +175,7 @@ const betterFriend = (function() {
   function renderDashboardPage() {
     $('main').html(`
       <section class="page dashboard">
-        <div class="inner">
+        <div class="wrapper">
           <h1>Dashboard Page</h1>
           <button class="btn jsCreateNewFriend">Create New Friend</button>
           <button class="btn jsLogout">Log Out</button>
