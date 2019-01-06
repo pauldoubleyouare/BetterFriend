@@ -34,26 +34,19 @@ body {
 	background-attachment: scroll;
 	color: white;
 }
-
-h1 {
-	font-family: 'Montserrat', sans-serif;
-	font-size: 2.8em;
+section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	/* z-index: 2; */
 }
 
-p, a {
-	font-family: 'Raleway', sans-serif;
-}
-
-a {
-	color: var(--main-a-color);
-}
-
-
-
-#introDescription {
-	display: block;
-	font-size: 1.2em;
-	line-height: 1.6;
+section > .inner {
+	position: relative;
+	max-width: 100%;
+	/* z-index: 1; */
 }
 
 .wrapper {
@@ -69,11 +62,11 @@ a {
 
 .inner {
 	/* border: 1px solid white; */
-	position: relative;
+	/* position: relative; */
 	z-index: 1;
 	max-width: 70%;
-	width: 20em;
-	height: 30em;
+	width: 30em;
+	/* height: 45em; */
 	text-align: center;
 	display: flex;
 	flex-direction: column;
@@ -81,12 +74,50 @@ a {
 	align-items: center;
 	background-color:  rgba(43, 46, 62, .7);
 	border-radius: 0.5em;
-	
 }
 
-/*Forms*/
+/*=====Text and Headers=====*/
+h1 {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 2.8em;
+	text-align: center;
+}
 
-.breakLine {
+p, a {
+	font-family: 'Raleway', sans-serif;
+}
+
+p {
+	font-size: 1.2em;
+}
+
+a {
+	color: var(--main-a-color);
+	cursor: pointer;
+}
+
+a#jsToLoginPage, a#jsToCreateAccountPage {
+	margin-bottom: 1em;
+}
+
+ol, ul {
+	/* border: 1px solid; */
+	list-style: none;
+}
+
+#home-description {
+	display: block;
+	line-height: 1.6;
+}
+
+
+/*=====FORMS=====*/
+form {
+	font-family: 'Raleway', sans-serif;
+	font-size: 1.2em;
+}
+
+.break-line {
 	display: block;
 	height: 1em;
 	border: 0;
@@ -117,12 +148,9 @@ input {
 	background-color: white;
 }
 
-ol, ul {
-	/* border: 1px solid; */
-	list-style: none;
-}
 
-.btn {
+/*=====BUTTONS=====*/
+button {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 14px;
 	box-sizing: border-box;
@@ -138,12 +166,24 @@ ol, ul {
 	cursor: pointer;
 }
 
-.btn:hover {
+button:hover {
 	background-color: #ffffff;
 	color: #000000;
 }
 
-#buttonsHomePage {
+.cta-submit {
+	margin-top: 0.5em;
+	background-color: #27CCC0;
+	border: none;
+}
+
+.cta-submit2 {
+	margin-top: 0.5em;
+	background-color: var(--main-a-color);
+	border: none;
+}
+
+#buttons-home-page {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -151,46 +191,92 @@ ol, ul {
 	margin: 4em 0;
 }
 
-.btn.login {
+#jsToLogin {
 	flex: left;
 }
 
-.btn.createBfAccount {
+#jsToCreateAcct {
 	flex: right;
 }
-.btn.jsSubmitLogin {
-	margin-top: 0.5em;
-	background-color: #27CCC0;
-	border: none;
+
+/* #jsCreateNewFriend {
+	margin-left: 10em;
 }
 
-.btn.toCreateAccount {
-	margin-top: 1em;
-}
+#jsLogOut {
+	margin-right: 10em;
+} */
 
-.page {
+/*=====Dashboard=====*/
+
+.dashboard-page {
+	/* border: 1px solid white; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 	min-height: 100vh;
-	/* z-index: 2; */
+
 }
 
-.page > .inner {
-	position: relative;
-	max-width: 100%;
-	/* z-index: 1; */
+.dashboard-wrapper {
+	/* border: 1px solid white; */
+	width: 60em;
+	background-color:  rgba(43, 46, 62, .7);
 }
 
-ul {
-	list-style: none;
+.dashboard-header {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	margin-bottom: 2em;
 }
 
-.form {
-	font-family: 'Raleway', sans-serif;
-	font-size: 1.2em;
+.dashboard-nav {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 90%;
+
 }
+
+.dashboard-inner {
+	/* border: 1px solid white; */
+}
+
+.dashboard-profiles-container {
+	/* border: 1px solid white; */
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.jsDashboardProfile {
+	/* border: 1px solid white; */
+	width: 17em;
+	height: 17em;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+	margin: 1em;
+}
+
+.dashboard-profile-photo {
+	border: 1px solid white;
+	border-radius: 50%;
+	width: 10em;
+	height: 10em;
+	cursor: pointer;
+}
+
+.dashboard-profile-name {
+	cursor: pointer;
+}
+
 
 footer {
 	position: fixed;
@@ -201,36 +287,3 @@ footer {
 	font-family: 'Yellowtail', cursive;
 }
 
-
-
-
-
-/*OLD CSS*/
-/* .friendProfilePhoto {
-	border-radius: 50%;
-	height: 200px;
-	width: 200px;
-
-}
-
-.centerBlock {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-
-}
-
-.centerText {
-	text-align: center;
-}
-
-.friendProfileData {
-	display: block;
-	margin: 0 auto;
-	
-} */
-
-/* .jsProfilesContainer {
-	width: 400px;
-	height: 400px;
-} */

@@ -28,21 +28,21 @@ const betterFriend = (function() {
   //=====Render HTML Functions=====//
   function renderHomePage() {
     $('main').html(`
-      <section class="page home">
+      <section class="home-page">
         <div class="wrapper">
           <h1>BetterFriend</h1>
-          <p id="introDescription">It's your best friend's birthday. They're having a party and everyone that's going is bringing <i>something</i>. You know exactly what you're getting them, right? Let's be real, you don't. Next year, it's going to be different. Never give another boring gift again. Become a BetterFriend. </p>
-          <ul id="buttonsHomePage">
-            <li><button class="btn login">Login</button></li>
-            <li><button class="btn createBfAccount">Create Account</button></li>
+          <p id="home-description">It's your best friend's birthday. They're having a party and everyone that's going is bringing <i>something</i>. You know exactly what you're getting them, right? Let's be real, you don't. Next year, it's going to be different. Never give another boring gift again. Become a BetterFriend. </p>
+          <ul id="buttons-home-page">
+            <li><button id="jsToLogin">Login</button></li>
+            <li><button id="jsToCreateAcct">Create Account</button></li>
           </ul>
         </div>
       </section>
     `);
-    $('.btn.login').on('click', function() {
+    $('#jsToLogin').on('click', function() {
       renderLoginPage();
     });
-    $('.btn.createBfAccount').on('click', function() {
+    $('#jsToCreateAcct').on('click', function() {
       renderCreateAccountPage();
     });
   }
@@ -50,55 +50,49 @@ const betterFriend = (function() {
 
   function renderCreateAccountPage() {
     $('main').html(`
-      <section class="page createAccount">
-        <div class="inner">
-          <h1>Create Account</h1>
-          <div class="breakLine"></div>
-          <form id="createAccountForm" class="form jsCreateAccountForm">
-            <fieldset>
-              <div>
-                
-                <input type="text"  name="userName" class="jsUserNameEntry" placeholder="Username" required>
-              </div>
-              <div>
-                
-                <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
-              </div>
-              <div>
-                
-                <input type="text" name="firstName" class="jsFirstNameEntry" placeholder="First name" required>
-              </div>
-              <div>
-                
-                <input type="text" name="lastName" class="jsLastNameEntry" placeholder="Last name" required>
-              </div>
-              <div>
-                
-                <input type="email" name="email" class="jsEmailEntry" placeholder="email@address.com" required>
-              </div>
-              <ul id="buttonsCreateAccount">
-                <li><button class="btn createAccount" type="submit">Create</button></li>
-              </ul>
-            </fieldset>
-          </form>
-          <a id="toLoginPage">Already have an account?</a>
+      <section class="create-account-page">
+        <div class="wrapper">
+          <div class="inner">
+            <h1>Create Account</h1>
+            <div class="break-line"></div>
+            <form id="jsCreateAccountForm" class="create-account-form">
+              <fieldset>
+                <div>
+                  <input type="text"  name="userName" placeholder="Username" required>
+                </div>
+                <div>
+                  <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <div>
+                  <input type="text" name="firstName" placeholder="First Name" required>
+                </div>
+                <div>
+                  <input type="text" name="lastName" placeholder="Last Name" required>
+                </div>
+                <div>
+                  <input type="email" name="email" placeholder="email@address.com" required>
+                </div>
+                <button type="submit" class="cta-submit">Create</button>
+              </fieldset>
+            </form>
+            <a id="jsToLoginPage">Already have an account?</a>
+          </div>
         </div>
       </section>
     `);
-    $('#toLoginPage').on('click', function() {
+    $('#jsToLoginPage').on('click', function() {
       renderLoginPage();
     });
 
-    $('.jsCreateAccountForm').on('submit', event => {
+    $('#jsCreateAccountForm').on('submit', event => {
       event.preventDefault();
-
       const signupForm = $(event.currentTarget);
       const newUser = {
-        userName: signupForm.find('.jsUserNameEntry').val(),
-        password: signupForm.find('.jsPasswordEntry').val(),
-        firstName: signupForm.find('.jsFirstNameEntry').val(),
-        lastName: signupForm.find('.jsLastNameEntry').val(),
-        email: signupForm.find('.jsEmailEntry').val()
+        userName: signupForm.find('input[name="userName"]').val(),
+        password: signupForm.find('input[name="password"]').val(),
+        firstName: signupForm.find('input[name="firstName"]').val(),
+        lastName: signupForm.find('input[name="lastName"]').val(),
+        email: signupForm.find('input[name="email"]').val()
       };
 
       api
@@ -114,39 +108,38 @@ const betterFriend = (function() {
     });
   }
 
-  //                <label for="userName">Username</label>
-  //                <label for="password">Password</label>
+
   function renderLoginPage() {
     $('main').html(`
-      <section class="page login">
+      <section class="login-page">
         <div class="wrapper">
           <div class="inner">
             <h1>Sign In</h1>
-            <div class="breakLine"></div>
-            <form id="loginForm" class="form jsLoginForm">
+            <div class="break-line"></div>
+            <form id="jsLoginForm" class="login-form">
               <fieldset>
                 <div>
-                  <input type="text" name="userName" class="jsUserNameEntry" placeholder="Username" required>
+                  <input type="text" name="userName" placeholder="Username" required>
                 </div>
                 <div>
-                  <input type="password" name="password" class="jsPasswordEntry" placeholder="Password" required>
+                  <input type="password" name="password" placeholder="Password" required>
                 </div>
-                <button type="submit" class="btn jsSubmitLogin">Login</button>
+                <button type="submit" class="cta-submit">Login</button>
               </fieldset>
             </form>
-            <a id="createBfAccount">New? Signup here</a>
+            <a id="jsToCreateAccountPage">New? Signup here</a>
           </div>
         </div>
       </section>
     `);
-//<button class="btn toCreateAccount" id="createBfAccount">New? Signup here!</button>
-    $('.jsLoginForm').on('submit', event => {
+
+    $('#jsLoginForm').on('submit', event => {
       event.preventDefault();
 
       const loginForm = $(event.currentTarget);
       const loginUser = {
-        userName: loginForm.find('.jsUserNameEntry').val(),
-        password: loginForm.find('.jsPasswordEntry').val()
+        userName: loginForm.find('input[name="userName"]').val(),
+        password: loginForm.find('input[name="password"]').val()
       };
 
       api
@@ -167,21 +160,28 @@ const betterFriend = (function() {
         .catch(handleErrors);
     });
 
-    $('#createBfAccount').on('click', function() {
+    $('#jsToCreateAccountPage').on('click', function() {
       renderCreateAccountPage();
     });
   }
 
   function renderDashboardPage() {
     $('main').html(`
-      <section class="page dashboard">
-        <div class="wrapper">
-          <h1>Dashboard Page</h1>
-          <button class="btn jsCreateNewFriend">Create New Friend</button>
-          <button class="btn jsLogout">Log Out</button>
-          <div class="jsProfilesContainer"></div>
+      <div class="dashboard-page">
+        <div class="dashboard-wrapper">
+          <div class="dashboard-header">
+            <h1>Dashboard Page</h1>
+            <div class="break-line"></div>
+            <div class="dashboard-nav">
+              <button id="jsLogOut" class="cta-submit2">Log Out</button>
+              <button id="jsCreateNewFriend" class="cta-submit">Create New Friend</button>
+            </div>
+          </div>
+          <div class="dashboard-inner">
+            <div id="jsProfilesContainer" class="dashboard-profiles-container"></div>
+          </div>
         </div>
-      </section>
+      </div>
     `);
 
     api
@@ -192,11 +192,12 @@ const betterFriend = (function() {
         let htmlProfiles = store.profiles.map(function(profile) {
           return `
           <div class="jsDashboardProfile" data-id="${profile._id}">
-            <div>${profile.firstName} ${profile.lastName}</div>
+            <div class="dashboard-profile-photo"></div>
+            <p class="dashboard-profile-name">${profile.firstName} ${profile.lastName}</p>
           </div>
           `;
         });
-        $('.jsProfilesContainer').html(htmlProfiles);
+        $('#jsProfilesContainer').html(htmlProfiles);
         $('.jsDashboardProfile').on('click', function() {
           targetedProfileId = $(this).attr('data-id');
           renderFriendProfilePage(targetedProfileId);
@@ -204,10 +205,10 @@ const betterFriend = (function() {
       })
       .catch(handleErrors);
 
-    $('.jsCreateNewFriend').on('click', function() {
+    $('#jsCreateNewFriend').on('click', function() {
       renderCreateFriendPage();
     });
-    $('.jsLogout').on('click', function() {
+    $('#jsLogOut').on('click', function() {
       localStorage.removeItem('authToken');
       localStorage.removeItem('authorized');
       localStorage.removeItem('currentUser');
@@ -220,53 +221,43 @@ const betterFriend = (function() {
 
   function renderCreateFriendPage() {
     $('main').html(`
-      <section class="page createFriend">
+      <section class="create-friend-page">
         <div class="inner">
-          <h1>Create Friend Page</h1>
-          <form id="createFriendForm" class="form jsCreateFriendForm">
+          <h1>Create New Friend</h1>
+          <div class="break-line"></div>
+          <form id="jsCreateFriend">
             <fieldset>
-              <legend>Create New Person</legend>
               <div>
-                <label for="firstName">*First name:</label>
-                <input type="text" name="firstName" class="jsNewFriendFirstNameEntry" placeholder="First name" required>
+                <input type="text" name="firstName" placeholder="First Name (required)" required>
               </div>
               <div>
-                <label for="lastName">*Last name:</label>
-                <input type="text" name="lastName" class="jsNewFriendLastNameEntry" placeholder="Last name" required>
+                <input type="text" name="lastName" placeholder="Last Name (required)" required>
               </div>
               <div>
-                <label for="email">Email:</label>
-                <input type="text" name="email" class="jsNewFriendEmailEntry" placeholder="email@address.com">
+                <input type="text" name="email" placeholder="email@address.com">
               </div>
               <div>
-                <label for="relationship">Relationship:</label>
-                <input type="text" name="relationship" class="jsNewFriendRelationshipEntry" placeholder="Mom, dad, best friend etc.">
+                <input type="text" name="relationship" placeholder="Mom, dad, best friend etc.">
               </div>
               <div>
-                <label for="birthday">Birthday:</label>
-                <input type="date" name="birthday" class="jsNewFriendBirthdayEntry" placeholder="12/15/1950">
+                <input type="date" name="birthday" placeholder="12/15/1950">
               </div>
               <div>
-                <label for="phone">Phone:</label>
-                <input type="text" name="phone" class="jsNewFriendPhoneEntry" placeholder="(555) 867-5309">
+                <input type="text" name="phone" placeholder="(555) 867-5309">
               </div>
               <fieldset>
                 <legend>Address:</legend>
                 <div>
-                  <label for="street">Street:</label>
-                  <input type="text" name="street" class="jsNewFriendStreetEntry" placeholder="1428 Elm Street">
+                  <input type="text" name="streetName" placeholder="Street">
                 </div>
                 <div>
-                  <label for="city">City:</label>
-                  <input type="text" name="city" class="jsNewFriendCityEntry" placeholder="Los Angeles">
+                  <input type="text" name="city" placeholder="City">
                 </div>
                 <div>
-                  <label for="state">State:</label>
-                  <input type="text" name="state" class="jsNewFriendStateEntry" placeholder="California">
+                  <input type="text" name="state" placeholder="State">
                 </div>
                 <div>
-                  <label for="zipcode">Zip:</label>
-                  <input type="text" name="zipcode" class="jsNewFriendZipCodeEntry" placeholder="90046">
+                  <input type="text" name="zipCode" placeholder="Zip">
                 </div>
               </fieldset>
               <button type="submit" class="btn jsCreateNewProfile">Create</button>
@@ -277,37 +268,39 @@ const betterFriend = (function() {
       </section>
     `);
 
-    $('.jsCreateFriendForm').on('submit', function(event) {
+    $('#jsCreateFriend').on('submit', function(event) {
       event.preventDefault();
       // Need to grab every value of the new profile and make a POST to /api/profiles
       //.find('input[name="type"]')
       const newProfileForm = $(event.currentTarget);
-      console.log('FFORM>>>>>', newProfileForm.find('input[name="firstName"]').val());
+
       const newProfile = {
-        firstName: $('.jsNewFriendFirstNameEntry').val(),
-        lastName: $('.jsNewFriendLastNameEntry').val(),
-        email: $('.jsNewFriendEmailEntry').val(),
-        relationship: $('.jsNewFriendRelationshipEntry').val(),
-        birthday: $('.jsNewFriendBirthdayEntry').val(),
+        firstName: newProfileForm.find('input[name="firstName"]').val(),
+        lastName: newProfileForm.find('input[name="lastName"]').val(),
+        email: newProfileForm.find('input[name="email"]').val(),
+        relationship: newProfileForm.find('input[name="relationship"]').val(),
+        birthday: newProfileForm.find('input[name="birthday"]').val(),
         address: {
-          streetName: $('.jsNewFriendStreetEntry').val(),
-          city: $('.jsNewFriendCityEntry').val(),
-          state: $('.jsNewFriendStateEntry').val(),
-          zipCode: $('.jsNewFriendZipCodeEntry').val()
+          streetName: newProfileForm.find('input[name="streetName"]').val(),
+          city: newProfileForm.find('input[name="city"]').val(),
+          state: newProfileForm.find('input[name="state"]').val(),
+          zipCode: newProfileForm.find('input[name="zipCode"]').val()
         },
-        phone: $('.jsNewFriendPhoneEntry').val()
+        phone: newProfileForm.find('input[name="phone"]').val()
       };
 
-      api
-        .create('/api/profiles', newProfile)
-        .then(response => {
-          newProfileForm[0].reset();
-          store.profiles.push(response);
-          showSuccessMessage(
-            `${newProfile.firstName} has been added to your Dashboard`
-          );
-        })
-        .catch(handleErrors);
+      console.log('newPROFILEFORM>>>>>', newProfile);
+
+      // api
+      //   .create('/api/profiles', newProfile)
+      //   .then(response => {
+      //     newProfileForm[0].reset();
+      //     store.profiles.push(response);
+      //     showSuccessMessage(
+      //       `${newProfile.firstName} has been added to your Dashboard`
+      //     );
+      //   })
+      //   .catch(handleErrors);
     });
 
     $('.jsCancelNewFriendCreate').on('click', function() {
@@ -321,7 +314,7 @@ const betterFriend = (function() {
       .search(`/api/profiles/${profileId}`)
       .then(profile => {
         $('main').html(`
-          <section class="page currentProfile">
+          <section class="current-profile-page">
             <div class="inner">
               <h1>Profile Page</h1>
                 <div class="jsProfileData">
@@ -434,7 +427,7 @@ const betterFriend = (function() {
       .then(profile => {
         console.log('PROFILE ON EDIT FRIEND', profile);
         $('main').html(`
-          <section class="page editFriend">
+          <section class="edit-friend-page">
             <div class="inner">
               <h1>EDIT Friend Page</h1>
               <form id="editFriendForm" class="form jsEditFriendForm">
@@ -540,6 +533,7 @@ const betterFriend = (function() {
               showSuccessMessage(
                 `${updatedProfile.firstName} has been added to your Dashboard`
               );
+              renderDashboardPage();
             })
             .catch(handleErrors);
         });
