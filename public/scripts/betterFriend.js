@@ -72,7 +72,7 @@ const betterFriend = (function() {
                 <div>
                   <input type="email" name="email" placeholder="email@address.com" required>
                 </div>
-                <button type="submit" class="cta-submit">Create</button>
+                <button type="submit" class="cta">Create</button>
               </fieldset>
             </form>
             <a id="jsToLoginPage">Already have an account?</a>
@@ -124,7 +124,7 @@ const betterFriend = (function() {
                 <div>
                   <input type="password" name="password" placeholder="Password" required>
                 </div>
-                <button type="submit" class="cta-submit">Login</button>
+                <button type="submit" class="cta">Login</button>
               </fieldset>
             </form>
             <a id="jsToCreateAccountPage">New? Signup here</a>
@@ -173,8 +173,8 @@ const betterFriend = (function() {
             <h1>Dashboard Page</h1>
             <div class="break-line"></div>
             <div class="dashboard-nav">
-              <button id="jsLogOut" class="cta-submit2">Log Out</button>
-              <button id="jsCreateNewFriend" class="cta-submit">Create New Friend</button>
+              <button id="jsLogOut" class="cta2">Log Out</button>
+              <button id="jsToCreateNewFriend" class="cta">Create New Friend</button>
             </div>
           </div>
           <div class="dashboard-inner">
@@ -205,7 +205,7 @@ const betterFriend = (function() {
       })
       .catch(handleErrors);
 
-    $('#jsCreateNewFriend').on('click', function() {
+    $('#jsToCreateNewFriend').on('click', function() {
       renderCreateFriendPage();
     });
     $('#jsLogOut').on('click', function() {
@@ -225,7 +225,7 @@ const betterFriend = (function() {
         <div class="inner">
           <h1>Create New Friend</h1>
           <div class="break-line"></div>
-          <form id="jsCreateFriend">
+          <form id="jsCreateFriendForm">
             <fieldset>
               <div>
                 <input type="text" name="firstName" placeholder="First Name (required)" required>
@@ -237,7 +237,7 @@ const betterFriend = (function() {
                 <input type="text" name="email" placeholder="email@address.com">
               </div>
               <div>
-                <input type="text" name="relationship" placeholder="Mom, dad, best friend etc.">
+                <input type="text" name="relationship" placeholder="Relationship">
               </div>
               <div>
                 <input type="date" name="birthday" placeholder="12/15/1950">
@@ -246,7 +246,7 @@ const betterFriend = (function() {
                 <input type="text" name="phone" placeholder="(555) 867-5309">
               </div>
               <fieldset>
-                <legend>Address:</legend>
+                <legend>Address</legend>
                 <div>
                   <input type="text" name="streetName" placeholder="Street">
                 </div>
@@ -260,18 +260,16 @@ const betterFriend = (function() {
                   <input type="text" name="zipCode" placeholder="Zip">
                 </div>
               </fieldset>
-              <button type="submit" class="btn jsCreateNewProfile">Create</button>
-              <button class="btn jsCancelNewFriendCreate" id="createBfAccount">Cancel</button>
+              <button type="submit" class="cta">Create</button>
+              <button id="jsCancelCreateFriend" class="cta2">Cancel</button>
             </fieldset>
           </form>
         </div>
       </section>
     `);
 
-    $('#jsCreateFriend').on('submit', function(event) {
+    $('#jsCreateFriendForm').on('submit', function(event) {
       event.preventDefault();
-      // Need to grab every value of the new profile and make a POST to /api/profiles
-      //.find('input[name="type"]')
       const newProfileForm = $(event.currentTarget);
 
       const newProfile = {
@@ -289,55 +287,52 @@ const betterFriend = (function() {
         phone: newProfileForm.find('input[name="phone"]').val()
       };
 
-      console.log('newPROFILEFORM>>>>>', newProfile);
-
-      // api
-      //   .create('/api/profiles', newProfile)
-      //   .then(response => {
-      //     newProfileForm[0].reset();
-      //     store.profiles.push(response);
-      //     showSuccessMessage(
-      //       `${newProfile.firstName} has been added to your Dashboard`
-      //     );
-      //   })
-      //   .catch(handleErrors);
+      api
+        .create('/api/profiles', newProfile)
+        .then(response => {
+          newProfileForm[0].reset();
+          console.log('RESPONSE FROM FRIEND CREATION>>>>>', response._id);
+          store.profiles.push(response);
+          showSuccessMessage(
+            `${newProfile.firstName} has been added to your Dashboard`
+          );
+          renderFriendProfilePage(response._id);
+        })
+        .catch(handleErrors);
     });
 
-    $('.jsCancelNewFriendCreate').on('click', function() {
+    $('#jsCancelCreateFriend').on('click', function() {
       renderDashboardPage();
     });
   }
 
   function renderFriendProfilePage(profileId) {
-    console.log('RENDER FRIEND PROFILE RAN');
     api
       .search(`/api/profiles/${profileId}`)
       .then(profile => {
         $('main').html(`
           <section class="current-profile-page">
             <div class="inner">
-              <h1>Profile Page</h1>
-                <div class="jsProfileData">
-                  <img class="centerBlock friendProfilePhoto" src="">
-                  <button class="btn jsEditFriend">Edit Friend</button>
-                  <button class="btn jsBackToDashboard">Back to Dashboard</button>	
-                  <div class="friendFullName">${profile.firstName +
-                    ' ' +
-                    profile.lastName}</div>
-                  <div class="friendEmail">${profile.email}</div>
-                  <div class="friendRelationship">${profile.relationship}</div>
-                  <div class="friendBirthday">${profile.birthday}</div>
-                  <div class="friendPhoneNumber">${profile.phone}</div>
-                  <div class="friendAddress">Address:
-                    <div class="friendAddressStreet">${
-                      profile.address.streetName
-                    }</div>
-                    <div class="friendAddressCity">${profile.address.city}</div>
-                    <div class="friendAddressState">${profile.address.state}</div>
-                    <div class="friendAddressZip">${profile.address.zipCode}</div>
-                  </div>
-                </div><br>
-                <form id="jsWishListForm" class="form">
+              <div class="profile-photo"></div>
+              <h1>${profile.firstName} ${profile.lastName}</h1>
+              <div class="break-line"></div>
+              <div class="profile-nav">
+                <button id="jsBackToDashboard" class="cta2">Back to Dashboard</button>
+                <button id="jsToEditFriend" class="cta">Edit Friend</button>
+              </div>
+              <div class="profile-details-container">
+                <div class="friendEmail">${profile.email}</div>
+                <div class="friendRelationship">${profile.relationship}</div>
+                <div class="friendBirthday">${profile.birthday}</div>
+                <div class="friendPhoneNumber">${profile.phone}</div>
+                <div class="friendAddress">Address:
+                  <div class="friendAddressStreet">${profile.address.streetName}</div>
+                  <div class="friendAddressCity">${profile.address.city}</div>
+                  <div class="friendAddressState">${profile.address.state}</div>
+                  <div class="friendAddressZip">${profile.address.zipCode}</div>
+                </div>
+              </div>
+                <form id="jsWishListForm">
                   <fieldset>
                     <legend>Add wish list item:<br></legend>
                       <div>
@@ -347,8 +342,7 @@ const betterFriend = (function() {
                       <button type="submit" id="jsAddWishItem">Add Wish</button>
                   </fieldset>
                 </form>
-                <div class="jsWishListData">
-                </div>
+              <div class="jsWishListData"></div>
             </div>
           </section>
         `);
@@ -366,15 +360,15 @@ const betterFriend = (function() {
         });
         $('.jsWishListData').html(htmlWishList);
 
-        $('.jsEditFriend').on('click', function() {
+        $('#jsToEditFriend').on('click', function() {
           renderEditFriendPage(profileId);
         });
 
-        $('.jsBackToDashboard').on('click', function() {
+        $('#jsBackToDashboard').on('click', function() {
           renderDashboardPage();
         });
 
-        $('.currentProfile').on('click', '#jsAddWishItem', function(event) {
+        $('.current-profile-page').on('click', '#jsAddWishItem', function(event) {
           event.preventDefault();
           let wishListItemEntry = $('.jsWishItemEntry').val();
           let newWishItem = {
@@ -399,7 +393,7 @@ const betterFriend = (function() {
             .catch(handleErrors);
         });
 
-        $('.currentProfile').on('click', '.jsDeleteWishItem', function(event) {
+        $('.current-profile-page').on('click', '.jsDeleteWishItem', function(event) {
           event.preventDefault();
           let currentListItem = $(this).closest('li');
           let currentListItemId = currentListItem.attr('data-id');
@@ -425,128 +419,91 @@ const betterFriend = (function() {
     api
       .search(`/api/profiles/${profileId}`)
       .then(profile => {
-        console.log('PROFILE ON EDIT FRIEND', profile);
+        console.log('PROFILE RENDER EDIT FRIEND>>>>>', profile);
         $('main').html(`
           <section class="edit-friend-page">
             <div class="inner">
-              <h1>EDIT Friend Page</h1>
-              <form id="editFriendForm" class="form jsEditFriendForm">
+              <h1>Edit Profile</h1>
+              <div class="break-line"></div>
+              <form id="jsEditFriendForm">
                 <fieldset>
-                  <legend>Edit ${profile.firstName}'s Profile</legend>
                   <div>
-                    <label for="firstName">First name:</label>
-                    <input type="text" name="firstName" class="jsEditFriendFirstNameEntry" placeholder="${
-                      profile.firstName
-                    }">
+                    <input type="text" name="firstName" value="${profile.firstName}" placeholder="First Name" required>
                   </div>
                   <div>
-                    <label for="lastName">Last name:</label>
-                    <input type="text" name="lastName" class="jsEditFriendLastNameEntry" placeholder="${
-                      profile.lastName
-                    }">
+                    <input type="text" name="lastName" value="${profile.lastName}" placeholder="Last Name" required>
                   </div>
                   <div>
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" class="jsEditFriendEmailEntry" placeholder="${
-                      profile.email
-                    }">
+                    <input type="text" name="email" value="${profile.email}" placeholder="Email">
                   </div>
                   <div>
-                    <label for="relationship">Relationship:</label>
-                    <input type="text" name="relationship" class="jsEditFriendRelationshipEntry" placeholder="${
-                      profile.relationship
-                    }">
+                    <input type="text" name="relationship" value="${profile.relationship}" placeholder="Relationship">
                   </div>
                   <div>
-                    <label for="birthday">Birthday:</label>
-                    <input type="date" name="birthday" class="jsEditFriendBirthdayEntry" placeholder="${
-                      profile.birthday
-                    }">
+                    <input type="date" name="birthday" value="${profile.birthday}" placeholder="Birthday">
                   </div>
                   <div>
-                    <label for="phone">Phone:</label>
-                    <input type="text" name="phone" class="jsEditFriendPhoneEntry" placeholder="${
-                      profile.birthday
-                    }">
+                    <input type="text" name="phone" value="${profile.phone}" placeholder="Phone">
                   </div>
                   <fieldset>
                     <legend>Address:</legend>
                     <div>
-                      <label for="street">Street:</label>
-                      <input type="text" name="street" class="jsEditFriendStreetEntry" placeholder="${
-                        profile.address.streetName
-                      }">
+                      <input type="text" name="streetName" value="${profile.address.streetName}" placeholder="Street">
                     </div>
                     <div>
-                      <label for="city">City:</label>
-                      <input type="text" name="city" class="jsEditFriendCityEntry" placeholder="${
-                        profile.address.city
-                      }">
+                      <input type="text" name="city" value="${profile.address.city}" placeholder="City">
                     </div>
                     <div>
-                      <label for="state">State:</label>
-                      <input type="text" name="state" class="jsEditFriendStateEntry" placeholder="${
-                        profile.address.state
-                      }">
+                      <input type="text" name="state" value="${profile.address.state}" placeholder="State">
                     </div>
                     <div>
-                      <label for="zipcode">Zip:</label>
-                      <input type="text" name="zipcode" class="jsEditFriendZipCodeEntry" placeholder="${
-                        profile.address.zipCode
-                      }">
+                      <input type="text" name="zipCode" value="${profile.address.zipCode}" placeholder="Zip">
                     </div>
                   </fieldset>
-                  <button type="submit" class="btn jsSaveEditedProfile">Save</button>
-                  <button type="button" class="btn jsCancelEditProfile">Cancel</button>
+                  <button type="submit" class="cta">Save</button>
+                  <button type="button" id="jsCancelEditFriend" class="cta2">Cancel</button>
                 </fieldset>
               </form>
             </div>
           </section>
       `);
 
-        $('.jsEditFriendForm').on('submit', function(event) {
+        $('#jsEditFriendForm').on('submit', function(event) {
           event.preventDefault();
-          // Need to grab every value of the new profile and make a POST to /api/profiles
           const editProfileForm = $(event.currentTarget);
           const updatedProfile = {
-            firstName: $('.jsEditFriendFirstNameEntry').val(),
-            lastName: $('.jsEditFriendLastNameEntry').val(),
-            email: $('.jsEditFriendEmailEntry').val(),
-            relationship: $('.jsEditFriendRelationshipEntry').val(),
-            birthday: $('.jsEditFriendBirthdayEntry').val(),
-            phone: $('.jsEditFriendPhoneEntry').val(),
+            firstName: editProfileForm.find('input[name="firstName"]').val(),
+            lastName: editProfileForm.find('input[name="lastName"]').val(),
+            email: editProfileForm.find('input[name="email"]').val(),
+            relationship: editProfileForm.find('input[name="relationship"]').val(),
+            birthday: editProfileForm.find('input[name="birthday"]').val(),
+            phone: editProfileForm.find('input[name="phone"]').val(),
             address: {
-              streetName: $('.jsEditFriendStreetEntry').val(),
-              city: $('.jsEditFriendCityEntry').val(),
-              state: $('.jsEditFriendStateEntry').val(),
-              zipCode: $('.jsEditFriendZipCodeEntry').val()
+              streetName: editProfileForm.find('input[name="streetName"]').val(),
+              city: editProfileForm.find('input[name="city"]').val(),
+              state: editProfileForm.find('input[name="state"]').val(),
+              zipCode: editProfileForm.find('input[name="zipCode"]').val()
             },
             _id: profileId
           };
 
           api
             .update(`/api/profiles/${profileId}`, updatedProfile)
-            .then(response => {
+            .then(() => {
               editProfileForm[0].reset();
-              console.log('PUT Response', response);
-              // store.profiles.push(response);
               showSuccessMessage(
-                `${updatedProfile.firstName} has been added to your Dashboard`
+                `${updatedProfile.firstName} has been updated!`
               );
-              renderDashboardPage();
+              renderFriendProfilePage(updatedProfile._id);
             })
             .catch(handleErrors);
         });
 
-        $('.jsCancelEditProfile').on('click', function() {
+        $('#jsCancelEditFriend').on('click', function() {
           renderFriendProfilePage(profileId);
         });
       })
       .catch(handleErrors);
-
-    // need to make a PUT to /profiles with updated info
-
-    console.log('PROFILE ID IN EDIT FRIEND>>>>>', profileId);
   }
 
   return {

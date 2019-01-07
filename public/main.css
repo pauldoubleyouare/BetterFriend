@@ -81,6 +81,7 @@ h1 {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 2.8em;
 	text-align: center;
+	margin: 0.5em 0;
 }
 
 p, a {
@@ -171,13 +172,13 @@ button:hover {
 	color: #000000;
 }
 
-.cta-submit {
+.cta {
 	margin-top: 0.5em;
-	background-color: #27CCC0;
+	background-color: var(--main-button-color);
 	border: none;
 }
 
-.cta-submit2 {
+.cta2 {
 	margin-top: 0.5em;
 	background-color: var(--main-a-color);
 	border: none;
@@ -199,13 +200,9 @@ button:hover {
 	flex: right;
 }
 
-/* #jsCreateNewFriend {
-	margin-left: 10em;
+#jsCancelCreateFriend {
+	margin-top: 0.5em;
 }
-
-#jsLogOut {
-	margin-right: 10em;
-} */
 
 /*=====Dashboard=====*/
 
@@ -222,7 +219,7 @@ button:hover {
 .dashboard-wrapper {
 	/* border: 1px solid white; */
 	width: 60em;
-	background-color:  rgba(43, 46, 62, .7);
+	/* background-color:  rgba(43, 46, 62, .7); */
 }
 
 .dashboard-header {
@@ -230,7 +227,7 @@ button:hover {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
-	margin-bottom: 2em;
+	margin-bottom: 1em;
 }
 
 .dashboard-nav {
@@ -250,7 +247,7 @@ button:hover {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	justify-content: space-evenly;
+	justify-content: center;
 	align-items: center;
 }
 
@@ -263,6 +260,9 @@ button:hover {
 	justify-content: space-evenly;
 	align-items: center;
 	margin: 1em;
+	background-color:  rgba(43, 46, 62, .7);
+	border-radius: 2.5%;
+
 }
 
 .dashboard-profile-photo {
@@ -271,11 +271,39 @@ button:hover {
 	width: 10em;
 	height: 10em;
 	cursor: pointer;
+	margin-top: 1em;
 }
 
 .dashboard-profile-name {
 	cursor: pointer;
+	margin-top: 0;
 }
+
+/*=====PROFILE PAGE=====*/
+
+.profile-photo {
+	border: 1px solid white;
+	border-radius: 50%;
+	width: 15em;
+	height: 15em;
+	margin-top: 1em;
+}
+
+.profile-details-container {
+	/* display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center; */
+	font-family: 'Raleway', sans-serif;
+	font-size: 1.2em;
+	text-align: left;
+
+}
+
+
+
+
+
 
 
 footer {
