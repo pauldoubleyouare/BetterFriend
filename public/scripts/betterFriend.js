@@ -321,16 +321,28 @@ const betterFriend = (function() {
                 <button id="jsToEditFriend" class="cta">Edit Friend</button>
               </div>
               <div class="profile-details-container">
-                <div class="friendEmail">${profile.email}</div>
-                <div class="friendRelationship">${profile.relationship}</div>
-                <div class="friendBirthday">${profile.birthday}</div>
-                <div class="friendPhoneNumber">${profile.phone}</div>
-                <div class="friendAddress">Address:
-                  <div class="friendAddressStreet">${profile.address.streetName}</div>
-                  <div class="friendAddressCity">${profile.address.city}</div>
-                  <div class="friendAddressState">${profile.address.state}</div>
-                  <div class="friendAddressZip">${profile.address.zipCode}</div>
-                </div>
+                <p class="paragraph1">
+                  Relationship:<br>
+                  Email:<br>
+                  Birthday:<br>
+                  Phone:<br><br>
+
+                  Street:<br>
+                  City:<br>
+                  State:<br>
+                  Zip:<br>
+                </p>
+                <p class="paragraph2">
+                  ${profile.relationship}<br>
+                  ${profile.email}<br>
+                  ${profile.birthday}<br>
+                  ${profile.phone}<br><br>
+
+                  ${profile.address.streetName}<br>
+                  ${profile.address.city}<br>
+                  ${profile.address.state}<br>
+                  ${profile.address.zipCode}<br>
+                </p>
               </div>
                 <form id="jsWishListForm">
                   <fieldset>
@@ -419,7 +431,6 @@ const betterFriend = (function() {
     api
       .search(`/api/profiles/${profileId}`)
       .then(profile => {
-        console.log('PROFILE RENDER EDIT FRIEND>>>>>', profile);
         $('main').html(`
           <section class="edit-friend-page">
             <div class="inner">
@@ -512,3 +523,17 @@ const betterFriend = (function() {
     renderCreateAccountPage: renderCreateAccountPage
   };
 })();
+
+
+
+
+//                <div class="contact-image">${profile.email}</div>
+// <div class="friendRelationship">${profile.relationship}</div>
+// <div class="friendBirthday">${profile.birthday}</div>
+// <div class="friendPhoneNumber">${profile.phone}</div>
+// <div class="friendAddress">Address:
+//   <div class="friendAddressStreet">${profile.address.streetName}</div>
+//   <div class="friendAddressCity">${profile.address.city}</div>
+//   <div class="friendAddressState">${profile.address.state}</div>
+//   <div class="friendAddressZip">${profile.address.zipCode}</div>
+// </div>

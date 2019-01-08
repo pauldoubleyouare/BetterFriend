@@ -290,16 +290,43 @@ button:hover {
 }
 
 .profile-details-container {
-	/* display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center; */
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 	font-family: 'Raleway', sans-serif;
 	font-size: 1.2em;
 	text-align: left;
-
+	margin: 2em 0;
 }
 
+.paragraph1 {
+	/* float: left; */
+	text-align: right;
+	width: 50%;
+	/* padding-right: 1em; */
+}
+
+.paragraph2 {
+	/* float: right; */
+	text-align: left;
+	width: 50%;
+	/* padding-left: 1em; */
+}
+
+.contact-image {
+	/* border: 1px solid white; */
+	display: inline-block;
+	width: 1.5em;
+	height: 1.5em;
+	vertical-align: middle;
+	margin-right: 2em;
+	/* background-image: url('/assets/email-icon.png');
+	background-position: 0% 0% center;
+	background-repeat: no-repeat;
+	background-size: 2em 2em; */
+	/* float: left; */
+
+}
 
 
 
