@@ -24,7 +24,6 @@ html {
 body {
 	/* border: 1px solid; */
 	overflow-x: hidden;
-	/* overflow-y: hidden; */
 	display: block;
 	overflow-x: hidden;
 	z-index: 0;
@@ -80,6 +79,13 @@ section > .inner {
 h1 {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 2.8em;
+	text-align: center;
+	margin: 0.5em 0;
+}
+
+h2 {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.5em;
 	text-align: center;
 	margin: 0.5em 0;
 }
@@ -204,6 +210,12 @@ button:hover {
 	margin-top: 0.5em;
 }
 
+.jsDeleteWishItem {
+	background: url('./assets/wish-delete.png') no-repeat left center;
+	max-width: 100%;
+	max-height: 100%;
+}
+
 /*=====Dashboard=====*/
 
 .dashboard-page {
@@ -238,9 +250,9 @@ button:hover {
 
 }
 
-.dashboard-inner {
-	/* border: 1px solid white; */
-}
+/* .dashboard-inner {
+	border: 1px solid white;
+} */
 
 .dashboard-profiles-container {
 	/* border: 1px solid white; */
@@ -296,22 +308,53 @@ button:hover {
 	font-family: 'Raleway', sans-serif;
 	font-size: 1.2em;
 	text-align: left;
-	margin: 2em 0;
+	margin: 1em 0;
 }
 
 .paragraph1 {
-	/* float: left; */
 	text-align: right;
-	width: 50%;
-	/* padding-right: 1em; */
+	width: 45%;
+	font-size: 1.0em;
+}
+
+.profile-middle-p {
+	width: 5%;
+	height: 100%; 
 }
 
 .paragraph2 {
-	/* float: right; */
+	/* vertical-align: middle; */
 	text-align: left;
-	width: 50%;
-	/* padding-left: 1em; */
+	width: 45%;
+	font-weight: bold;
+	font-size: 1.0em;
 }
+
+/* .wish-input-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	
+} */
+
+.add-wish-icon {
+	display: inline-block;
+	background-image: url('./assets/wish-add.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	height: 3em;
+	width: 3em;
+	vertical-align: middle;
+	border: none;
+	cursor: pointer;
+}
+
+.add-wish-icon:hover {
+	background-image: url('./assets/wish-add-hover.png');
+
+}
+
 
 .contact-image {
 	/* border: 1px solid white; */

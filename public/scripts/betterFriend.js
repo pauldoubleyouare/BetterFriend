@@ -321,7 +321,7 @@ const betterFriend = (function() {
                 <button id="jsToEditFriend" class="cta">Edit Friend</button>
               </div>
               <div class="profile-details-container">
-                <p class="paragraph1">
+                <div class="paragraph1">
                   Relationship:<br>
                   Email:<br>
                   Birthday:<br>
@@ -331,8 +331,9 @@ const betterFriend = (function() {
                   City:<br>
                   State:<br>
                   Zip:<br>
-                </p>
-                <p class="paragraph2">
+                </div>
+                <div class="profile-middle-p"></div>
+                <div class="paragraph2">
                   ${profile.relationship}<br>
                   ${profile.email}<br>
                   ${profile.birthday}<br>
@@ -342,16 +343,16 @@ const betterFriend = (function() {
                   ${profile.address.city}<br>
                   ${profile.address.state}<br>
                   ${profile.address.zipCode}<br>
-                </p>
+                </div>
               </div>
                 <form id="jsWishListForm">
                   <fieldset>
-                    <legend>Add wish list item:<br></legend>
-                      <div>
-                        <label for="wishItem">Wish idea:</label>
-                        <input type="text" name="wishItem" class="jsWishItemEntry">
+                    <h2>Wish List</h2>
+                      <div class="wish-input-container">
+                        <input type="text" name="wishItem" class="jsWishItemEntry" placeholder="New wish item">
+                        <div id="jsAddWishItem" class="add-wish-icon"></div>
                       </div>
-                      <button type="submit" id="jsAddWishItem">Add Wish</button>
+                      
                   </fieldset>
                 </form>
               <div class="jsWishListData"></div>
@@ -363,9 +364,7 @@ const betterFriend = (function() {
             <li data-id="${wish._id}">
               <span class="wishListItem">${wish.wishItem}</span>
               <div class="wishListItemControls">
-                <button class="jsDeleteWishItem">
-                  <span class="deleteButtonLabel">Delete</span>
-                </button>
+                <div class="jsDeleteWishItem"></div>
               </div>
             </li>
           `;
@@ -395,9 +394,7 @@ const betterFriend = (function() {
                 <li data-id="${wishItemId}">
                   <span class="wishListItem">${response.wishItem}</span>
                   <div class="wishListItemControls">
-                    <button class="jsDeleteWishItem">
-                      <span class="deleteButtonLabel">Delete</span>
-                    </button>
+                    <div class="jsDeleteWishItem"></div>
                   </div>
                 </li>
               `);
@@ -415,7 +412,6 @@ const betterFriend = (function() {
           api
             .remove(`api/profiles/${profileId}/wishItem`, wishToRemove)
             .then(() => {
-              // console.log('RESPONSE', res);
               showSuccessMessage(`Deleted ${currentListItemId}`);
             })
             .catch(handleErrors);

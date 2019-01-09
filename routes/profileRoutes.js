@@ -209,10 +209,7 @@ router.post('/:id/wishItem', (req, res, next) => {
           currentIndexObject = i;
         }
       }
-      console.log('PROFILE>>>>>', profile);
-      console.log('REQ>BODY>>>>', req.body);
-      //How do I get back the newest item/addition?
-      // let wishResponse = ;
+      
       res.status(201).json(
         profile.wishList[currentIndexObject]
       );
