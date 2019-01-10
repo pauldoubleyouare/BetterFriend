@@ -1,4 +1,4 @@
-/* global $, api, store, localStorage, jwt_decode */
+/* global $, api, store, localStorage, jwt_decode, moment */
 
 'use strict';
 
@@ -332,11 +332,10 @@ const betterFriend = (function() {
                   State:<br>
                   Zip:<br>
                 </div>
-                <div class="profile-middle-p"></div>
                 <div class="paragraph2">
                   ${profile.relationship}<br>
                   ${profile.email}<br>
-                  ${profile.birthday}<br>
+                  ${moment(profile.birthday).format('MMM Do, YYYY') || ""}<br>
                   ${profile.phone}<br><br>
 
                   ${profile.address.streetName}<br>
@@ -350,9 +349,8 @@ const betterFriend = (function() {
                     <h2>Wish List</h2>
                       <div class="wish-input-container">
                         <input type="text" name="wishItem" class="jsWishItemEntry" placeholder="New wish item">
-                        <div id="jsAddWishItem" class="add-wish-icon"></div>
+                        <input type="submit" id="jsAddWishItem" class="add-wish-icon">
                       </div>
-                      
                   </fieldset>
                 </form>
               <div class="jsWishListData"></div>
@@ -362,10 +360,8 @@ const betterFriend = (function() {
         let htmlWishList = profile.wishList.map(function(wish) {
           return `
             <li data-id="${wish._id}">
-              <span class="wishListItem">${wish.wishItem}</span>
-              <div class="wishListItemControls">
-                <div class="jsDeleteWishItem"></div>
-              </div>
+              <div class="delete-wish-icon"></div>
+              <div class="wish-list-item">${wish.wishItem}</div>
             </li>
           `;
         });
@@ -390,19 +386,17 @@ const betterFriend = (function() {
             .then(response => {
               let wishItemId = response._id;
               $('.jsWishItemEntry').val('');
-              $('.jsWishListData').append(`
+              $('.jsWishListData').prepend(`
                 <li data-id="${wishItemId}">
-                  <span class="wishListItem">${response.wishItem}</span>
-                  <div class="wishListItemControls">
-                    <div class="jsDeleteWishItem"></div>
-                  </div>
+                  <div class="delete-wish-icon"></div>
+                  <div class="wish-list-item">${response.wishItem}</div>
                 </li>
               `);
             })
             .catch(handleErrors);
         });
 
-        $('.current-profile-page').on('click', '.jsDeleteWishItem', function(event) {
+        $('.current-profile-page').on('click', '.delete-wish-icon', function(event) {
           event.preventDefault();
           let currentListItem = $(this).closest('li');
           let currentListItemId = currentListItem.attr('data-id');
@@ -520,16 +514,3 @@ const betterFriend = (function() {
   };
 })();
 
-
-
-
-//                <div class="contact-image">${profile.email}</div>
-// <div class="friendRelationship">${profile.relationship}</div>
-// <div class="friendBirthday">${profile.birthday}</div>
-// <div class="friendPhoneNumber">${profile.phone}</div>
-// <div class="friendAddress">Address:
-//   <div class="friendAddressStreet">${profile.address.streetName}</div>
-//   <div class="friendAddressCity">${profile.address.city}</div>
-//   <div class="friendAddressState">${profile.address.state}</div>
-//   <div class="friendAddressZip">${profile.address.zipCode}</div>
-// </div>

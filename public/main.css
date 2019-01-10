@@ -112,6 +112,12 @@ ol, ul {
 	list-style: none;
 }
 
+li {
+	list-style: none;
+	display: flex;
+	flex-direction: row;
+}
+
 #home-description {
 	display: block;
 	line-height: 1.6;
@@ -139,7 +145,7 @@ fieldset {
 	border: none;
 }
 
-input {
+input[type='text'], input[type='date'], input[type='password'], input[type='email'] {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 14px;
 	box-sizing: border-box;
@@ -309,40 +315,35 @@ button:hover {
 	font-size: 1.2em;
 	text-align: left;
 	margin: 1em 0;
+	width: 100%
 }
 
 .paragraph1 {
 	text-align: right;
-	width: 45%;
+	width: 50%;
 	font-size: 1.0em;
+	padding-right: 5px;
 }
 
-.profile-middle-p {
-	width: 5%;
-	height: 100%; 
-}
+
 
 .paragraph2 {
 	/* vertical-align: middle; */
 	text-align: left;
-	width: 45%;
+	width: 50%;
 	font-weight: bold;
 	font-size: 1.0em;
+	padding-left: 5px;
 }
 
-/* .wish-input-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	
-} */
 
 .add-wish-icon {
-	display: inline-block;
 	background-image: url('./assets/wish-add.png');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
+	background-color: transparent;
+	color: transparent;
 	height: 3em;
 	width: 3em;
 	vertical-align: middle;
@@ -352,27 +353,33 @@ button:hover {
 
 .add-wish-icon:hover {
 	background-image: url('./assets/wish-add-hover.png');
-
 }
 
+.wish-list-item {
+	font-family: 'Raleway', sans-serif;
+	font-size: 1.5em;
+	margin: 1em;
+	/* vertical-align: middle; */
+}
 
-.contact-image {
-	/* border: 1px solid white; */
-	display: inline-block;
-	width: 1.5em;
-	height: 1.5em;
-	vertical-align: middle;
-	margin-right: 2em;
-	/* background-image: url('/assets/email-icon.png');
-	background-position: 0% 0% center;
+.delete-wish-icon {
+	background-image: url('./assets/wish-delete.png');
 	background-repeat: no-repeat;
-	background-size: 2em 2em; */
-	/* float: left; */
-
+	background-size: 100% 100%;
+	background-position: center;
+	background-color: transparent;
+	color: transparent;
+	height: 3em;
+	width: 3em;
+	vertical-align: middle;
+	border: none;
+	cursor: pointer;
+	margin: 1em;
 }
 
-
-
+.delete-wish-icon:hover {
+	background-image: url('./assets/wish-delete-hover.png');
+}
 
 
 
