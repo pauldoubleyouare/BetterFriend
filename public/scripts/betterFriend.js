@@ -113,6 +113,7 @@ const betterFriend = (function() {
             <h1>Sign In</h1>
             <div class="break-line"></div>
             <form id="jsLoginForm" class="login-form">
+              <legend>Demo Use<br>Username: 'user' <br> Password: 'password' </legend>
               <fieldset>
                 <div>
                   <input type="text" name="userName" placeholder="Username" required>
@@ -188,7 +189,7 @@ const betterFriend = (function() {
         let htmlProfiles = store.profiles.map(function(profile) {
           return `
           <div class="jsDashboardProfile" data-id="${profile._id}">
-            <img src="" class="dashboard-profile-photo"></img>
+            <img src="${profile.imgUrl || ''}" class="dashboard-profile-photo"></img>
             <p class="dashboard-profile-name">${
               profile.firstName
             } ${profile.lastName}</p>
@@ -268,6 +269,18 @@ const betterFriend = (function() {
       event.preventDefault();
       const newProfileForm = $(event.currentTarget);
 
+      let newImgUrl;
+
+      $.ajax({
+        url: 'https://randomuser.me/api/',
+        async: false,
+        dataType: 'json',
+        success: function(data) {
+          console.log(data);
+          newImgUrl = data.results[0].picture.large;
+        }
+      });
+
       const newProfile = {
         firstName: newProfileForm.find('input[name="firstName"]').val(),
         lastName: newProfileForm.find('input[name="lastName"]').val(),
@@ -280,14 +293,14 @@ const betterFriend = (function() {
           state: newProfileForm.find('input[name="state"]').val(),
           zipCode: newProfileForm.find('input[name="zipCode"]').val()
         },
-        phone: newProfileForm.find('input[name="phone"]').val()
+        phone: newProfileForm.find('input[name="phone"]').val(),
+        imgUrl: newImgUrl
       };
 
       api
         .create('/api/profiles', newProfile)
         .then(response => {
           newProfileForm[0].reset();
-          console.log('RESPONSE FROM FRIEND CREATION>>>>>', response._id);
           store.profiles.push(response);
           showSuccessMessage(
             `${newProfile.firstName} has been added to your Dashboard`
@@ -306,10 +319,11 @@ const betterFriend = (function() {
     api
       .search(`/api/profiles/${profileId}`)
       .then(profile => {
+        console.log('PROFILE>>>>>', profile.imgUrl);
         $('main').html(`
           <section class="current-profile-page">
             <div class="inner">
-              <img src="https://randomuser.me/api/portraits/med/men/65.jpg" class="profile-photo"></img>
+              <img src="${profile.imgUrl || ''}" class="profile-photo"></img>
               <h1>${profile.firstName} ${profile.lastName}</h1>
               <div class="break-line"></div>
               <div class="profile-nav">
