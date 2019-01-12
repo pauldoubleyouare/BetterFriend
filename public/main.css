@@ -27,19 +27,9 @@ html {
 	overflow-x: hidden;
 	overflow-y: auto;
 	z-index: 0;
+	color: white;
 }
 
-/* html {
-	font-size: 10pt;
-	overflow-x: hidden;
-	overflow-y: auto;
-	z-index: 0;
-	background-image: linear-gradient(to top, rgba(28,30,40,0.851), rgba(28,30,40,0.851)), url('/assets/bgImage.jpg');
-	background-position: 100% 100% center;
-	background-size: auto, cover;
-	background-attachment: scroll;
-	background-repeat: no-repeat;
-} */
 
 /* iPad */
 @media only screen 
@@ -68,19 +58,6 @@ header {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 1em;
 }
-
-body {
-	/* overflow-x: hidden;
-	overflow-y: auto;
-	z-index: 0;
-	background-image: linear-gradient(to top, rgba(28,30,40,0.851), rgba(28,30,40,0.851)), url('/assets/bgImage.jpg');
-	background-position: 100% 100% center;
-	background-size: auto, cover;
-	background-attachment: scroll;
-	background-repeat: no-repeat; */
-	color: white;
-}
-
 
 section {
 	display: flex;
