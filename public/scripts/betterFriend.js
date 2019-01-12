@@ -2,8 +2,6 @@
 
 'use strict';
 
-
-
 // eslint-disable-next-line no-unused-vars
 const betterFriend = (function() {
   function showSuccessMessage(message) {
@@ -46,7 +44,6 @@ const betterFriend = (function() {
       renderCreateAccountPage();
     });
   }
-
 
   function renderCreateAccountPage() {
     $('main').html(`
@@ -107,7 +104,6 @@ const betterFriend = (function() {
       renderLoginPage();
     });
   }
-
 
   function renderLoginPage() {
     $('main').html(`
@@ -192,8 +188,10 @@ const betterFriend = (function() {
         let htmlProfiles = store.profiles.map(function(profile) {
           return `
           <div class="jsDashboardProfile" data-id="${profile._id}">
-            <div class="dashboard-profile-photo"></div>
-            <p class="dashboard-profile-name">${profile.firstName} ${profile.lastName}</p>
+            <img src="" class="dashboard-profile-photo"></img>
+            <p class="dashboard-profile-name">${
+              profile.firstName
+            } ${profile.lastName}</p>
           </div>
           `;
         });
@@ -216,8 +214,6 @@ const betterFriend = (function() {
       renderHomePage();
     });
   }
-
-
 
   function renderCreateFriendPage() {
     $('main').html(`
@@ -313,7 +309,7 @@ const betterFriend = (function() {
         $('main').html(`
           <section class="current-profile-page">
             <div class="inner">
-              <div class="profile-photo"></div>
+              <img src="https://randomuser.me/api/portraits/med/men/65.jpg" class="profile-photo"></img>
               <h1>${profile.firstName} ${profile.lastName}</h1>
               <div class="break-line"></div>
               <div class="profile-nav">
@@ -335,7 +331,7 @@ const betterFriend = (function() {
                 <div class="paragraph2">
                   ${profile.relationship}<br>
                   ${profile.email}<br>
-                  ${moment(profile.birthday).format('MMM Do, YYYY') || ""}<br>
+                  ${moment(profile.birthday).format('MMM Do, YYYY') || ''}<br>
                   ${profile.phone}<br><br>
 
                   ${profile.address.streetName}<br>
@@ -375,7 +371,9 @@ const betterFriend = (function() {
           renderDashboardPage();
         });
 
-        $('.current-profile-page').on('click', '#jsAddWishItem', function(event) {
+        $('.current-profile-page').on('click', '#jsAddWishItem', function(
+          event
+        ) {
           event.preventDefault();
           let wishListItemEntry = $('.jsWishItemEntry').val();
           let newWishItem = {
@@ -396,7 +394,9 @@ const betterFriend = (function() {
             .catch(handleErrors);
         });
 
-        $('.current-profile-page').on('click', '.delete-wish-icon', function(event) {
+        $('.current-profile-page').on('click', '.delete-wish-icon', function(
+          event
+        ) {
           event.preventDefault();
           let currentListItem = $(this).closest('li');
           let currentListItemId = currentListItem.attr('data-id');
@@ -429,36 +429,56 @@ const betterFriend = (function() {
               <form id="jsEditFriendForm">
                 <fieldset>
                   <div>
-                    <input type="text" name="firstName" value="${profile.firstName}" placeholder="First Name" required>
+                    <input type="text" name="firstName" value="${
+                      profile.firstName
+                    }" placeholder="First Name" required>
                   </div>
                   <div>
-                    <input type="text" name="lastName" value="${profile.lastName}" placeholder="Last Name" required>
+                    <input type="text" name="lastName" value="${
+                      profile.lastName
+                    }" placeholder="Last Name" required>
                   </div>
                   <div>
-                    <input type="text" name="email" value="${profile.email}" placeholder="Email">
+                    <input type="text" name="email" value="${
+                      profile.email
+                    }" placeholder="Email">
                   </div>
                   <div>
-                    <input type="text" name="relationship" value="${profile.relationship}" placeholder="Relationship">
+                    <input type="text" name="relationship" value="${
+                      profile.relationship
+                    }" placeholder="Relationship">
                   </div>
                   <div>
-                    <input type="date" name="birthday" value="${profile.birthday}" placeholder="Birthday">
+                    <input type="date" name="birthday" value="${
+                      profile.birthday
+                    }" placeholder="Birthday">
                   </div>
                   <div>
-                    <input type="text" name="phone" value="${profile.phone}" placeholder="Phone">
+                    <input type="text" name="phone" value="${
+                      profile.phone
+                    }" placeholder="Phone">
                   </div>
                   <fieldset>
                     <legend>Address:</legend>
                     <div>
-                      <input type="text" name="streetName" value="${profile.address.streetName}" placeholder="Street">
+                      <input type="text" name="streetName" value="${
+                        profile.address.streetName
+                      }" placeholder="Street">
                     </div>
                     <div>
-                      <input type="text" name="city" value="${profile.address.city}" placeholder="City">
+                      <input type="text" name="city" value="${
+                        profile.address.city
+                      }" placeholder="City">
                     </div>
                     <div>
-                      <input type="text" name="state" value="${profile.address.state}" placeholder="State">
+                      <input type="text" name="state" value="${
+                        profile.address.state
+                      }" placeholder="State">
                     </div>
                     <div>
-                      <input type="text" name="zipCode" value="${profile.address.zipCode}" placeholder="Zip">
+                      <input type="text" name="zipCode" value="${
+                        profile.address.zipCode
+                      }" placeholder="Zip">
                     </div>
                   </fieldset>
                   <button type="submit" class="cta">Save</button>
@@ -476,11 +496,15 @@ const betterFriend = (function() {
             firstName: editProfileForm.find('input[name="firstName"]').val(),
             lastName: editProfileForm.find('input[name="lastName"]').val(),
             email: editProfileForm.find('input[name="email"]').val(),
-            relationship: editProfileForm.find('input[name="relationship"]').val(),
+            relationship: editProfileForm
+              .find('input[name="relationship"]')
+              .val(),
             birthday: editProfileForm.find('input[name="birthday"]').val(),
             phone: editProfileForm.find('input[name="phone"]').val(),
             address: {
-              streetName: editProfileForm.find('input[name="streetName"]').val(),
+              streetName: editProfileForm
+                .find('input[name="streetName"]')
+                .val(),
               city: editProfileForm.find('input[name="city"]').val(),
               state: editProfileForm.find('input[name="state"]').val(),
               zipCode: editProfileForm.find('input[name="zipCode"]').val()
@@ -513,4 +537,3 @@ const betterFriend = (function() {
     renderCreateAccountPage: renderCreateAccountPage
   };
 })();
-

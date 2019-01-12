@@ -35,6 +35,7 @@ const profileSchema = mongoose.Schema(
       zipCode: String
     },
     phone: String,
+    imgUrl: String,
     wishList: [wishSchema]
   },
   {
@@ -58,6 +59,7 @@ profileSchema.methods.serialize = function() {
     birthday: this.birthday,
     address: this.address,
     phone: this.phone,
+    imgUrl: this.imgUrl,
     wishList: this.wishList,
     timestamps: this.timestamps
   };

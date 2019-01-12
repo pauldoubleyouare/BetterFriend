@@ -69,7 +69,8 @@ router.post('/', (req, res) => {
     'email',
     'relationship',
     'email',
-    'phone'
+    'phone',
+    'imgUrl'
   ];
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
@@ -97,7 +98,8 @@ router.post('/', (req, res) => {
       state: req.body.address.state,
       zipCode: req.body.address.zipCode
     },
-    phone: req.body.phone
+    phone: req.body.phone,
+    imgUrl: req.body.imgUrl
   };
 
   User.findById(owner)
@@ -131,7 +133,8 @@ router.put('/:id', (req, res, next) => {
     'relationship',
     'birthday',
     'address',
-    'phone'
+    'phone',
+    'imgUrl'
   ];
 
   updateableFields.forEach(field => {

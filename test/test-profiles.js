@@ -97,6 +97,7 @@ describe('Profiles API', function() {
             'birthday',
             'address',
             'phone',
+            'imgUrl',
             'createdAt',
             'updatedAt'
           );
@@ -140,7 +141,8 @@ describe('Profiles API', function() {
             'address',
             'wishList',
             'birthday',
-            'phone'
+            'phone',
+            'imgUrl'
           );
           res.body._id.should.equal(profileData._id.toHexString());
           res.body.owner.should.equal(profileData.owner.toHexString());
@@ -181,6 +183,7 @@ describe('Profiles API', function() {
         lastName: faker.name.lastName(),
         relationship: 'Friend',
         phone: '555-555-1212',
+        imgUrl: faker.internet.url(),
         birthday: faker.date.past(),
         address: {
           streetName: faker.address.streetName(),

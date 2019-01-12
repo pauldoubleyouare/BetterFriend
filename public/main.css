@@ -7,604 +7,559 @@
 */
 
 :root {
-	--main-bg-color: #1C1E28;
-	--secondary-bg-color: #2B2E3E;
-	--main-a-color: #FF2D66;
-	--main-button-color: #27CCC0;
+  --main-bg-color: #1c1e28;
+  --secondary-bg-color: #2b2e3e;
+  --main-a-color: #ff2d66;
+  --main-button-color: #27ccc0;
 }
 
 * *:before *:after {
-	box-sizing: border-box
+  box-sizing: border-box;
 }
 
 html {
-	background: linear-gradient(to top, rgba(28,30,40,0.851), rgba(28,30,40,0.851)), url('/assets/bgImage.jpg') no-repeat center center fixed; 
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
-	font-size: 10pt;
-	overflow-x: hidden;
-	overflow-y: auto;
-	z-index: 0;
-	color: white;
+  background: linear-gradient(
+      to top,
+      rgba(28, 30, 40, 0.851),
+      rgba(28, 30, 40, 0.851)
+    ),
+    url('/assets/bgImage.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-size: 10pt;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 0;
+  color: white;
 }
 
-
 /* iPad */
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) { 
-		html {
-			font-size: 14pt;
-		}
-	}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  html {
+    font-size: 14pt;
+  }
+}
 
 /* iPad Pro */
-@media only screen 
-  and (min-device-width: 834px) 
-  and (max-device-width: 1112px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		html {
-			font-size: 16pt;
-		}
+@media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+  html {
+    font-size: 16pt;
+  }
 }
 
 header {
-	position: absolute;
-	width: 100%;
-	text-align: center;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 1em;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
 }
 
 section {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	min-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 98vh;
 }
-
 
 section > .inner {
-	position: relative;
-	max-width: 100%;
+  position: relative;
+  max-width: 100%;
 }
 
-
-
 .wrapper {
-	width: 60%;
-	height: 100%;
-	max-width: 800px;
-	display: flex;
-	text-align: center;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
+  width: 60%;
+  height: 100%;
+  max-width: 800px;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .inner {
-	z-index: 1;
-	width: 40%;
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	background-color:  rgba(43, 46, 62, .7);
-	border-radius: 0.5em;
+  z-index: 1;
+  width: 40%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(43, 46, 62, 0.7);
+  border-radius: 0.5em;
 }
 
 /* iPhone 5 */
-@media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		.wrapper {
-			width: 100%;
-		}
-		
-		.inner {
-			width: 100%;
-		}
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) {
+  .wrapper {
+    width: 100%;
+  }
+
+  .inner {
+    width: 100%;
+  }
 }
 
 /* iPad */
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) {
-		.wrapper {
-			width: 100%;
-		}
-		
-		.inner {
-			width: 60%;
-		}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .wrapper {
+    width: 100%;
+  }
 
+  .inner {
+    width: 60%;
+  }
 }
 
 /* iPad Pro */
-@media only screen 
-  and (min-device-width: 834px) 
-  and (max-device-width: 1112px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		.inner {
-			width: 85%;
-		}
+@media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+  .inner {
+    width: 85%;
+  }
 }
-
-
 
 /*=====Text and Headers=====*/
 h1 {
-	font-family: 'Montserrat', sans-serif;
-	font-size: 2.8em;
-	text-align: center;
-	margin: 0.5em 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.8em;
+  text-align: center;
+  margin: 0.5em 0;
 }
 
 h2 {
-	font-family: 'Montserrat', sans-serif;
-	font-size: 1.5em;
-	text-align: center;
-	margin: 0.5em 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5em;
+  text-align: center;
+  margin: 0.5em 0;
 }
 
-p, a {
-	font-family: 'Raleway', sans-serif;
+p,
+a {
+  font-family: 'Raleway', sans-serif;
 }
 
 p {
-	font-size: 1.2em;
+  font-size: 1.2em;
 }
 
 a {
-	color: var(--main-a-color);
-	cursor: pointer;
+  color: var(--main-a-color);
+  cursor: pointer;
 }
 
-a#jsToLoginPage, a#jsToCreateAccountPage {
-	margin-bottom: 1em;
+a#jsToLoginPage,
+a#jsToCreateAccountPage {
+  margin-bottom: 1em;
 }
 
-ol, ul {
-	/* border: 1px solid; */
-	list-style: none;
+ol,
+ul {
+  /* border: 1px solid; */
+  list-style: none;
 }
 
 li {
-	list-style: none;
-	display: flex;
-	flex-direction: row;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
 }
 
 #home-description {
-	display: block;
-	line-height: 1.6;
+  display: block;
+  line-height: 1.6;
 }
 
 /* iPad */
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) { 
-		#home-description {
-			width: 95%
-		}
-	}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  #home-description {
+    width: 95%;
+  }
+}
 
 /*=====FORMS=====*/
 form {
-	font-family: 'Raleway', sans-serif;
-	font-size: 1.2em;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.2em;
 }
 
 .break-line {
-	display: block;
-	height: 1em;
-	border: 0;
-	border-top: 1px solid #ccc;
-	width: 8em;
-	margin: 1em 0;
-	padding: 0;
+  display: block;
+  height: 1em;
+  border: 0;
+  border-top: 1px solid #ccc;
+  width: 8em;
+  margin: 1em 0;
+  padding: 0;
 }
 
 fieldset {
-	margin: 1em 1em;
-	border: none;
+  margin: 1em 1em;
+  border: none;
 }
 
-input[type='text'], input[type='date'], input[type='password'], input[type='email'] {
-	font-family: 'Montserrat', sans-serif;
-	font-size: 14px;
-	box-sizing: border-box;
-	text-align: left;
-	width: 13em;
-	height: 3em;
-	max-width: 100%;
-	color: black;
-	border: solid 1px #ffffff;
-	border-radius: 0.2em;
-	margin: 0.4em 0.5em;
-	padding: 0 1.0em;
-	background-color: white;
+input[type='text'],
+input[type='date'],
+input[type='password'],
+input[type='email'] {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+  text-align: left;
+  width: 13em;
+  height: 3em;
+  max-width: 100%;
+  color: black;
+  border: solid 1px #ffffff;
+  border-radius: 0.2em;
+  margin: 0.4em 0.5em;
+  padding: 0 1em;
+  background-color: white;
 }
 
 /* iPad */
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) { 
-		input[type='text'], input[type='date'], input[type='password'], input[type='email'] {
-			font-size: 22px;
-		}
-	}
-
-/* iPad Pro */
-@media only screen 
-  and (min-device-width: 834px) 
-  and (max-device-width: 1112px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		input[type='text'], input[type='date'], input[type='password'], input[type='email'] {
-			font-size: 24px;
-
-		}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  input[type='text'],
+  input[type='date'],
+  input[type='password'],
+  input[type='email'] {
+    font-size: 22px;
+  }
 }
 
+/* iPad Pro */
+@media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+  input[type='text'],
+  input[type='date'],
+  input[type='password'],
+  input[type='email'] {
+    font-size: 24px;
+  }
+}
 
 /*=====BUTTONS=====*/
 button {
-	font-family: 'Montserrat', sans-serif;
-	font-size: 14px;
-	box-sizing: border-box;
-	text-align: center;
-	width: 12.75em;
-	height: 3.25em;
-	max-width: 100%;
-	color: #ffffff;
-	border: solid 1px #ffffff;
-	border-radius: 1em;
-	margin: 0.5em 0.5em;
-	background-color: transparent;
-	cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+  text-align: center;
+  width: 12.75em;
+  height: 3.25em;
+  max-width: 100%;
+  color: #ffffff;
+  border: solid 1px #ffffff;
+  border-radius: 1em;
+  margin: 0.5em 0.5em;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 /* iPad */
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) { 
-		button {
-			font-size: 22px;
-		}
-	}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  button {
+    font-size: 22px;
+  }
+}
 
 /* iPad Pro */
-@media only screen 
-  and (min-device-width: 834px) 
-  and (max-device-width: 1112px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		button {
-			font-size: 24px;
-		}
+@media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+  button {
+    font-size: 24px;
+  }
 }
 
 button:hover {
-	background-color: #ffffff;
-	color: #000000;
+  background-color: #ffffff;
+  color: #000000;
 }
 
-#create-account-submit, #login-submit {
-	margin-top: 2em;
+#create-account-submit,
+#login-submit {
+  margin-top: 2em;
 }
 
 .cta {
-	margin-top: 0.5em;
-	background-color: var(--main-button-color);
-	border: none;
+  margin-top: 0.5em;
+  background-color: var(--main-button-color);
+  border: none;
 }
 
 .cta2 {
-	margin-top: 0.5em;
-	background-color: var(--main-a-color);
-	border: none;
+  margin-top: 0.5em;
+  background-color: var(--main-a-color);
+  border: none;
 }
 
 #buttons-home-page {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	padding-left: 0;
-	margin: 4em 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-left: 0;
+  margin: 4em 0;
 }
 
 @media screen and (max-width: 480px) {
-	#buttons-home-page {
-		flex-direction: column;
-	}
+  #buttons-home-page {
+    flex-direction: column;
+  }
 }
 
 #jsToLogin {
-	flex: left;
+  flex: left;
 }
 
 #jsToCreateAcct {
-	flex: right;
+  flex: right;
 }
 
 #jsCancelCreateFriend {
-	margin-top: 0.5em;
+  margin-top: 0.5em;
 }
 
 .jsDeleteWishItem {
-	background: url('./assets/wish-delete.png') no-repeat left center;
-	max-width: 100%;
-	max-height: 100%;
+  background: url('./assets/wish-delete.png') no-repeat left center;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /*=====Dashboard=====*/
 
 .dashboard-page {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	min-height: 95vh;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 95vh;
 }
 
 .dashboard-header {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
-	margin-bottom: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 1em;
 }
 
 .dashboard-nav {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	width: 90%;
-
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 90%;
 }
 
 /* iPhone 5 */
-@media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		.dashboard-nav {
-			flex-direction: column;
-			width: 100%;
-			align-items: center; 
-		}
-
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) {
+  .dashboard-nav {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
 }
 
-
 .dashboard-profiles-container {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	max-width: 1000px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 1000px;
 }
 
 .jsDashboardProfile {
-	/* border: 1px solid white; */
-	width: 17em;
-	height: 17em;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	align-items: center;
-	margin: 1em;
-	background-color:  rgba(43, 46, 62, .7);
-	border-radius: 2.5%;
-
+  /* border: 1px solid white; */
+  width: 17em;
+  height: 17em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 1em;
+  background-color: rgba(43, 46, 62, 0.7);
+  border-radius: 2.5%;
 }
 
 .dashboard-profile-photo {
-	border: 1px solid white;
-	border-radius: 50%;
-	width: 10em;
-	height: 10em;
-	cursor: pointer;
-	margin-top: 1em;
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+  cursor: pointer;
+  margin-top: 1em;
 }
 
 .dashboard-profile-name {
-	cursor: pointer;
-	margin-top: 0;
+  cursor: pointer;
+  margin-top: 0;
 }
 
 /*=====PROFILE PAGE=====*/
 
 .profile-photo {
-	border: 1px solid white;
-	border-radius: 50%;
-	width: 15em;
-	height: 15em;
-	margin-top: 1em;
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 15em;
+  height: 15em;
+  margin-top: 1em;
 }
 
 .profile-details-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	font-family: 'Raleway', sans-serif;
-	font-size: 1.2em;
-	text-align: left;
-	margin: 1em 0;
-	width: 100%
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.2em;
+  text-align: left;
+  margin: 1em 0;
+  width: 100%;
 }
 
 .paragraph1 {
-	text-align: right;
-	width: 50%;
-	font-size: 1.0em;
-	padding-right: 5px;
+  text-align: right;
+  width: 50%;
+  font-size: 1em;
+  padding-right: 5px;
 }
 
-
-
 .paragraph2 {
-	/* vertical-align: middle; */
-	text-align: left;
-	width: 50%;
-	font-weight: bold;
-	font-size: 1.0em;
-	padding-left: 5px;
+  /* vertical-align: middle; */
+  text-align: left;
+  width: 50%;
+  font-weight: bold;
+  font-size: 1em;
+  padding-left: 5px;
 }
 
 .wish-input-container {
-	width: 100%;
+  width: 100%;
 }
 
-
 .add-wish-icon {
-	background-image: url('./assets/wish-add.png');
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: center;
-	background-color: transparent;
-	color: transparent;
-	height: 3em;
-	width: 3em;
-	vertical-align: middle;
-	border: none;
-	cursor: pointer;
+  background-image: url('./assets/wish-add.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: transparent;
+  color: transparent;
+  height: 3em;
+  width: 3em;
+  vertical-align: middle;
+  border: none;
+  cursor: pointer;
 }
 
 .add-wish-icon:hover {
-	background-image: url('./assets/wish-add-hover.png');
+  background-image: url('./assets/wish-add-hover.png');
 }
 
-
 .jsWishListData {
-	width: 80%;
+  width: 80%;
 }
 
 .wish-list-item {
-	font-family: 'Raleway', sans-serif;
-	font-size: 1.5em;
-	margin: 1em;
-	word-wrap: break-word;
-	max-width: 400px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.5em;
+  margin: 1em;
+  word-wrap: break-word;
+  max-width: 400px;
 }
 
-
-
 .delete-wish-icon {
-	background-image: url('./assets/wish-delete.png');
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	background-position: center;
-	background-color: transparent;
-	color: transparent;
-	height: 3em;
-	width: 3em;
-	vertical-align: middle;
-	border: none;
-	cursor: pointer;
-	margin: 1em;
+  background-image: url('./assets/wish-delete.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  background-color: transparent;
+  color: transparent;
+  height: 3em;
+  width: 3em;
+  vertical-align: middle;
+  border: none;
+  cursor: pointer;
+  margin: 1em;
 }
 
 .delete-wish-icon:hover {
-	background-image: url('./assets/wish-delete-hover.png');
+  background-image: url('./assets/wish-delete-hover.png');
 }
 
 /* iPhone */
-@media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		.profile-details-container {
-			width: 100%;
-			justify-content: left;
-		}
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) {
+  .profile-details-container {
+    width: 100%;
+    justify-content: left;
+  }
 
-		.jsWishListData {
-			width: 100%;
-		}
+  .jsWishListData {
+    width: 100%;
+  }
 
-		.add-wish-icon {
-			width: 45px;
-			height: 45px;
-		}
+  .add-wish-icon {
+    width: 45px;
+    height: 45px;
+  }
 
-		.wish-list-item {
-			max-width: 200px;
-			word-wrap: break-word;
-			margin: .5em;
-		
-		}
+  .wish-list-item {
+    max-width: 200px;
+    word-wrap: break-word;
+    margin: 0.5em;
+  }
 
-		.delete-wish-icon {
-			height: 4em;
-			width: 40px;
-		}
-
+  .delete-wish-icon {
+    height: 4em;
+    width: 40px;
+  }
 }
 
 /* iPad */
-@media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (-webkit-min-device-pixel-ratio: 1) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .add-wish-icon {
+    height: 50px;
+    width: 50px;
+  }
 
-		.add-wish-icon {
-			height: 50px;
-			width: 50px;
-		}
+  .wish-list-item {
+    max-width: 250px;
+  }
 
-		.wish-list-item {
-			max-width: 250px;
-		}
-
-		.delete-wish-icon {
-			height: 60px;
-			min-width: 60px;
-		}
-
+  .delete-wish-icon {
+    height: 60px;
+    min-width: 60px;
+  }
 }
 
 /* iPad Pro */
-@media only screen 
-  and (min-device-width: 834px) 
-  and (max-device-width: 1112px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		.add-wish-icon {
-			height: 5em;
-			width: 5em;
-		}
+@media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+  .add-wish-icon {
+    height: 5em;
+    width: 5em;
+  }
 
-		.wish-list-item {
-			max-width: 500px;
-		}
+  .wish-list-item {
+    max-width: 500px;
+  }
 }
-
 
 footer {
-	position: fixed;
-	color: white;
-	bottom: 0.5em;
-	right: 0.5em;
-	font-family: 'Montserrat', sans-serif;
+  position: fixed;
+  color: white;
+  bottom: 0.5em;
+  right: 0.5em;
+  font-family: 'Montserrat', sans-serif;
 }
 
-@media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 568px)
-  and (-webkit-min-device-pixel-ratio: 2) {
-		footer {
-			display: none;
-		}
+/* iPhone */
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) {
+  footer {
+    display: none;
+  }
+}
 
+/* iPad Pro */
+@media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+  footer {
+    display: none;
+  }
 }
