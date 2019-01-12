@@ -21,51 +21,77 @@ html {
 	font-size: 10pt;
 }
 
+/* iPad */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) { 
+		html {
+			font-size: 14pt;
+		}
+	}
+
+/* iPad Pro */
+@media only screen 
+  and (min-device-width: 834px) 
+  and (max-device-width: 1112px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		html {
+			font-size: 16pt;
+		}
+}
+
+header {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1em;
+}
+
 body {
-	/* border: 1px solid; */
 	overflow-x: hidden;
-	display: block;
-	overflow-x: hidden;
+	overflow-y: auto;
 	z-index: 0;
 	background-image: linear-gradient(to top, rgba(28,30,40,0.851), rgba(28,30,40,0.851)), url('/assets/bgImage.jpg');
-	background-position: 0% 0% center;
+	background-position: 100% 100% center;
 	background-size: auto, cover;
 	background-attachment: scroll;
+	background-repeat: no-repeat;
 	color: white;
 }
+
+
 section {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	min-height: 100vh;
-	/* z-index: 2; */
+	min-height: 98vh;
 }
+
 
 section > .inner {
 	position: relative;
 	max-width: 100%;
-	/* z-index: 1; */
 }
 
+
+
 .wrapper {
-	/* border: 1px solid white; */
-	width: 60em;
-	height: 40em;
+	width: 60%;
+	height: 100%;
+	max-width: 800px;
 	display: flex;
 	text-align: center;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-around;
 	align-items: center;
 }
 
 .inner {
-	/* border: 1px solid white; */
-	/* position: relative; */
 	z-index: 1;
-	max-width: 70%;
-	width: 30em;
-	/* height: 45em; */
+	width: 40%;
 	text-align: center;
 	display: flex;
 	flex-direction: column;
@@ -74,6 +100,47 @@ section > .inner {
 	background-color:  rgba(43, 46, 62, .7);
 	border-radius: 0.5em;
 }
+
+/* iPhone 5 */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		.wrapper {
+			width: 100%;
+		}
+		
+		.inner {
+			width: 100%;
+		}
+}
+
+/* iPad */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+		.wrapper {
+			width: 100%;
+		}
+		
+		.inner {
+			width: 60%;
+		}
+
+}
+
+/* iPad Pro */
+@media only screen 
+  and (min-device-width: 834px) 
+  and (max-device-width: 1112px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		.inner {
+			width: 85%;
+		}
+}
+
+
 
 /*=====Text and Headers=====*/
 h1 {
@@ -123,6 +190,15 @@ li {
 	line-height: 1.6;
 }
 
+/* iPad */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) { 
+		#home-description {
+			width: 95%
+		}
+	}
 
 /*=====FORMS=====*/
 form {
@@ -161,6 +237,27 @@ input[type='text'], input[type='date'], input[type='password'], input[type='emai
 	background-color: white;
 }
 
+/* iPad */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) { 
+		input[type='text'], input[type='date'], input[type='password'], input[type='email'] {
+			font-size: 22px;
+		}
+	}
+
+/* iPad Pro */
+@media only screen 
+  and (min-device-width: 834px) 
+  and (max-device-width: 1112px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		input[type='text'], input[type='date'], input[type='password'], input[type='email'] {
+			font-size: 24px;
+
+		}
+}
+
 
 /*=====BUTTONS=====*/
 button {
@@ -174,14 +271,38 @@ button {
 	color: #ffffff;
 	border: solid 1px #ffffff;
 	border-radius: 1em;
-	margin: 0 0.5em;
+	margin: 0.5em 0.5em;
 	background-color: transparent;
 	cursor: pointer;
+}
+
+/* iPad */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) { 
+		button {
+			font-size: 22px;
+		}
+	}
+
+/* iPad Pro */
+@media only screen 
+  and (min-device-width: 834px) 
+  and (max-device-width: 1112px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		button {
+			font-size: 24px;
+		}
 }
 
 button:hover {
 	background-color: #ffffff;
 	color: #000000;
+}
+
+#create-account-submit, #login-submit {
+	margin-top: 2em;
 }
 
 .cta {
@@ -202,6 +323,12 @@ button:hover {
 	justify-content: center;
 	padding-left: 0;
 	margin: 4em 0;
+}
+
+@media screen and (max-width: 480px) {
+	#buttons-home-page {
+		flex-direction: column;
+	}
 }
 
 #jsToLogin {
@@ -225,19 +352,12 @@ button:hover {
 /*=====Dashboard=====*/
 
 .dashboard-page {
-	/* border: 1px solid white; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: flex-start;
-	min-height: 100vh;
+	justify-content: center;
+	min-height: 95vh;
 
-}
-
-.dashboard-wrapper {
-	/* border: 1px solid white; */
-	width: 60em;
-	/* background-color:  rgba(43, 46, 62, .7); */
 }
 
 .dashboard-header {
@@ -256,17 +376,27 @@ button:hover {
 
 }
 
-/* .dashboard-inner {
-	border: 1px solid white;
-} */
+/* iPhone 5 */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		.dashboard-nav {
+			flex-direction: column;
+			width: 100%;
+			align-items: center; 
+		}
+
+}
+
 
 .dashboard-profiles-container {
-	/* border: 1px solid white; */
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
+	max-width: 1000px;
 }
 
 .jsDashboardProfile {
@@ -355,12 +485,20 @@ button:hover {
 	background-image: url('./assets/wish-add-hover.png');
 }
 
+
+.jsWishListData {
+	width: 80%;
+}
+
 .wish-list-item {
 	font-family: 'Raleway', sans-serif;
 	font-size: 1.5em;
 	margin: 1em;
-	/* vertical-align: middle; */
+	word-wrap: break-word;
+	max-width: 400px;
 }
+
+
 
 .delete-wish-icon {
 	background-image: url('./assets/wish-delete.png');
@@ -381,14 +519,91 @@ button:hover {
 	background-image: url('./assets/wish-delete-hover.png');
 }
 
+/* iPhone */
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		.profile-details-container {
+			width: 100%;
+			justify-content: left;
+		}
+
+		.jsWishListData {
+			width: 100%;
+		}
+
+		.add-wish-icon {
+			width: 45px;
+			height: 45px;
+		}
+
+		.wish-list-item {
+			max-width: 200px;
+			word-wrap: break-word;
+			margin: .5em;
+		
+		}
+
+		.delete-wish-icon {
+			height: 4em;
+			width: 40px;
+		}
+
+}
+
+/* iPad */
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+
+		.add-wish-icon {
+			height: 50px;
+			width: 50px;
+		}
+
+		.wish-list-item {
+			max-width: 250px;
+		}
+
+		.delete-wish-icon {
+			height: 60px;
+			min-width: 60px;
+		}
+
+}
+
+/* iPad Pro */
+@media only screen 
+  and (min-device-width: 834px) 
+  and (max-device-width: 1112px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		.add-wish-icon {
+			height: 5em;
+			width: 5em;
+		}
+
+		.wish-list-item {
+			max-width: 500px;
+		}
+}
 
 
 footer {
 	position: fixed;
-	color: black;
-	bottom: 0;
-	right: 0;
-	padding-left: 15px;
-	font-family: 'Yellowtail', cursive;
+	color: white;
+	bottom: 0.5em;
+	right: 0.5em;
+	font-family: 'Montserrat', sans-serif;
 }
 
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+		footer {
+			display: none;
+		}
+
+}

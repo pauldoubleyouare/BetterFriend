@@ -31,7 +31,7 @@ const betterFriend = (function() {
       <section class="home-page">
         <div class="wrapper">
           <h1>BetterFriend</h1>
-          <p id="home-description">It's your best friend's birthday. They're having a party and everyone that's going is bringing <i>something</i>. You know exactly what you're getting them, right? Let's be real, you don't. Next year, it's going to be different. Never give another boring gift again. Become a BetterFriend. </p>
+          <p id="home-description">It's the day before your best friend's birthday. You know exactly what you're getting them, right? Let's be real, you probably don't. Never give another boring gift again. <br><br>Become a BetterFriend. </p>
           <ul id="buttons-home-page">
             <li><button id="jsToLogin">Login</button></li>
             <li><button id="jsToCreateAcct">Create Account</button></li>
@@ -72,7 +72,7 @@ const betterFriend = (function() {
                 <div>
                   <input type="email" name="email" placeholder="email@address.com" required>
                 </div>
-                <button type="submit" class="cta">Create</button>
+                <button type="submit" class="cta" id="create-account-submit">Create</button>
               </fieldset>
             </form>
             <a id="jsToLoginPage">Already have an account?</a>
@@ -124,7 +124,7 @@ const betterFriend = (function() {
                 <div>
                   <input type="password" name="password" placeholder="Password" required>
                 </div>
-                <button type="submit" class="cta">Login</button>
+                <button type="submit" class="cta" id="login-submit">Login</button>
               </fieldset>
             </form>
             <a id="jsToCreateAccountPage">New? Signup here</a>
@@ -170,7 +170,7 @@ const betterFriend = (function() {
       <div class="dashboard-page">
         <div class="dashboard-wrapper">
           <div class="dashboard-header">
-            <h1>Dashboard Page</h1>
+            <h1>Dashboard</h1>
             <div class="break-line"></div>
             <div class="dashboard-nav">
               <button id="jsLogOut" class="cta2">Log Out</button>
