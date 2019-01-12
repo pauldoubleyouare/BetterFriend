@@ -18,8 +18,28 @@
 }
 
 html {
+	background: linear-gradient(to top, rgba(28,30,40,0.851), rgba(28,30,40,0.851)), url('/assets/bgImage.jpg') no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 	font-size: 10pt;
+	overflow-x: hidden;
+	overflow-y: auto;
+	z-index: 0;
 }
+
+/* html {
+	font-size: 10pt;
+	overflow-x: hidden;
+	overflow-y: auto;
+	z-index: 0;
+	background-image: linear-gradient(to top, rgba(28,30,40,0.851), rgba(28,30,40,0.851)), url('/assets/bgImage.jpg');
+	background-position: 100% 100% center;
+	background-size: auto, cover;
+	background-attachment: scroll;
+	background-repeat: no-repeat;
+} */
 
 /* iPad */
 @media only screen 
@@ -50,14 +70,14 @@ header {
 }
 
 body {
-	overflow-x: hidden;
+	/* overflow-x: hidden;
 	overflow-y: auto;
 	z-index: 0;
 	background-image: linear-gradient(to top, rgba(28,30,40,0.851), rgba(28,30,40,0.851)), url('/assets/bgImage.jpg');
 	background-position: 100% 100% center;
 	background-size: auto, cover;
 	background-attachment: scroll;
-	background-repeat: no-repeat;
+	background-repeat: no-repeat; */
 	color: white;
 }
 
@@ -371,7 +391,7 @@ button:hover {
 .dashboard-nav {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: space-around;
 	width: 90%;
 
 }
@@ -464,6 +484,10 @@ button:hover {
 	font-weight: bold;
 	font-size: 1.0em;
 	padding-left: 5px;
+}
+
+.wish-input-container {
+	width: 100%;
 }
 
 
