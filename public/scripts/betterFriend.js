@@ -293,7 +293,6 @@ const betterFriend = (function() {
         async: false,
         dataType: 'json',
         success: function(data) {
-          console.log(data);
           newImgUrl = data.results[0].picture.large;
         }
       });
@@ -336,7 +335,6 @@ const betterFriend = (function() {
     api
       .search(`/api/profiles/${profileId}`)
       .then(profile => {
-        console.log('PROFILE>>>>>', profile.imgUrl);
         $('main').html(`
           <section class="current-profile-page">
             <div class="inner">

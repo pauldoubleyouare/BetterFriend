@@ -24,22 +24,6 @@ function tearDownDb() {
   });
 }
 
-// function seedUserData() {
-//   console.info('Seeding User data');
-//   const seedData = [];
-//   for (let i = 1; i <= 5; i++) {
-//     seedData.push({
-//       userName: faker.internet.userName(),
-//       password: faker.internet.password(),
-//       firstName: faker.name.firstName(),
-//       lastName: faker.name.lastName(),
-//       email: faker.internet.email()
-//       // profiles: [{id: faker.random.uuid()}, {id: faker.random.uuid()}, {id: faker.random.uuid()}]
-//     });
-//   }
-//   return User.insertMany(seedData);
-// }
-
 describe('Users API', function() {
   before(function() {
     return runServer(TEST_DATABASE_URL);
@@ -295,15 +279,7 @@ describe('Users API', function() {
   });
 
 
-  //**************This is the test that's logging the user's password to the terminal... not sure how to fix!?******** */
   describe('PUT User endpoint', function() {
-    // before(function() {
-    //   return seedUserData();
-    // });
-
-    // after(function() {
-    //   return tearDownDb();
-    // });
 
     it('Should update one user', function() {
       let userToUpdate = {
@@ -333,13 +309,6 @@ describe('Users API', function() {
   });
 
   describe('DELETE User endpoint', function() {
-    // before(function() {
-    //   return seedUserData();
-    // });
-
-    // after(function() {
-    //   return tearDownDb();
-    // });
 
     let userToDelete;
 

@@ -413,7 +413,6 @@ describe('Profiles API', function() {
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.an('object');
-          console.log('RES BODY>>>>>', res.body);
           res.body.should.be.an('object');
           res.body.should.include.keys('wishItem');
           return Profile.findOne({ owner: user.id, _id: profileId });
@@ -465,7 +464,6 @@ describe('Profiles API', function() {
     });
   });
 
-  //******Not sure how else to test if the wishList array has one less, or has been successfully deleted, other than status code?? */
   //=====Tests for DELETE to /profiles/:id/wishItem=====//
   describe('DELETE WishList endpoint', function() {
     it('Should delete a wishItem', function() {
@@ -487,7 +485,6 @@ describe('Profiles API', function() {
         })
         .then(function(res) {
           res.should.have.status(204);
-          console.log('RESPONSE BODY>>>>>', res.body.profile);
           res.body.should.be.empty;
         });
     });
