@@ -478,7 +478,7 @@ const betterFriend = (function() {
                   </div>
                   <div>
                     <label for="birthday">Birthday</label>
-                    <input type="date" name="birthday" value="${profile.birthday}" placeholder="Birthday">
+                    <input type="date" name="birthday" value="${profile.birthday || ''}" placeholder="Birthday">
                   </div>
                   <div>
                     <label for="phone">Phone</label>
