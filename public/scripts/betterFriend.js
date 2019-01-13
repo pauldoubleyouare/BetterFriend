@@ -58,7 +58,7 @@ const betterFriend = (function() {
                   <input type="text"  name="userName" placeholder="Username" required>
                 </div>
                 <div>
-                  <input type="password" name="password" placeholder="Password" required>
+                  <input type="password" name="password" placeholder="Password" minlength="6" required>
                 </div>
                 <div>
                   <input type="text" name="firstName" placeholder="First Name" required>
