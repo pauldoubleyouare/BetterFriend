@@ -5,7 +5,7 @@
 // eslint-disable-next-line no-unused-vars
 const betterFriend = (function() {
   function showSuccessMessage(message) {
-    const element = $('.jsMessage');
+    const element = $('.jsSuccess');
     element.text(message).show();
     setTimeout(() => element.fadeOut('slow'), 3000);
   }
@@ -56,11 +56,11 @@ const betterFriend = (function() {
               <fieldset>
                 <div>
                   <label for="userName">Username</label>
-                  <input type="text"  name="userName" placeholder="Username" required>
+                  <input type="text"  name="userName" placeholder="Username" minlength="3" maxlength="20" required>
                 </div>
                 <div>
                   <label for="password">Password</label>
-                  <input type="password" name="password" placeholder="Password" minlength="8" required>
+                  <input type="password" name="password" placeholder="Password" minlength="8" maxlength="72" required>
                 </div>
                 <div>
                   <label for="firstName">First Name</label>
@@ -121,9 +121,11 @@ const betterFriend = (function() {
               <legend>Demo Use<br>Username: 'user' <br> Password: 'password' </legend>
               <fieldset>
                 <div>
+                  <label for="userName">Username</label>
                   <input type="text" name="userName" placeholder="Username" required>
                 </div>
                 <div>
+                  <label for="password">Password</label>
                   <input type="password" name="password" placeholder="Password" required>
                 </div>
                 <button type="submit" class="cta" id="login-submit">Login</button>
@@ -230,35 +232,45 @@ const betterFriend = (function() {
           <form id="jsCreateFriendForm">
             <fieldset>
               <div>
+                <label for="firstName">First Name</label>
                 <input type="text" name="firstName" placeholder="First Name (required)" required>
               </div>
               <div>
+                <label for="lastName">Last Name</label>
                 <input type="text" name="lastName" placeholder="Last Name (required)" required>
               </div>
               <div>
+                <label for="email">Email</label>
                 <input type="text" name="email" placeholder="email@address.com">
               </div>
               <div>
+                <label for="relationship">Relationship</label>
                 <input type="text" name="relationship" placeholder="Relationship">
               </div>
               <div>
+                <label for="birthday">Birthday</label>
                 <input type="date" name="birthday" placeholder="12/15/1950">
               </div>
               <div>
+                <label for="phone">Phone</label>
                 <input type="text" name="phone" placeholder="(555) 867-5309">
               </div>
               <fieldset>
                 <legend>Address</legend>
                 <div>
+                  <label for="streetName">Street</label>
                   <input type="text" name="streetName" placeholder="Street">
                 </div>
                 <div>
+                  <label for="city">City</label>
                   <input type="text" name="city" placeholder="City">
                 </div>
                 <div>
+                  <label for="state">State</label>
                   <input type="text" name="state" placeholder="State">
                 </div>
                 <div>
+                  <label for="zipCode">Zip</label>
                   <input type="text" name="zipCode" placeholder="Zip">
                 </div>
               </fieldset>
@@ -363,6 +375,7 @@ const betterFriend = (function() {
                   <fieldset>
                     <h2>Wish List</h2>
                       <div class="wish-input-container">
+                        <label for="wishItem">Enter wish</label>
                         <input type="text" name="wishItem" class="jsWishItemEntry" placeholder="New wish item">
                         <input type="submit" id="jsAddWishItem" class="add-wish-icon">
                       </div>
@@ -448,56 +461,46 @@ const betterFriend = (function() {
               <form id="jsEditFriendForm">
                 <fieldset>
                   <div>
-                    <input type="text" name="firstName" value="${
-                      profile.firstName
-                    }" placeholder="First Name" required>
+                    <label for="firstName">First Name</label>
+                    <input type="text" name="firstName" value="${profile.firstName}" placeholder="First Name" required>
                   </div>
                   <div>
-                    <input type="text" name="lastName" value="${
-                      profile.lastName
-                    }" placeholder="Last Name" required>
+                    <label for="lastName">Last Name</label>
+                    <input type="text" name="lastName" value="${profile.lastName}" placeholder="Last Name" required>
                   </div>
                   <div>
-                    <input type="text" name="email" value="${
-                      profile.email
-                    }" placeholder="Email">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" value="${profile.email}" placeholder="Email">
                   </div>
                   <div>
-                    <input type="text" name="relationship" value="${
-                      profile.relationship
-                    }" placeholder="Relationship">
+                    <label for="relationship">Relationship</label>
+                    <input type="text" name="relationship" value="${profile.relationship}" placeholder="Relationship">
                   </div>
                   <div>
-                    <input type="date" name="birthday" value="${
-                      profile.birthday
-                    }" placeholder="Birthday">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" name="birthday" value="${profile.birthday}" placeholder="Birthday">
                   </div>
                   <div>
-                    <input type="text" name="phone" value="${
-                      profile.phone
-                    }" placeholder="Phone">
+                    <label for="phone">Phone</label>
+                    <input type="text" name="phone" value="${profile.phone}" placeholder="Phone">
                   </div>
                   <fieldset>
                     <legend>Address:</legend>
                     <div>
-                      <input type="text" name="streetName" value="${
-                        profile.address.streetName
-                      }" placeholder="Street">
+                      <label for="zipCode">Street</label>
+                      <input type="text" name="streetName" value="${profile.address.streetName}" placeholder="Street">
                     </div>
                     <div>
-                      <input type="text" name="city" value="${
-                        profile.address.city
-                      }" placeholder="City">
+                      <label for="zipCode">City</label>
+                      <input type="text" name="city" value="${profile.address.city}" placeholder="City">
                     </div>
                     <div>
-                      <input type="text" name="state" value="${
-                        profile.address.state
-                      }" placeholder="State">
+                      <label for="zipCode">State</label>
+                      <input type="text" name="state" value="${profile.address.state}" placeholder="State">
                     </div>
                     <div>
-                      <input type="text" name="zipCode" value="${
-                        profile.address.zipCode
-                      }" placeholder="Zip">
+                      <label for="zipCode">Zip</label>
+                      <input type="text" name="zipCode" value="${profile.address.zipCode}" placeholder="Zip">
                     </div>
                   </fieldset>
                   <button type="submit" class="cta">Save</button>

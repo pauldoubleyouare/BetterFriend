@@ -54,7 +54,15 @@ header {
   width: 100%;
   text-align: center;
   font-family: 'Montserrat', sans-serif;
-  font-size: 1em;
+  font-size: 1.5em;
+}
+
+.jsMessage {
+  color: var(--main-a-color);
+}
+
+.jsSuccess {
+  color: var(--main-button-color);
 }
 
 section {
@@ -91,6 +99,7 @@ section > .inner {
   align-items: center;
   background-color: rgba(43, 46, 62, 0.7);
   border-radius: 0.5em;
+  padding: 2em 0em;
 }
 
 /* iPhone 5 */
@@ -386,7 +395,7 @@ button:hover {
 }
 
 .dashboard-profile-photo {
-  border: 1px solid white;
+  border: 2px solid white;
   border-radius: 50%;
   width: 10em;
   height: 10em;
@@ -402,7 +411,7 @@ button:hover {
 /*=====PROFILE PAGE=====*/
 
 .profile-photo {
-  border: 1px solid white;
+  border: 2px solid white;
   border-radius: 50%;
   width: 15em;
   height: 15em;
