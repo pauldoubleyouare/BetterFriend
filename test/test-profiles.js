@@ -109,6 +109,7 @@ describe('Profiles API', function() {
           expect(item.relationship).to.equal(data[i].relationship);
           expect(Date(item.birthday)).to.equal(Date(data[i].birthday));
           expect(item.phone).to.equal(data[i].phone);
+          expect(item.imgUrl).to.equal(data[i].imgUrl);
         });
       });
     });
@@ -412,8 +413,9 @@ describe('Profiles API', function() {
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.an('object');
-          res.body.profile.wishList.should.be.an('array');
-          res.body.profile.wishList[0].should.include.keys('wishItem');
+          console.log('RES BODY>>>>>', res.body);
+          res.body.should.be.an('object');
+          res.body.should.include.keys('wishItem');
           return Profile.findOne({ owner: user.id, _id: profileId });
         })
         .then(function(data) {
