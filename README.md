@@ -9,13 +9,13 @@ BetterFriend is a web application that makes it easier for you to remember thing
 [BetterFriend API Docs](https://documenter.getpostman.com/view/4648606/RznHJxsU)
 
 ## Screenshots
-Landing Page:
+Landing Page: <br>
 <img src="https://github.com/pauldoubleyouare/BetterFriend/blob/master/public/assets/betterfriend-home-ex.png?raw=true" width="800" height="400"/>
 
-Dashboard:
+Dashboard: <br>
 <img src="https://github.com/pauldoubleyouare/BetterFriend/blob/master/public/assets/betterfriend-dash-ex.png?raw=true" width="800" height="400"/>
 
-Friend Profile:
+Friend Profile: <br>
 <img src="https://github.com/pauldoubleyouare/BetterFriend/blob/master/public/assets/betterfriend-profile-ex.png?raw=true" width="800" height="400"/>
 
 ## Tech Stack
