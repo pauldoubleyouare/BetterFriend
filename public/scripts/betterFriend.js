@@ -55,18 +55,23 @@ const betterFriend = (function() {
             <form id="jsCreateAccountForm" class="create-account-form">
               <fieldset>
                 <div>
+                  <label for="userName">Username</label>
                   <input type="text"  name="userName" placeholder="Username" required>
                 </div>
                 <div>
-                  <input type="password" name="password" placeholder="Password" minlength="6" required>
+                  <label for="password">Password</label>
+                  <input type="password" name="password" placeholder="Password" minlength="8" required>
                 </div>
                 <div>
+                  <label for="firstName">First Name</label>
                   <input type="text" name="firstName" placeholder="First Name" required>
                 </div>
                 <div>
+                  <label for="lastName">Last Name</label>
                   <input type="text" name="lastName" placeholder="Last Name" required>
                 </div>
                 <div>
+                  <label for="email">Email</label>
                   <input type="email" name="email" placeholder="email@address.com" required>
                 </div>
                 <button type="submit" class="cta" id="create-account-submit">Create</button>

@@ -202,7 +202,6 @@ router.post('/:id/wishItem', (req, res, next) => {
     { new: true }
   )
     .then(profile => {
-      //
       let oldestCreatedDate = new Date(profile.wishList[0].createdAt);
       let currentIndexObject = 0;
       for (let i = 1; i < profile.wishList.length; i++) {

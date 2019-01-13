@@ -186,6 +186,10 @@ form {
   font-size: 1.2em;
 }
 
+label {
+  display: none;
+}
+
 .break-line {
   display: block;
   height: 1em;
