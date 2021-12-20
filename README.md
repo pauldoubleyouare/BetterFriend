@@ -2,6 +2,15 @@
 
 BetterFriend is a web application that makes it easier for you to remember things about your friends or family. Ultimately, when their birthday rolls around, you'll know exactly what to get them. Make yourself a gift-giving hero! ...Or at the very least, a BetterFriend.
 
+## Getting Started
+- Within the root project folder run `npm install` to install project dependencies
+- Install Mongo via `brew install mongodb-community@5.0` (macOS)
+- Start Mongo service via `mongod`
+- Seed the DB?
+- To start the project run `node server.js`
+- Using a browser, navigate to `localhost:8000`
+
+
 ## Live link
 (https://betterfriend-app.herokuapp.com/)
 
